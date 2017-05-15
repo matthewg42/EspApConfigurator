@@ -7,7 +7,7 @@
 #include <Mode.h>
 #include "APButton.h"
 #include "HeartBeat.h"
-#include "DummyMode.h"
+#include "NormalMode.h"
 #include "Config.h"
 
 Mode* BaseMode = NULL;
@@ -40,7 +40,7 @@ void setup() {
     Serial.begin(115200);
     HeartBeat.begin();
     APButton.begin();
-    switchMode(&DummyMode);
+    switchMode(&NormalMode);
     DBLN(F("E:setup"));
 }
 
