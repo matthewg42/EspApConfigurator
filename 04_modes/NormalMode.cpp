@@ -1,7 +1,7 @@
 #include <MutilaDebug.h>
 #include "NormalMode.h"
 #include "NormalConnecting.h"
-#include "DummyMode.h"
+#include "NormalConnected.h"
 
 NormalMode_ NormalMode;
 
@@ -29,9 +29,14 @@ void NormalMode_::modeUpdate()
 {
     if (mode) { 
         mode->update();
-        if (mode->isFinished() && mode == &NormalConnecting) {
-            DBLN(F("NormalConnecting done -> DummyMode"));
-            switchMode(&DummyMode);
+        if (mode->isFinished()) {
+            if (mode == &NormalConnecting) {
+                DBLN(F("NormalConnecting done -> NormalConnected"));
+                switchMode(&NormalConnected);
+            } else if (mode == &NormalConnected) {
+                DBLN(F("NormalConnected done -> NormalConnecting"));
+                switchMode(&NormalConnecting);
+            }
         }
     }
 }

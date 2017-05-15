@@ -6,3 +6,4 @@
 #define HEARTBEAT_PIN   D5
 #define AP_NAME         "MouseAP"
 #define AP_PASS         "MouseAPP"
+#define WIFI_CHECK_MS   500

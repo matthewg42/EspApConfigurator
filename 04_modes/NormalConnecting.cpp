@@ -3,6 +3,7 @@
 #include "MutilaDebug.h"
 #include "NormalConnecting.h"
 #include "HeartBeat.h"
+#include "Config.h"
 
 NormalConnecting_ NormalConnecting;
 
@@ -10,7 +11,7 @@ NormalConnecting_::NormalConnecting_() :
     _isConnected(false)
 {
     // only check if we're connected every 500ms
-    setUpdatePeriod(500);
+    setUpdatePeriod(WIFI_CHECK_MS);
 }
 
 void NormalConnecting_::modeStart()
