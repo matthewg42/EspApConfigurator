@@ -7,7 +7,7 @@
 #include <Mode.h>
 #include "APButton.h"
 #include "HeartBeat.h"
-#include "NormalMode.h"
+#include "WifiClientMode.h"
 #include "APMode.h"
 #include "Config.h"
 
@@ -26,7 +26,7 @@ void setup() {
     Serial.begin(115200);
     HeartBeat.begin();
     APButton.begin();
-    switchMode(&NormalMode);
+    switchMode(&WifiClientMode);
     DBLN(F("E:setup"));
 }
 
@@ -45,6 +45,7 @@ void loop() {
             delay(70);
         }
         switchMode(&APMode);
+        APButton.setState(false);
     }
 }
 

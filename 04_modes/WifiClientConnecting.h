@@ -4,9 +4,9 @@
 
 //! \brief Connecting to WiFi
 //! This mode waits until WiFi connected, and then terminates
-class NormalConnecting_ : public Mode {
+class WifiClientConnecting_ : public Mode {
 public:
-    NormalConnecting_();
+    WifiClientConnecting_();
     void modeStart();
     void modeUpdate();
     bool isFinished();
@@ -16,5 +16,5 @@ private:
 
 };
 
-extern NormalConnecting_ NormalConnecting;
+extern WifiClientConnecting_ WifiClientConnecting;
 

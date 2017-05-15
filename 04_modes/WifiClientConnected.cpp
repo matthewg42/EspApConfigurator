@@ -1,37 +1,37 @@
 #include <Arduino.h>
 #include <ESP8266WiFi.h>
 #include "MutilaDebug.h"
-#include "NormalConnected.h"
+#include "WifiClientConnected.h"
 #include "HeartBeat.h"
 #include "Config.h"
 
-NormalConnected_ NormalConnected;
+WifiClientConnected_ WifiClientConnected;
 
-NormalConnected_::NormalConnected_()
+WifiClientConnected_::WifiClientConnected_()
 {
 }
 
-void NormalConnected_::modeStart()
+void WifiClientConnected_::modeStart()
 {
-    DBLN(F("NormalConnected::modeStart"));
+    DBLN(F("WifiClientConnected::modeStart"));
     HeartBeat.setMode(Heartbeat::Normal);
     _isConnected = true;
     _nextWifiCheck = Millis() + WIFI_CHECK_MS;
 }
 
-void NormalConnected_::modeUpdate()
+void WifiClientConnected_::modeUpdate()
 {
     wifiCheck();
 
     // Your Code Here
 }
 
-bool NormalConnected_::isFinished()
+bool WifiClientConnected_::isFinished()
 {
     return !_isConnected;
 }
 
-void NormalConnected_::wifiCheck()
+void WifiClientConnected_::wifiCheck()
 {
     if (Millis() > _nextWifiCheck) {
         _nextWifiCheck = Millis();

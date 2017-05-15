@@ -1,26 +1,26 @@
 #include <Arduino.h>
 #include <ESP8266WiFi.h>
 #include "MutilaDebug.h"
-#include "NormalConnecting.h"
+#include "WifiClientConnecting.h"
 #include "HeartBeat.h"
 #include "Config.h"
 
-NormalConnecting_ NormalConnecting;
+WifiClientConnecting_ WifiClientConnecting;
 
-NormalConnecting_::NormalConnecting_() :
+WifiClientConnecting_::WifiClientConnecting_() :
     _isConnected(false)
 {
     // only check if we're connected every 500ms
     setUpdatePeriod(WIFI_CHECK_MS);
 }
 
-void NormalConnecting_::modeStart()
+void WifiClientConnecting_::modeStart()
 {
-    DBLN(F("NormalConnecting::modeStart"));
+    DBLN(F("WifiClientConnecting::modeStart"));
     HeartBeat.setMode(Heartbeat::Quick);
 }
 
-void NormalConnecting_::modeUpdate()
+void WifiClientConnecting_::modeUpdate()
 {
     if (WiFi.status() != WL_CONNECTED) {
         return;
@@ -31,7 +31,7 @@ void NormalConnecting_::modeUpdate()
     }
 }
 
-bool NormalConnecting_::isFinished()
+bool WifiClientConnecting_::isFinished()
 {
     return _isConnected;
 }
