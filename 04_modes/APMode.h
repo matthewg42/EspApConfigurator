@@ -8,6 +8,10 @@ public:
     APMode_();
     void modeStart();
     void modeUpdate();
+    bool isFinished();
+
+private:
+    bool _finished;
 
 };
 

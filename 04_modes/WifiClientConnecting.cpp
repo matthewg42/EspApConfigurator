@@ -7,8 +7,7 @@
 
 WifiClientConnecting_ WifiClientConnecting;
 
-WifiClientConnecting_::WifiClientConnecting_() :
-    _isConnected(false)
+WifiClientConnecting_::WifiClientConnecting_()
 {
     // only check if we're connected every 500ms
     setUpdatePeriod(WIFI_CHECK_MS);
@@ -17,6 +16,7 @@ WifiClientConnecting_::WifiClientConnecting_() :
 void WifiClientConnecting_::modeStart()
 {
     DBLN(F("WifiClientConnecting::modeStart"));
+    _isConnected = false;
     HeartBeat.setMode(Heartbeat::Quick);
 }
 

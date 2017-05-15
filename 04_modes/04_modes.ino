@@ -47,5 +47,9 @@ void loop() {
         switchMode(&APMode);
         APButton.setState(false);
     }
+
+    if (BaseMode == &APMode && BaseMode->isFinished()) {
+        switchMode(&WifiClientMode);
+    }
 }
 
