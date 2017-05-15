@@ -1,6 +1,7 @@
 archive/*
 *_test
 tmp
+mk
 *~
 .*~
 .*swp
