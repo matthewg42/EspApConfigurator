@@ -2,7 +2,7 @@
 
 #include <Mode.h>
 
-//! Mode which does nothing, and never ends itself
+//! \brief Mode which does nothing (except debug out)
 class DummyMode_ : public Mode {
 public:
     DummyMode_();
@@ -12,3 +12,4 @@ public:
 };
 
 extern DummyMode_ DummyMode;
+
