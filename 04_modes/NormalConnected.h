@@ -15,6 +15,8 @@ private:
     unsigned long _nextWifiCheck;
     bool _isConnected;
 
+    void wifiCheck();
+
 };
 
 extern NormalConnected_ NormalConnected;

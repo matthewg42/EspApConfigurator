@@ -21,18 +21,24 @@ void NormalConnected_::modeStart()
 
 void NormalConnected_::modeUpdate()
 {
-    if (Millis() > _nextWifiCheck) {
-        _nextWifiCheck = Millis();
-        if (WiFi.status() != WL_CONNECTED) {
-            DBLN(F("WiFi dropped"));
-            _isConnected = false;
-            return;
-        }
-    }
+    wifiCheck();
+
+    // Your Code Here
 }
 
 bool NormalConnected_::isFinished()
 {
     return !_isConnected;
+}
+
+void NormalConnected_::wifiCheck()
+{
+    if (Millis() > _nextWifiCheck) {
+        _nextWifiCheck = Millis();
+        if (WiFi.status() != WL_CONNECTED) {
+            DBLN(F("WiFi dropped"));
+            _isConnected = false;
+        }
+    }
 }
 
