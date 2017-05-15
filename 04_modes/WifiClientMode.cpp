@@ -12,6 +12,8 @@ WifiClientMode_::WifiClientMode_()
 void WifiClientMode_::begin()
 {
     DBLN(F("WifiClientMode::begin()"));
+    WifiClientConnecting.begin();
+    WifiClientConnected.begin();
 }
 
 void WifiClientMode_::modeStart()
