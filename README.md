@@ -16,8 +16,8 @@ This project is under development and is not presently suitable for end users.
 ## Pre-requisites
 
 * Install the Arduino IDE 1.6.6 or later
-** All OSes: [download link](https://www.arduino.cc/en/Main/Software)
-** Major Linux distros carry it in their software repositories, or the link above may be used
+   * All OSes: [download link](https://www.arduino.cc/en/Main/Software)
+   * Major Linux distros carry it in their software repositories, or the link above may be used
 * In the Arduino IDE, install ESP8266 board support from Tools -> Board -> Boards Manager
 * In the Arduino IDE, install ESP8266 tools from Sketch -> Include Library -> Manage Libraries
 * Install the [Mutila](https://github.com/matthewg42/Mutila) library
