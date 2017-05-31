@@ -6,6 +6,7 @@
 #include "HeartBeat.h"
 #include "HttpServer.h"
 #include "HttpHandlers.h"
+#include "ModeWifiClient.h"
 #include "Config.h"
 
 ModeAP_ ModeAP;
@@ -39,7 +40,7 @@ void ModeAP_::modeStart()
     // Set AP SSID and passphrase
     WiFi.softAP(AP_NAME, AP_PASS);
 
-    DB(" AP IP address: ");
+    DB("AP IP address: ");
     DBLN(WiFi.softAPIP());
 
     // Set up DNS resolver for all names going to local IP
@@ -74,6 +75,9 @@ void ModeAP_::modeEnd()
         delete pHttpServer;
         pHttpServer = NULL;
     }
+
+    // TODO: remove (this code for testing)
+    ModeWifiClient.setWifiLogin("wirescubedextended", "16leslierd");
 }
 
 void ModeAP_::modeUpdate()

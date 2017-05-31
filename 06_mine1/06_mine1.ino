@@ -12,7 +12,7 @@
 
 // Top level modes
 #include "ModeAP.h"
-#include "ModeWifiOff.h"
+#include "ModeWifiClient.h"
 
 // Compile time config options
 #include "Config.h"
@@ -38,8 +38,8 @@ void setup()
     HeartBeat.begin();
     APButton.begin();
     ModeAP.begin();
-    ModeWifiOff.begin();
-    switchMode(&ModeAP);
+    ModeWifiClient.begin();
+    switchMode(&ModeWifiClient);
     DBLN(F("E:setup"));
 }
 
@@ -49,9 +49,12 @@ void loop()
     APButton.update();
     pBaseMode->update();
 
-    if (APButton.held(2000)) {
-        APButton.setState(false);
-        switchMode(&ModeAP);
+    if (APButton.tapped()) {
+        if (pBaseMode == &ModeAP) {
+            switchMode(&ModeWifiClient);
+        } else {
+            switchMode(&ModeAP);
+        }
     }
 }
 
