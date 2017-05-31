@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Arduino.h>
-#include <NamedMode.h>
+#include "NamedMode.h"
 
 //! \brief Normal operation as WiFi client
 class ModeWifiClient_ : public NamedMode {
