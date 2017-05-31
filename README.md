@@ -13,6 +13,16 @@ Differences:
 
 This project is under development and is not presently suitable for end users.
 
+### TODO
+
+- Add generic non-volatile settings
+   - Integers
+   - Floats
+   - Fixed length strings
+- Wrap whole thing in a ParentMode to it can be easily used in other projects
+- Web interface
+- Find out what EEPROM addresses are available
+
 ## Pre-requisites
 
 * Install the Arduino IDE 1.6.6 or later
