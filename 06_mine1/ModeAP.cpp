@@ -1,6 +1,7 @@
 #include <Arduino.h>
 #include <ESP8266WiFi.h>
 #include <MutilaDebug.h>
+#include <Millis.h>
 #include "ModeAP.h"
 #include "MutilaDebug.h"
 #include "HeartBeat.h"
@@ -26,6 +27,10 @@ void ModeAP_::modeStart()
     
     // Change heartbeat to indicate AP mode
     HeartBeat.setCustomMode(900, 100);
+
+    // We're not scanning yet
+    scanning = false;
+    lastScan = 0;
 
     // Make sure the WiFi is turned on
     WiFi.forceSleepWake();
@@ -80,8 +85,6 @@ void ModeAP_::modeEnd()
         pHttpServer = NULL;
     }
 
-    // TODO: remove (this code for testing)
-    ModeWifiClient.setWifiLogin("wirescubedextended", "16leslierd");
 }
 
 void ModeAP_::modeUpdate()
@@ -89,5 +92,37 @@ void ModeAP_::modeUpdate()
     // Handle incoming connections
     pDnsServer->processNextRequest();
     pHttpServer->handleClient();
+
+    if (scanning) {
+        int8_t netCount = WiFi.scanComplete();
+        if (netCount > 0) {
+            scanning = false;
+            DB("scan took ");
+            DB(Millis() - lastScan);
+            DBLN("ms");
+            for (int8_t i=0; i<netCount; i++) {
+                DBF("%d: %s, Ch:%d (%ddBm) %s\n", 
+                    i+1, 
+                    WiFi.SSID(i).c_str(),
+                    WiFi.channel(i), 
+                    WiFi.RSSI(i), 
+                    WiFi.encryptionType(i) == ENC_TYPE_NONE ? "open" : "");
+            }
+        }
+    } else if (Millis() > lastScan+(WIFI_SCAN_PERIOD*1000)) {
+        startScan();
+    }
+}
+
+void ModeAP_::startScan()
+{
+    DBLN(F("ModeAP::startScan"));
+    if (scanning) {
+        DBLN(F("[still scanning]"));
+        return;
+    }
+    scanning = true;
+    lastScan = Millis();
+    WiFi.scanNetworks(true);
 }
 

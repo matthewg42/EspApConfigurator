@@ -12,11 +12,15 @@ public:
     void modeStart();
     void modeEnd();
     void modeUpdate();
+    //! begin asynchronous scanning for wifi networks
+    void startScan();
 
 protected:
     IPAddress apIP;
     IPAddress netMsk;
     DNSServer* pDnsServer;
+    bool scanning;
+    unsigned long lastScan;
 
 };
 
