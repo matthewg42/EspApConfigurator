@@ -6,9 +6,9 @@
 #include "NamedMode.h"
 
 //! \brief Mode which does nothing (except debug out)
-class ModeAPServe_ : public NamedMode {
+class ModeAP_ : public NamedMode {
 public:
-    ModeAPServe_();
+    ModeAP_();
     void modeStart();
     void modeEnd();
     void modeUpdate();
@@ -20,5 +20,5 @@ protected:
 
 };
 
-extern ModeAPServe_ ModeAPServe;
+extern ModeAP_ ModeAP;
 

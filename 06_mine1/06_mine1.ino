@@ -11,7 +11,7 @@
 #include "HeartBeat.h"
 
 // Top level modes
-#include "ModeAPServe.h"
+#include "ModeAP.h"
 #include "ModeWifiOff.h"
 
 // Compile time config options
@@ -37,9 +37,9 @@ void setup()
     DBLN(F("\n\nS:setup"));
     HeartBeat.begin();
     APButton.begin();
-    ModeAPServe.begin();
+    ModeAP.begin();
     ModeWifiOff.begin();
-    switchMode(&ModeAPServe);
+    switchMode(&ModeAP);
     DBLN(F("E:setup"));
 }
 
@@ -51,7 +51,7 @@ void loop()
 
     if (APButton.held(2000)) {
         APButton.setState(false);
-        switchMode(&ModeAPServe);
+        switchMode(&ModeAP);
     }
 }
 

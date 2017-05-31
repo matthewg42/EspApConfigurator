@@ -1,17 +1,17 @@
 #include <Arduino.h>
 #include <ESP8266WiFi.h>
 #include <MutilaDebug.h>
-#include "ModeAPServe.h"
+#include "ModeAP.h"
 #include "MutilaDebug.h"
 #include "HeartBeat.h"
 #include "HttpServer.h"
 #include "HttpHandlers.h"
 #include "Config.h"
 
-ModeAPServe_ ModeAPServe;
+ModeAP_ ModeAP;
 
-ModeAPServe_::ModeAPServe_() :
-    NamedMode("ModeAPServe"),
+ModeAP_::ModeAP_() :
+    NamedMode("ModeAP"),
     apIP(192, 168, 6, 1),
     netMsk(255, 255, 255, 0)
 {
@@ -19,9 +19,9 @@ ModeAPServe_::ModeAPServe_() :
     pHttpServer = NULL;
 }
 
-void ModeAPServe_::modeStart()
+void ModeAP_::modeStart()
 {
-    DBLN(F("S:ModeAPServe::modeStart()"));
+    DBLN(F("S:ModeAP::modeStart()"));
     
     // Change heartbeat to indicate AP mode
     HeartBeat.setCustomMode(900, 100);
@@ -57,12 +57,12 @@ void ModeAPServe_::modeStart()
     pHttpServer->onNotFound(handleNotFound);
     pHttpServer->begin();
 
-    DBLN(F("E:ModeAPServe::modeStart()"));
+    DBLN(F("E:ModeAP::modeStart()"));
 }
 
-void ModeAPServe_::modeEnd()
+void ModeAP_::modeEnd()
 {
-    DBLN("ModeAPServe::modeEnd");
+    DBLN("ModeAP::modeEnd");
     // destroy DNS to save memory when not in AP mode
     if (pDnsServer) {
         delete pDnsServer;
@@ -76,7 +76,7 @@ void ModeAPServe_::modeEnd()
     }
 }
 
-void ModeAPServe_::modeUpdate()
+void ModeAP_::modeUpdate()
 {
     // Handle incoming connections
     pDnsServer->processNextRequest();
