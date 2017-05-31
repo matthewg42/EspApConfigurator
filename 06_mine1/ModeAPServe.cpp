@@ -4,6 +4,8 @@
 #include "ModeAPServe.h"
 #include "MutilaDebug.h"
 #include "HeartBeat.h"
+#include "HttpServer.h"
+#include "HttpHandlers.h"
 #include "Config.h"
 
 ModeAPServe_ ModeAPServe;
@@ -13,13 +15,20 @@ ModeAPServe_::ModeAPServe_() :
     apIP(192, 168, 6, 1),
     netMsk(255, 255, 255, 0)
 {
-    setUpdatePeriod(100);
+    pDnsServer = NULL;
+    pHttpServer = NULL;
 }
 
 void ModeAPServe_::modeStart()
 {
     DBLN(F("S:ModeAPServe::modeStart()"));
-    pDnsServer = new DNSServer();
+    if (!pDnsServer) {
+        pDnsServer = new DNSServer();
+    }
+    if (!pHttpServer) {
+        pHttpServer = new ESP8266WebServer(80);
+    }
+    
     HeartBeat.setMode(Heartbeat::Quick);
     // Make sure the WiFi is turned on
     WiFi.forceSleepWake();
@@ -32,6 +41,12 @@ void ModeAPServe_::modeStart()
     DBLN(WiFi.softAPIP());
     pDnsServer->setErrorReplyCode(DNSReplyCode::NoError);
     pDnsServer->start(53, "*", WiFi.softAPIP());
+
+    // Set up routes for web server
+    pHttpServer->on("/", handleRoot);
+    pHttpServer->onNotFound(handleNotFound);
+    pHttpServer->begin();
+
     DBLN(F("E:ModeAPServe::modeStart()"));
 }
 
@@ -41,14 +56,16 @@ void ModeAPServe_::modeEnd()
         delete pDnsServer;
         pDnsServer = NULL;
     }
+
+    if (pHttpServer) {
+        delete pHttpServer;
+        pHttpServer = NULL;
+    }
 }
 
 void ModeAPServe_::modeUpdate()
 {
-    DBLN(F("S:ModeAPServe::modeUpdate()"));
-    if (pDnsServer) {
-        //pDnsServer->processNextRequest();
-    }
-    DBLN(F("E:ModeAPServe::modeUpdate()"));
+    pDnsServer->processNextRequest();
+    pHttpServer->handleClient();
 }
 

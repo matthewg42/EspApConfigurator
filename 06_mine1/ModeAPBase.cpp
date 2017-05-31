@@ -9,7 +9,6 @@ ModeAPBase_ ModeAPBase;
 ModeAPBase_::ModeAPBase_() :
     ParentMode("ModeAPBase")
 {
-    setUpdatePeriod(500);
 }
 
 void ModeAPBase_::begin()
@@ -26,6 +25,6 @@ void ModeAPBase_::modeStart()
 
 void ModeAPBase_::modeUpdate()
 {
-    DBLN(F("ModeAPBase::modeUpdate()"));
+    ParentMode::modeUpdate();
 }
 
