@@ -1,5 +1,6 @@
 #include <ESP8266WiFi.h>
 #include <MutilaDebug.h>
+#include <DNSServer.h>
 
 // Misc local includes
 #include "NamedMode.h"

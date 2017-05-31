@@ -1,6 +1,7 @@
 #pragma once
 
 #include <ESP8266WiFi.h>
+#include <DNSServer.h>
 #include "NamedMode.h"
 
 //! \brief Mode which does nothing (except debug out)
@@ -13,6 +14,7 @@ public:
 protected:
     IPAddress apIP;
     IPAddress netMsk;
+    DNSServer dnsServer;
 
 };
 
