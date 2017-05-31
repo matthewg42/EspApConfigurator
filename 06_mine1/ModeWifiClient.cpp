@@ -17,7 +17,7 @@ ModeWifiClient_::ModeWifiClient_() :
 void ModeWifiClient_::modeStart()
 {
     DBLN(F("ModeWifiClient::modeStart()"));
-    HeartBeat.setMode(Heartbeat::Normal);
+    HeartBeat.setMode(Heartbeat::Quick);
     WiFi.forceSleepWake(); 
     connect(_ssid!="");
 }
@@ -51,26 +51,32 @@ void ModeWifiClient_::modeUpdate()
 {
     int status = WiFi.status();
     if (status != _prevStatus) {
-        DB(F("Wifi stat: "));
+        DB(F("Wifi: "));
         switch (status) {
         case WL_CONNECTED:
-            DB(F("connOK, ip="));
+            DB(F("connected ip="));
+            HeartBeat.setMode(Heartbeat::Slower);
             DBLN(WiFi.localIP());
             break;
         case WL_IDLE_STATUS:
             DBLN(F("idle"));
+            HeartBeat.setMode(Heartbeat::Normal);
             break;
         case WL_CONNECT_FAILED:
-            DBLN(F("connFail"));
+            DBLN(F("connect failed"));
+            HeartBeat.setMode(Heartbeat::Quick);
             break;
         case WL_CONNECTION_LOST:
-            DBLN(F("connLost"));
+            DBLN(F("connect lost"));
+            HeartBeat.setMode(Heartbeat::Quick);
             break;
         case WL_DISCONNECTED:
-            DBLN(F("connDisc"));
+            DBLN(F("connect disconnected"));
+            HeartBeat.setMode(Heartbeat::Normal);
             break;
         default:
             DBLN(status);
+            HeartBeat.setMode(Heartbeat::Quick);
             break;
         }
         _prevStatus = status;

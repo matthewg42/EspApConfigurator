@@ -40,8 +40,12 @@ void ModeAP_::modeStart()
     // Set AP SSID and passphrase
     WiFi.softAP(AP_NAME, AP_PASS);
 
-    DB("AP IP address: ");
-    DBLN(WiFi.softAPIP());
+    // Wait a moment for ESP state to change
+    delay(100);
+    DB(F("AP IP address: got="));
+    DB(WiFi.softAPIP());
+    DB(F(" req="));
+    DBLN(apIP);
 
     // Set up DNS resolver for all names going to local IP
     if (!pDnsServer) {
