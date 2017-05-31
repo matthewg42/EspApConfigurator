@@ -7,7 +7,6 @@ class ModeWifiOff_ : public NamedMode {
 public:
     ModeWifiOff_();
     void modeStart();
-    void modeEnd();
     void modeUpdate();
 
 };

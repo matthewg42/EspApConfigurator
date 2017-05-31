@@ -9,12 +9,13 @@ class ModeAPServe_ : public NamedMode {
 public:
     ModeAPServe_();
     void modeStart();
+    void modeEnd();
     void modeUpdate();
 
 protected:
     IPAddress apIP;
     IPAddress netMsk;
-    DNSServer dnsServer;
+    DNSServer* pDnsServer;
 
 };
 

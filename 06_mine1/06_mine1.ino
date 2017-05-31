@@ -38,7 +38,7 @@ void setup()
     APButton.begin();
     ModeAPBase.begin();
     ModeWifiOff.begin();
-    switchMode(&ModeWifiOff);
+    switchMode(&ModeAPBase);
     DBLN(F("E:setup"));
 }
 

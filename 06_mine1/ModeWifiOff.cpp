@@ -20,14 +20,7 @@ void ModeWifiOff_::modeStart()
     HeartBeat.setMode(Heartbeat::Slow);
 }
 
-void ModeWifiOff_::modeEnd()
-{
-    DBLN(F("ModeWifiOff::modeStart()"));
-    WiFi.forceSleepWake();
-}
-
 void ModeWifiOff_::modeUpdate()
 {
-    DBLN(F("ModeWifiOff::modeUpdate()"));
 }
 
