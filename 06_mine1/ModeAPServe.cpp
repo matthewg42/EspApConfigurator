@@ -9,7 +9,9 @@
 ModeAPServe_ ModeAPServe;
 
 ModeAPServe_::ModeAPServe_() :
-    NamedMode("ModeAPServe")
+    NamedMode("ModeAPServe"),
+    apIP(192, 168, 4, 1),
+    netMsk(255, 255, 255, 0)
 {
     setUpdatePeriod(500);
 }
