@@ -1,14 +1,17 @@
-# Access Point -> Connected Wifi
+# ESP Access Point Configurator
 
-This project is a series of tests which aim towards the goal of making a Chromecast-like WiFi configurator for ESP8266 projects. This means a project which has an ESP8266 starting as an open access point, and re-directing all web traffic to a small web server, which provides an interface to the following operations:
+## Summary
 
-1. Scan for WiFi networks
-2. Choose network to connect to
-3. Enter credentials if necessary
-4. Save credentials to EEPROM
-5. Switch to connected mode
+This is a re-implementation and extension of the functionality available in the [WiFiManager library](https://github.com/tzapu/WiFiManager).
 
-One in connected mode, the firmware will use credentials from EEPROM, and try to run the "payload" firmware (data logger, or whatever). In connected mode, the firmware will monitor a button for some sequence of presses, which will signify that the user wishes to go back to access point mode.
+Differences:
+
+- Run your own code while the AP is doing it's thing
+- Extensible - add your own configuration options
+
+## Status
+
+This project is under development and is not presently suitable for end users.
 
 ## Pre-requisites
 
@@ -17,6 +20,7 @@ One in connected mode, the firmware will use credentials from EEPROM, and try to
 ** Major Linux distros carry it in their software repositories, or the link above may be used
 * In the Arduino IDE, install ESP8266 board support from Tools -> Board -> Boards Manager
 * In the Arduino IDE, install ESP8266 tools from Sketch -> Include Library -> Manage Libraries
+* Install the [Mutila](https://github.com/matthewg42/Mutila) library
 
 ## Building Using the Arduino IDE
 
