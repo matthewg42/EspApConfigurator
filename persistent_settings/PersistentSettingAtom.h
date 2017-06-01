@@ -52,6 +52,12 @@ public:
      */
     bool save();
 
+    /*! \brief Get the number of bytes of EEPROM used by this setting
+     *
+     *  \return true size in bytes
+     */
+    size_t size();
+
     /*! \brief Validation
      *
      *  Determine if the current value is valid - used after loading from EEPROM and when setting the value. If
@@ -132,6 +138,12 @@ bool PersistentSettingAtom<T>::save()
     EEPROM.put(_address, _value);
     EEPROM.commit();
     return peek() == _value;
+}
+
+template <class T>
+size_t PersistentSettingAtom<T>::size()
+{
+    return sizeof(T);
 }
 
 template <class T>
