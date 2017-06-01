@@ -6,6 +6,7 @@
 #include <Millis.h>
 #include "PersistentSettingAtom.h"
 #include "PersistentSettingString.h"
+#include "PersistentSettingManager.h"
 
 // Goal: read write different types to/from eeprom on the ESP8266
 
