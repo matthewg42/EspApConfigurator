@@ -6,6 +6,7 @@
 #include <Millis.h>
 #include "PersistentSettingAtom.h"
 #include "PersistentSettingArray.h"
+#include "PersistentSettingString.h"
 
 // Goal: read write different types to/from eeprom on the ESP8266
 
@@ -19,7 +20,8 @@ bool isEven(unsigned long n)
 DebouncedButton button(D6);
 
 PersistentSettingAtom<unsigned long> intSetting(0, 3142, &isEven);
-PersistentSettingArray<char> strSetting(sizeof(unsigned long), 0, STRSIZE);
+PersistentSettingArray<char> arrSetting(sizeof(unsigned long), 0, STRSIZE);
+PersistentSettingString strSetting(sizeof(unsigned long) + STRSIZE, STRSIZE);
 
 void getIt()
 {
@@ -29,6 +31,14 @@ void getIt()
     DBLN(intSetting.load());
     DB("intSetting.get()   = ");
     DBLN(intSetting.get());
+    DBLN();
+
+    DB("arrSetting.get()   = ");
+    DBLN(arrSetting.get());
+    DB("arrSetting.load()  = ");
+    DBLN(arrSetting.load());
+    DB("arrSetting.get()   = ");
+    DBLN(arrSetting.get());
     DBLN();
 
     DB("strSetting.get()   = ");
@@ -55,6 +65,14 @@ void setIt()
     char buf[STRSIZE];
     memset(buf, 0, STRSIZE);
     snprintf(buf, STRSIZE, "m=%ld", Millis());
+    DB("arrSetting.set("); 
+    DB(buf);
+    DB(") = ");
+    DBLN(arrSetting.set(buf));
+    DB("arrSetting.save() = "); 
+    DBLN(arrSetting.save());
+    DBLN();
+
     DB("strSetting.set("); 
     DB(buf);
     DB(") = ");
@@ -80,6 +98,15 @@ void setup()
     DB("then intSetting is        = ");
     DBLN(intSetting.get());
     DBLN();
+
+    DB("before loading arrSetting = ");
+    DBLN(arrSetting.get());
+    DB("arrSetting.load           = ");
+    DBLN(arrSetting.load());
+    DB("then arrSetting is        = ");
+    DBLN(arrSetting.get());
+    DBLN();
+
     DB("before loading strSetting = ");
     DBLN(strSetting.get());
     DB("strSetting.load           = ");
