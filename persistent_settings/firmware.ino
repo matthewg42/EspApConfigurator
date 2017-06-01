@@ -17,8 +17,13 @@ PersistentSettingAtom<unsigned long> intSetting(0, 3142, &isEven);
 
 void getIt()
 {
-    DB("intSetting value is: ");
+    DB("intSetting.get()   = ");
     DBLN(intSetting.get());
+    DB("intSetting.load()  = ");
+    DBLN(intSetting.load());
+    DB("intSetting.get()   = ");
+    DBLN(intSetting.get());
+    DBLN();
 }
 
 void setIt()
@@ -26,8 +31,11 @@ void setIt()
     unsigned long v = random(0,400);
     DB("intSetting.set("); 
     DB(v);
-    DB(") returned ");
+    DB(") = ");
     DBLN(intSetting.set(v));
+    DB("intSetting.save() = "); 
+    DBLN(intSetting.save());
+    DBLN();
 }
 
 /*
@@ -80,6 +88,13 @@ void setup()
     DBLN("E:setup");
     EEPROM.begin(512);
 
+    DB("before loading intSetting = ");
+    DBLN(intSetting.get());
+    DB("intsetting.load           = ");
+    DBLN(intSetting.load());
+    DB("then intSetting is        = ");
+    DBLN(intSetting.get());
+    DBLN();
 }
 
 void loop()

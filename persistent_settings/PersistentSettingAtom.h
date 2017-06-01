@@ -40,6 +40,18 @@ public:
      */
     bool set(T newValue);
 
+    /*! \brief Load the value stored in EEPROM for this setting.
+     *
+     *  \return true if the value loaded from EEPROM passes validation by isValid(), else false.
+     */
+    bool load();
+
+    /*! \brief Save the value to EEPROM
+     *
+     *  \return true if the value was saved OK, else false
+     */
+    bool save();
+
     /*! \brief Validation
      *
      *  Determine if the current value is valid - used after loading from EEPROM and when setting the value. If
@@ -50,6 +62,12 @@ public:
      *  \return true if value is valid, else false
      */
     bool isValid(T value);
+
+    /*! \brief peek at what is in EEPROM for this setting (may not be a valid value)
+     * 
+     *  \return the value in EEPROM for this setting
+     */
+    T peek();
 
 protected:
     uint16_t _address;
@@ -93,6 +111,38 @@ bool PersistentSettingAtom<T>::isValid(T value)
     } else {
         return _validator(value);
     }
+}
+
+template <class T>
+bool PersistentSettingAtom<T>::load()
+{
+    T loaded = peek();
+    if (isValid(loaded)) {
+        _value = loaded;
+        return true;
+    } else {
+        return false;
+    }
+}
+
+template <class T>
+bool PersistentSettingAtom<T>::save()
+{
+    // TODO: non-ESP code
+    EEPROM.put(_address, _value);
+    EEPROM.commit();
+    return peek() == _value;
+}
+
+template <class T>
+T PersistentSettingAtom<T>::peek()
+{
+    // TODO: non-ESP code
+   
+    // Note: this parameter is only used to notifying the template function what 
+    // type it has to load... we don't actually use it for anything else.
+    T tmp; 
+    return EEPROM.get(_address, tmp);
 }
 
 
