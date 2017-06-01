@@ -21,7 +21,7 @@ This project is under development and is not presently suitable for end users.
    - Fixed length strings
 - Wrap whole thing in a ParentMode to it can be easily used in other projects
 - Web interface
-- Find out what EEPROM addresses are available
+- Find out what EEPROM addresses are available: answer: 0 to 511. However, it is messy - the ESP EEPROM library works differently from the stock Arduino EEPROM library - it is in fact sort of emulating EEPROM, but is actually flash or something. At any rate, it needs different code from Arduino. I will write some persistent setting classes and maybe have those work on either and then migrate them into the Mutila library. 
 
 ## Pre-requisites
 
