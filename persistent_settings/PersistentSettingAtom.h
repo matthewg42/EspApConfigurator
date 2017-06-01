@@ -7,7 +7,7 @@
 
 /*! \brief EEPROM-backed non-volatile storage of atomic (non-array) settings
  */
-template <typename T>
+template <class T>
 class PersistentSettingAtom : public AbstractPersistentSetting<T> {
 public:
     //! syntactic simplication for passing validators
