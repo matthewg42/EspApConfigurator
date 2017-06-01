@@ -1,11 +1,14 @@
+#include <stdio.h>
 #include <Arduino.h>
 #include <EEPROM.h>
 #include <MutilaDebug.h>
 #include <DebouncedButton.h>
 #include <Millis.h>
-#include "PersistentSettingAtom.h"
+#include "PersistentSettingArray.h"
 
 // Goal: read write different types to/from eeprom on the ESP8266
+
+#define STRSIZE 16
 
 bool isEven(unsigned long n)
 {
@@ -13,72 +16,32 @@ bool isEven(unsigned long n)
 }
 
 DebouncedButton button(D6);
-PersistentSettingAtom<unsigned long> intSetting(0, 3142, &isEven);
+PersistentSettingArray<char> strSetting(0, 0, STRSIZE);
 
 void getIt()
 {
-    DB("intSetting.get()   = ");
-    DBLN(intSetting.get());
-    DB("intSetting.load()  = ");
-    DBLN(intSetting.load());
-    DB("intSetting.get()   = ");
-    DBLN(intSetting.get());
+    DB("strSetting.get()   = ");
+    DBLN(strSetting.get());
+    DB("strSetting.load()  = ");
+    DBLN(strSetting.load());
+    DB("strSetting.get()   = ");
+    DBLN(strSetting.get());
     DBLN();
 }
 
 void setIt()
 {
-    unsigned long v = random(0,400);
-    DB("intSetting.set("); 
-    DB(v);
+    char buf[STRSIZE];
+    memset(buf, 0, STRSIZE);
+    snprintf(buf, STRSIZE, "m=%ld", Millis());
+    DB("strSetting.set("); 
+    DB(buf);
     DB(") = ");
-    DBLN(intSetting.set(v));
-    DB("intSetting.save() = "); 
-    DBLN(intSetting.save());
+    DBLN(strSetting.set(buf));
+    DB("strSetting.save() = "); 
+    DBLN(strSetting.save());
     DBLN();
 }
-
-/*
-const uint16_t _size = 24;
-const uint16_t _address = 5;
-const char _default = 0;
-
-void getIt()
-{
-    DBLN("getIt");
-
-    // Init
-    char* buf = new char[_size];
-    memset(buf, _default, sizeof(char)*_size);
-
-    // read from EEPROM
-    for (uint16_t offset=0; offset<_size; offset++) {
-        EEPROM.get(_address+offset, buf[offset]);
-    }
-
-    // display
-    DB("got: ");
-    DBLN(buf);
-    delete buf;
-}
-
-void setIt() 
-{
-    DBLN("setIt");
-    // Init
-    char* buf = new char[_size];
-    memset(buf, _default, sizeof(char)*_size);
-
-    // Set value
-    snprintf(buf, _size, "sz=%d, set at %ld", Millis());
-
-    for (uint16_t offset=0; offset<_size; offset++) {
-        EEPROM.put(_address+offset, buf[offset]);
-    }
-    // de-alloc buf
-    delete buf;
-    EEPROM.commit();
-} */
 
 void setup()
 {
@@ -88,12 +51,12 @@ void setup()
     DBLN("E:setup");
     EEPROM.begin(512);
 
-    DB("before loading intSetting = ");
-    DBLN(intSetting.get());
-    DB("intsetting.load           = ");
-    DBLN(intSetting.load());
-    DB("then intSetting is        = ");
-    DBLN(intSetting.get());
+    DB("before loading strSetting = ");
+    DBLN(strSetting.get());
+    DB("strSetting.load           = ");
+    DBLN(strSetting.load());
+    DB("then strSetting is        = ");
+    DBLN(strSetting.get());
     DBLN();
 }
 

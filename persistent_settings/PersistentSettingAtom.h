@@ -42,6 +42,8 @@ public:
 
     /*! \brief Load the value stored in EEPROM for this setting.
      *
+     * \param newValue the new value to set (pending validation)
+     *
      *  \return true if the value loaded from EEPROM passes validation by isValid(), else false.
      */
     bool load();
@@ -54,7 +56,7 @@ public:
 
     /*! \brief Get the number of bytes of EEPROM used by this setting
      *
-     *  \return true size in bytes
+     *  \return size in bytes
      */
     size_t size();
 
