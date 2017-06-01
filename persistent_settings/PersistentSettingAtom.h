@@ -3,11 +3,12 @@
 #include <stdint.h>
 #include <Arduino.h>
 #include <EEPROM.h>
+#include "AbstractPersistentSetting.h"
 
 /*! \brief EEPROM-backed non-volatile storage of atomic (non-array) settings
  */
-template <class T>
-class PersistentSettingAtom {
+template <typename T>
+class PersistentSettingAtom : public AbstractPersistentSetting<T> {
 public:
     //! syntactic simplication for passing validators
     typedef bool (*validatorFunction)(T);
