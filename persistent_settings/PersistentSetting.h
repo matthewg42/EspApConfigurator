@@ -12,7 +12,8 @@ public:
     virtual bool set(String newValue) = 0;
     virtual bool load() = 0;
     virtual bool save() = 0;
-    virtual size_t size() = 0;
+    virtual uint16_t size() = 0;
+    uint16_t address() { return _address; }
 
 protected:
     uint16_t _address;

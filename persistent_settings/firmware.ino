@@ -16,6 +16,8 @@ DebouncedButton button(D6);
 
 PersistentSettingLong longSetting(0, 3142);
 PersistentSettingString strSetting(sizeof(unsigned long), STRSIZE);
+PersistentSettingLong longSetting2(sizeof(unsigned long)+STRSIZE-1, 1234);
+PersistentSettingString strSetting2(100, STRSIZE);
 PersistentSettingManager settings(3);
 
 void getIt()
@@ -39,9 +41,17 @@ void setIt()
     DBLN(longSetting.save());
     DBLN();
 
-    char buf[STRSIZE];
-    memset(buf, 0, STRSIZE);
-    snprintf(buf, STRSIZE, "m=%ld", Millis());
+    DB("longSetting2.set("); 
+    DB(v);
+    DB(") = ");
+    DBLN(longSetting2.set(String(v)));
+    DB("longSetting2.save() = "); 
+    DBLN(longSetting2.save());
+    DBLN();
+
+    char buf[STRSIZE+1];
+    memset(buf, 0, STRSIZE+1);
+    snprintf(buf, STRSIZE+1, "m=%ld abcdefghjklmnopqrstu", Millis());
     DB("strSetting.set("); 
     DB(buf);
     DB(") = ");
@@ -61,6 +71,8 @@ void setup()
     EEPROM.begin(512);
     settings.addSetting(String("Some Random Long Int"), (PersistentSetting*)(&longSetting));
     settings.addSetting(String("Last Pressed Message"), (PersistentSetting*)(&strSetting));
+    settings.addSetting(String("Another Long Int Set"), (PersistentSetting*)(&longSetting2));
+    settings.addSetting(String("One Too many setting"), (PersistentSetting*)(&strSetting2));
     DBLN("E:setup");
 
 }

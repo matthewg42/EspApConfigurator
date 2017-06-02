@@ -74,7 +74,7 @@ public:
      *
      *  \return size in bytes
      */
-    size_t size();
+    uint16_t size();
 
     /*! \brief Validation of String representation
      *
@@ -164,7 +164,7 @@ bool PersistentSettingAtom<T>::save()
 }
 
 template <class T>
-size_t PersistentSettingAtom<T>::size()
+uint16_t PersistentSettingAtom<T>::size()
 {
     return sizeof(T);
 }

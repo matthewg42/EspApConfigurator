@@ -63,7 +63,7 @@ bool PersistentSettingString::save()
     return peek() == _value;
 }
 
-size_t PersistentSettingString::size()
+uint16_t PersistentSettingString::size()
 {
     return _maxLength;
 }

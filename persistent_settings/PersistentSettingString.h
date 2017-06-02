@@ -57,7 +57,7 @@ public:
      *
      *  \return size in bytes
      */
-    size_t size();
+    uint16_t size();
 
     /*! \brief Validation
      *
