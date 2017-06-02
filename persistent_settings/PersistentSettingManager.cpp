@@ -15,9 +15,10 @@ PersistentSettingManager::~PersistentSettingManager()
     _settings = NULL;
 }
 
-void PersistentSettingManager::addSetting(String id, PersistentSetting* setting) 
+void PersistentSettingManager::addSetting(String id, PersistentSetting* setting, bool load) 
 {
-    if (_count < _maxSettings) {
+    if (_count < _maxSettings) {    
+        if (load) { setting->load(); }
         _settings[_count].id = id;
         _settings[_count].setting = setting;
         _count++;
