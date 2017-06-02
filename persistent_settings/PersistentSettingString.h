@@ -2,11 +2,11 @@
 
 #include <stdint.h>
 #include <Arduino.h>
-#include "AbstractPersistentSetting.h"
+#include "PersistentSetting.h"
 
 /*! \brief EEPROM-backed non-volatile storage of atomic (non-array) settings
  */
-class PersistentSettingString : public AbstractPersistentSetting<String> {
+class PersistentSettingString : public PersistentSetting {
 public:
     //! syntactic simplication for passing validators
     typedef bool (*validatorFunction)(String);

@@ -4,39 +4,38 @@
 #include <MutilaDebug.h>
 #include <DebouncedButton.h>
 #include <Millis.h>
-#include "PersistentSettingAtom.h"
+#include "PersistentSettingLong.h"
 #include "PersistentSettingString.h"
-#include "PersistentSettingManager.h"
 
 // Goal: read write different types to/from eeprom on the ESP8266
 
 #define STRSIZE 16
 
-bool isEven(unsigned long n)
+bool isEven(String n)
 {
-    return (n%2) == 0;
+    return (n.toInt()%2) == 0;
 }
 
 DebouncedButton button(D6);
 
-PersistentSettingAtom<unsigned long> intSetting(0, 3142, &isEven);
+PersistentSettingLong longSetting(0, 3142, &isEven);
 PersistentSettingString strSetting(sizeof(unsigned long), STRSIZE);
 
 void getIt()
 {
-    DB("intSetting.get()   = ");
-    DBLN(intSetting.get());
-    DB("intSetting.load()  = ");
-    DBLN(intSetting.load());
-    DB("intSetting.get()   = ");
-    DBLN(intSetting.get());
+    DB("longSetting.get()   = ");
+    DBLN(longSetting.get());
+    DB("longSetting.load()  = ");
+    DBLN(longSetting.load());
+    DB("longSetting.get()   = ");
+    DBLN(longSetting.get());
     DBLN();
 
-    DB("strSetting.get()   = ");
+    DB("strSetting.get()    = ");
     DBLN(strSetting.get());
-    DB("strSetting.load()  = ");
+    DB("strSetting.load()   = ");
     DBLN(strSetting.load());
-    DB("strSetting.get()   = ");
+    DB("strSetting.get()    = ");
     DBLN(strSetting.get());
     DBLN();
     DBLN();
@@ -45,12 +44,12 @@ void getIt()
 void setIt()
 {
     unsigned long v = random(0,400);
-    DB("intSetting.set("); 
+    DB("longSetting.set("); 
     DB(v);
     DB(") = ");
-    DBLN(intSetting.set(v));
-    DB("intSetting.save() = "); 
-    DBLN(intSetting.save());
+    DBLN(longSetting.set(String(v)));
+    DB("longSetting.save() = "); 
+    DBLN(longSetting.save());
     DBLN();
 
     char buf[STRSIZE];
@@ -60,7 +59,7 @@ void setIt()
     DB(buf);
     DB(") = ");
     DBLN(strSetting.set(buf));
-    DB("strSetting.save() = "); 
+    DB("strSetting.save()  = "); 
     DBLN(strSetting.save());
     DBLN();
     DBLN();
@@ -74,19 +73,19 @@ void setup()
     DBLN("E:setup");
     EEPROM.begin(512);
 
-    DB("before loading intSetting = ");
-    DBLN(intSetting.get());
-    DB("intSetting.load           = ");
-    DBLN(intSetting.load());
-    DB("then intSetting is        = ");
-    DBLN(intSetting.get());
+    DB("before loading longSetting = ");
+    DBLN(longSetting.get());
+    DB("longSetting.load           = ");
+    DBLN(longSetting.load());
+    DB("then longSetting is        = ");
+    DBLN(longSetting.get());
     DBLN();
 
-    DB("before loading strSetting = ");
+    DB("before loading strSetting  = ");
     DBLN(strSetting.get());
-    DB("strSetting.load           = ");
+    DB("strSetting.load            = ");
     DBLN(strSetting.load());
-    DB("then strSetting is        = ");
+    DB("then strSetting is         = ");
     DBLN(strSetting.get());
     DBLN();
     DBLN();
