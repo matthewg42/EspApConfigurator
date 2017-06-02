@@ -2,41 +2,31 @@
 
 #include <stdint.h>
 #include <Arduino.h>
-#include <EEPROM.h>
 #include "PersistentSettingAtom.h"
 
+/*! \brief Class for storing long int values to EEPROM
+ */
 class PersistentSettingLong : public PersistentSettingAtom<long> {
 public:
+    /*! Constructor
+     * \param eepromAddress start address of this setting
+     * \param defaultValue value to take before loading
+     * \param validatorFunction function to validate values
+     */
     PersistentSettingLong(uint16_t eepromAddress, long defaultValue, validatorFunction validator=NULL);
+
+    /*! Load from EEPROM 
+     *  Loads value from EEPROM, and checks for validity. If valid use value and return
+     *  true, else return false.
+     */
     bool load();
+
+    /*! Set value
+     *  \param newValue new value to set
+     *
+     *  If newValue is valid, set it and return true, else return false.
+     */
     bool set(String newValue);
 
 };
-
-PersistentSettingLong::PersistentSettingLong(uint16_t eepromAddress, long defaultValue, validatorFunction validator) :
-    PersistentSettingAtom<long>(eepromAddress, defaultValue, validator)
-{
-}
-
-bool PersistentSettingLong::load()
-{
-    long loaded = peek();
-    String s(loaded);
-    if (isValid(s)) {
-        _value = loaded;
-        return true;
-    } else {
-        return false;
-    }
-}
-
-bool PersistentSettingLong::set(String newValue)
-{
-    if (isValid(newValue)) {
-        _value = newValue.toInt();
-        return true;
-    } else {
-        return false;
-    }   
-}
 
