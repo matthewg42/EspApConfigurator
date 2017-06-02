@@ -32,8 +32,16 @@ bool PersistentSettingManager::addSetting(String id, PersistentSetting* setting,
         if ((newFirst>=oldFirst && newFirst<=oldLast) || (newLast>=oldFirst && newLast<=oldLast)) {
             DB(F("WARNING: EEPROM setting overlap: "));
             DB(id);
-            DB('/');
-            DBLN(_settings[i].id);
+            DB(F(" start="));
+            DB(newFirst);
+            DB(F(" last="));
+            DB(newLast);
+            DB(F(" / "));
+            DB(_settings[i].id);
+            DB(F(" start="));
+            DB(oldFirst);
+            DB(F(" last="));
+            DBLN(oldLast);
             return false;
         }
     }
@@ -53,5 +61,17 @@ uint8_t PersistentSettingManager::count()
 settingPair PersistentSettingManager::operator[](uint8_t idx)
 {
     return _settings[idx];
+}
+
+uint16_t PersistentSettingManager::nextFreeAddress()
+{
+    uint16_t lastUsedAddress = 0;
+    for (uint8_t i=0; i<_count; i++) {
+        uint16_t last  = _settings[i].setting->address() + _settings[i].setting->size()-1;
+        if (last >= lastUsedAddress) {
+            lastUsedAddress = last;
+        }
+    }
+    return lastUsedAddress+1;
 }
 

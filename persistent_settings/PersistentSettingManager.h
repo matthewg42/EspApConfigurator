@@ -18,6 +18,13 @@ public:
     uint8_t count();
     settingPair operator[](uint8_t idx);
 
+    /*! Get next free EEPROM address
+     *
+     * Free as in not-known to be in use by PersistentSettingManager
+     *
+     */
+    uint16_t nextFreeAddress();
+
 private:
     uint8_t _maxSettings;
     uint8_t _count;
