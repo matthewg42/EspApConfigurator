@@ -6,6 +6,7 @@
 #include <Millis.h>
 #include "PersistentSettingLong.h"
 #include "PersistentSettingString.h"
+#include "PersistentSettingManager.h"
 
 // Goal: read write different types to/from eeprom on the ESP8266
 
@@ -20,24 +21,15 @@ DebouncedButton button(D6);
 
 PersistentSettingLong longSetting(0, 3142, &isEven);
 PersistentSettingString strSetting(sizeof(unsigned long), STRSIZE);
+PersistentSettingManager settings(3);
 
 void getIt()
 {
-    DB("longSetting.get()   = ");
-    DBLN(longSetting.get());
-    DB("longSetting.load()  = ");
-    DBLN(longSetting.load());
-    DB("longSetting.get()   = ");
-    DBLN(longSetting.get());
-    DBLN();
-
-    DB("strSetting.get()    = ");
-    DBLN(strSetting.get());
-    DB("strSetting.load()   = ");
-    DBLN(strSetting.load());
-    DB("strSetting.get()    = ");
-    DBLN(strSetting.get());
-    DBLN();
+    for(uint8_t i=0; i<settings.count(); i++) {
+        DB(settings[i].id);
+        DB(" = ");
+        DBLN(settings[i].setting->get());
+    }
     DBLN();
 }
 
@@ -69,26 +61,13 @@ void setup()
 {
     Serial.begin(115200);
     delay(100);
+    DBLN("\n\nS:setup");
     button.begin();
-    DBLN("E:setup");
     EEPROM.begin(512);
+    settings.addSetting(String("Some Random Long Int"), (PersistentSetting*)(&longSetting));
+    settings.addSetting(String("Last Pressed Message"), (PersistentSetting*)(&strSetting));
+    DBLN("E:setup");
 
-    DB("before loading longSetting = ");
-    DBLN(longSetting.get());
-    DB("longSetting.load           = ");
-    DBLN(longSetting.load());
-    DB("then longSetting is        = ");
-    DBLN(longSetting.get());
-    DBLN();
-
-    DB("before loading strSetting  = ");
-    DBLN(strSetting.get());
-    DB("strSetting.load            = ");
-    DBLN(strSetting.load());
-    DB("then strSetting is         = ");
-    DBLN(strSetting.get());
-    DBLN();
-    DBLN();
 }
 
 void loop()
