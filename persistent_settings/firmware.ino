@@ -12,14 +12,9 @@
 
 #define STRSIZE 16
 
-bool isEven(String n)
-{
-    return (n.toInt()%2) == 0;
-}
-
 DebouncedButton button(D6);
 
-PersistentSettingLong longSetting(0, 3142, &isEven);
+PersistentSettingLong longSetting(0, 3142);
 PersistentSettingString strSetting(sizeof(unsigned long), STRSIZE);
 PersistentSettingManager settings(3);
 
