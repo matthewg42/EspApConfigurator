@@ -7,12 +7,15 @@
  */
 class PersistentSetting {
 public:
-    PersistentSetting() {;}
+    PersistentSetting(uint16_t eepromAddress) : _address(eepromAddress) {;}
     virtual String get() = 0;
     virtual bool set(String newValue) = 0;
     virtual bool load() = 0;
     virtual bool save() = 0;
     virtual size_t size() = 0;
+
+protected:
+    uint16_t _address;
 
 };
 

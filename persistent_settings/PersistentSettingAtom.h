@@ -94,7 +94,6 @@ public:
     T peek();
 
 protected:
-    uint16_t _address;
     T _default;
     validatorFunction _validator;
     T _value;
@@ -103,7 +102,7 @@ protected:
 
 template <class T>
 PersistentSettingAtom<T>::PersistentSettingAtom(uint16_t eepromAddress, T defaultValue, validatorFunction validator) : 
-    _address(eepromAddress),
+    PersistentSetting(eepromAddress),
     _default(defaultValue),
     _validator(validator)
 {

@@ -2,7 +2,7 @@
 #include "PersistentSettingString.h"
 
 PersistentSettingString::PersistentSettingString(uint16_t eepromAddress, uint16_t maxLength, validatorFunction validator) : 
-    _address(eepromAddress),
+    PersistentSetting(eepromAddress),
     _maxLength(maxLength),
     _validator(validator)
 {

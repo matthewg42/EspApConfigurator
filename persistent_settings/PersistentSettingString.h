@@ -77,7 +77,6 @@ public:
     String peek();
 
 protected:
-    uint16_t _address;
     uint16_t _maxLength;
     validatorFunction _validator;
     String _value;
