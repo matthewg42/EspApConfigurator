@@ -99,17 +99,11 @@ void ModeAP_::modeUpdate()
         int8_t netCount = WiFi.scanComplete();
         if (netCount > 0) {
             scanning = false;
-            DB("scan took ");
+            DB(F("scan took "));
             DB(Millis() - lastScan);
-            DBLN("ms");
-            /* for (int8_t i=0; i<netCount; i++) {
-                DBF("%d: %s, Ch:%d (%ddBm) %s\n", 
-                    i+1, 
-                    WiFi.SSID(i).c_str(),
-                    WiFi.channel(i), 
-                    WiFi.RSSI(i), 
-                    WiFi.encryptionType(i) == ENC_TYPE_NONE ? "open" : "");
-            }*/
+            DB(F("ms, found "));
+            DB(netCount);
+            DBLN(F(" net(s)"));
         }
     } else if (Millis() > lastScan+(WIFI_SCAN_PERIOD*1000)) {
         startScan();
