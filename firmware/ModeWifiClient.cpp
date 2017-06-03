@@ -35,7 +35,7 @@ void ModeWifiClient_::setWifiLogin(const char* ssid, const char* passphrase)
 
 void ModeWifiClient_::connect(bool useCredentials)
 {
-    DB(F("ModeWifiClient_::connect uc="));
+    DB(F("ModeWifiClient_::connect useCredentials="));
     DBLN(useCredentials);
     WiFi.disconnect();
     if (useCredentials) {

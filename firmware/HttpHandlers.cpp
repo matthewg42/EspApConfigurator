@@ -3,6 +3,8 @@
 #include <ESP8266WiFi.h>
 #include "HttpServer.h"
 #include "HttpHandlers.h"
+#include "ModeAP.h"
+#include "ModeWifiClient.h"
 
 // Taken from MIT-licensed WiFiManager code
 int rssiToQuality(int RSSI) {
@@ -99,5 +101,53 @@ void handleWifiPage()
     pHttpServer->sendHeader("Expires", "-1");
     pHttpServer->send(200, "text/html", page);
     // pHttpServer->client().stop();
+}
+
+void handleWifiSavePage() {
+    DBLN(F("handleWifiSavePage"));
+    String page = FPSTR(HTTP_HEAD);
+    page.replace("{v}", "Config WiFi");
+    page += FPSTR(HTTP_SCRIPT);
+    page += FPSTR(HTTP_STYLE);
+    page += FPSTR(HTTP_HEAD_END);
+
+    String ssid;
+    String pass;
+    bool ok = true;
+    String reason;
+
+    if (pHttpServer->method() != HTTP_POST) {
+        ok = false;
+        reason = F("not a POST");
+    } else {
+        // we have a POST, good, now populate the parameters
+        // iterate over pHttpServer->args
+        ssid = pHttpServer->arg("s");
+        pass = pHttpServer->arg("p");
+        if (ssid == "") {
+            ok = false;
+            reason = F("no ssid specified");
+        }
+    }
+
+    if (!ok) {
+        page += F("<h1>Error</h1>");       
+        page += reason;       
+    } else {
+        page += FPSTR(HTTP_SAVED);
+    }
+
+    page += FPSTR(HTTP_END);
+
+    pHttpServer->sendHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+    pHttpServer->sendHeader("Pragma", "no-cache");
+    pHttpServer->sendHeader("Expires", "-1");
+    if (ok) {
+        pHttpServer->send(200, "text/html", page);
+        ModeWifiClient.setWifiLogin(ssid.c_str(), pass=="" ? NULL : pass.c_str());
+        ModeAP.finish();
+    } else {
+        pHttpServer->send(400, "text/plain", page);
+    }
 }
 

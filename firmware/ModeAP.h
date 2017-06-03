@@ -14,6 +14,8 @@ public:
     void modeUpdate();
     //! begin asynchronous scanning for wifi networks
     void startScan();
+    void finish();
+    bool isFinished();
 
 protected:
     IPAddress apIP;
@@ -21,6 +23,7 @@ protected:
     DNSServer* pDnsServer;
     bool scanning;
     unsigned long lastScan;
+    bool finishFlag;
 
 };
 

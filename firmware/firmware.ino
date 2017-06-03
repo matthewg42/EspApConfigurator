@@ -39,8 +39,7 @@ void setup()
     APButton.begin();
     ModeAP.begin();
     ModeWifiClient.begin();
-    // switchMode(&ModeWifiClient);
-    switchMode(&ModeAP);
+    switchMode(&ModeWifiClient);
     DBLN(F("E:setup"));
 }
 
@@ -50,10 +49,13 @@ void loop()
     APButton.update();
     pBaseMode->update();
 
-    if (APButton.tapped()) {
-        if (pBaseMode == &ModeAP) {
+    if (pBaseMode == &ModeAP) {
+        if (pBaseMode->isFinished()) {
             switchMode(&ModeWifiClient);
-        } else {
+        }
+    } else {
+        unsigned long tapMs = APButton.tapped();
+        if (tapMs) {
             switchMode(&ModeAP);
         }
     }

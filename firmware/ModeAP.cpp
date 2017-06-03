@@ -25,6 +25,9 @@ void ModeAP_::modeStart()
 {
     DBLN(F("S:ModeAP::modeStart()"));
     
+    // Reset the flag so we keep running
+    finishFlag = false;
+
     // Change heartbeat to indicate AP mode
     HeartBeat.setCustomMode(900, 100);
 
@@ -67,6 +70,7 @@ void ModeAP_::modeStart()
     pHttpServer->on("/", handleRoot);
     pHttpServer->on("/settings", handleSettingsPage);
     pHttpServer->on("/wifi", handleWifiPage);
+    pHttpServer->on("/wifisave", handleWifiSavePage);
     pHttpServer->begin();
 
     DBLN(F("E:ModeAP::modeStart()"));
@@ -120,5 +124,15 @@ void ModeAP_::startScan()
     scanning = true;
     lastScan = Millis();
     WiFi.scanNetworks(true);
+}
+
+void ModeAP_::finish()
+{
+    finishFlag = true;
+}
+
+bool ModeAP_::isFinished()
+{
+    return finishFlag;
 }
 

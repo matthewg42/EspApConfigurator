@@ -6,6 +6,7 @@ void handleNotFound();
 void handleRoot();
 void handleSettingsPage();
 void handleWifiPage();
+void handleWifiSavePage();
 
 // HTML taken from MIT-licensed WiFiManager project 
 // https://github.com/tzapu/WiFiManager
