@@ -2,26 +2,40 @@
 
 ## Summary
 
-This is a re-implementation and extension of the functionality available in the [WiFiManager library](https://github.com/tzapu/WiFiManager).
+This is a re-implementation and modification of the functionality available in the [WiFiManager library](https://github.com/tzapu/WiFiManager).
 
 Differences:
 
-- Run your own code while the AP is doing it's thing
-- Extensible - add your own configuration options
+- Less flash memory usage (faster to upload your code)
+- Everything done with timeslices an Mutila Modes, making it possible to run your own code while also being in AP mode (WiFiManager blocks)
+- Extensible - add your own configuration options which save to EEPROM
 
 ## Status
 
-This project is under development and is not presently suitable for end users.
+
+### Working
+
+- Button press to enter AP mode
+- AP mode runs 
+- DNS re-directs all to device
+- WiFi network scanning
+- Web pages get served for setting WiFi Credentials
+- Set SSID, passphrase and hostname
+- Connect to network in client mode
+- Hard-ish reset (zaps SSID from ESP memory)
+- Experimental settings for Char, UInt8, Long, String
 
 ### TODO
 
 - Add generic non-volatile settings
-   - Integers
    - Floats
-   - Fixed length strings
+- Configure settings with web interface
 - Wrap whole thing in a ParentMode to it can be easily used in other projects
-- Web interface
-- Find out what EEPROM addresses are available: answer: 0 to 511. However, it is messy - the ESP EEPROM library works differently from the stock Arduino EEPROM library - it is in fact sort of emulating EEPROM, but is actually flash or something. At any rate, it needs different code from Arduino. I will write some persistent setting classes and maybe have those work on either and then migrate them into the Mutila library. 
+- No networks found indication 
+- rescan button (just reloads page?)
+- Customised theming
+- Re-arrange project as usable library
+- Static IP config
 
 ## Pre-requisites
 
