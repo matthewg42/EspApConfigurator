@@ -4,6 +4,10 @@
 #include <MutilaDebug.h>
 #include <DebouncedButton.h>
 #include <Millis.h>
+#include <ESP8266WebServer.h>
+#include <ESP8266WiFi.h>
+#include <DNSServer.h>
+
 #include "PersistentSettingLong.h"
 #include "PersistentSettingString.h"
 #include "PersistentSettingChar.h"
@@ -90,23 +94,23 @@ void setup()
     button.begin();
     EEPROM.begin(512);
     
-    longSetting =   settings.addSetting(
+    longSetting =   settings.add(
                         String("Long integer setting"),
                         new PersistentSettingLong(settings.nextFreeAddress(), 3142)
                     );
-    charSetting =   settings.addSetting(
+    charSetting =   settings.add(
                         String("Character setting"),
                         new PersistentSettingChar(settings.nextFreeAddress(), 'c')
                     );
-    uint8Setting =  settings.addSetting(
+    uint8Setting =  settings.add(
                         String("UInt8 setting"),
                         new PersistentSettingUInt8(settings.nextFreeAddress(), 42)
                     );
-    strSetting =    settings.addSetting(
+    strSetting =    settings.add(
                         String("String setting"),
                         new PersistentSettingString(settings.nextFreeAddress(), STRSIZE)
                     );
-    floatSetting =  settings.addSetting(
+    floatSetting =  settings.add(
                         String("Float setting"),
                         new PersistentSettingFloat(settings.nextFreeAddress(), 3.142)
                     );

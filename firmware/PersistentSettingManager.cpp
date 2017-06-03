@@ -15,7 +15,7 @@ PersistentSettingManager::~PersistentSettingManager()
     _settings = NULL;
 }
 
-PersistentSetting* PersistentSettingManager::addSetting(String id, PersistentSetting* setting, bool load) 
+PersistentSetting* PersistentSettingManager::add(String id, PersistentSetting* setting, bool load) 
 {
     if (_count >= _maxSettings) {    
         DBLN(F("ERROR maxSettings reached"));
