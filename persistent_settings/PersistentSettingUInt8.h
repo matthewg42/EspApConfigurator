@@ -4,18 +4,17 @@
 #include <Arduino.h>
 #include "PersistentSettingAtom.h"
 
-/*! \brief Class for storing char values to EEPROM
+/*! \brief Class for storing unsigned 9-bit integers values to EEPROM
  *
- * Probably to be used mostly for boolean values...
  */
-class PersistentSettingChar : public PersistentSettingAtom<char> {
+class PersistentSettingUInt8 : public PersistentSettingAtom<uint8_t> {
 public:
     /*! Constructor
      * \param eepromAddress start address of this setting
      * \param defaultValue value to take before loading
      * \param validatorFunction function to validate values
      */
-    PersistentSettingChar(uint16_t eepromAddress, char defaultValue, validatorFunction validator=NULL);
+    PersistentSettingUInt8(uint16_t eepromAddress, uint8_t defaultValue, validatorFunction validator=NULL);
 
     /*! Load from EEPROM 
      *  Loads value from EEPROM, and checks for validity. If valid use value and return

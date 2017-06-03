@@ -7,6 +7,7 @@
 #include "PersistentSettingLong.h"
 #include "PersistentSettingString.h"
 #include "PersistentSettingChar.h"
+#include "PersistentSettingUInt8.h"
 #include "PersistentSettingManager.h"
 
 // Goal: read write different types to/from eeprom on the ESP8266
@@ -15,9 +16,10 @@
 
 DebouncedButton button(D6);
 
-PersistentSettingManager settings(3);
+PersistentSettingManager settings(5);
 PersistentSetting* longSetting;
 PersistentSetting* charSetting;
+PersistentSetting* uint8Setting;
 PersistentSetting* strSetting;
 
 void getIt()
@@ -51,6 +53,14 @@ void setIt()
     DB(", save()=");
     DBLN(charSetting->save());
 
+    uint8_t u = random(0, 255);
+    DB("uint8Setting->set(");
+    DB(u);
+    DB(")=");
+    DB(uint8Setting->set(String(u)));
+    DB(", save()=");
+    DBLN(uint8Setting->save());
+
     String s = "Millis=" + String(Millis());
     DB("strSetting->set(");
     DB(s);
@@ -77,6 +87,10 @@ void setup()
     charSetting =   settings.addSetting(
                         String("Character setting"),
                         new PersistentSettingChar(settings.nextFreeAddress(), 'c')
+                    );
+    uint8Setting =  settings.addSetting(
+                        String("UInt8 setting"),
+                        new PersistentSettingUInt8(settings.nextFreeAddress(), 42)
                     );
     strSetting =    settings.addSetting(
                         String("String setting"),
