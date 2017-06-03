@@ -141,7 +141,9 @@ void handleWifiSavePage() {
         page += F("<h1>Error</h1>");       
         page += reason;       
     } else {
-        page += FPSTR(HTTP_SAVED);
+        String saved = FPSTR(HTTP_SAVED);
+        saved.replace("{h}", host);
+        page += saved;
     }
 
     page += FPSTR(HTTP_END);
