@@ -91,7 +91,9 @@ void handleWifiPage()
         page += item;
     }
     page += F("<br/>");
-    page += FPSTR(HTTP_FORM_START);
+    String formStart = FPSTR(HTTP_FORM_START);
+    formStart.replace("{h}", WiFi.hostname());
+    page += formStart;
     page += FPSTR(HTTP_FORM_END);
     page += F("<br/>");
     page += FPSTR(HTTP_END);
@@ -113,6 +115,7 @@ void handleWifiSavePage() {
 
     String ssid;
     String pass;
+    String host;
     bool ok = true;
     String reason;
 
@@ -124,9 +127,13 @@ void handleWifiSavePage() {
         // iterate over pHttpServer->args
         ssid = pHttpServer->arg("s");
         pass = pHttpServer->arg("p");
+        host = pHttpServer->arg("h");
         if (ssid == "") {
             ok = false;
             reason = F("no ssid specified");
+        } else if (host == "") {
+            ok = false;
+            reason = F("no hostname specified");
         }
     }
 
@@ -145,6 +152,7 @@ void handleWifiSavePage() {
     if (ok) {
         pHttpServer->send(200, "text/html", page);
         ModeWifiClient.setWifiLogin(ssid.c_str(), pass=="" ? NULL : pass.c_str());
+        ModeWifiClient.setHostname(host.c_str());
         ModeAP.finish();
     } else {
         pHttpServer->send(400, "text/plain", page);

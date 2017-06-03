@@ -32,6 +32,12 @@ void ModeWifiClient_::setWifiLogin(const char* ssid, const char* passphrase)
     _passphrase = passphrase;
 }
 
+void ModeWifiClient_::setHostname(const char* hostname)
+{
+    DB(F("ModeWifiClient::setHostname "));
+    _hostname = hostname;
+    DBLN(_hostname);
+}
 
 void ModeWifiClient_::connect(bool useCredentials)
 {
@@ -40,12 +46,12 @@ void ModeWifiClient_::connect(bool useCredentials)
     WiFi.disconnect();
     if (useCredentials) {
         WiFi.begin(_ssid.c_str(), _passphrase.c_str());
+        WiFi.hostname(_hostname.c_str());
     } else { 
         // Let the ESP8266 use the last sucessful credentials
         WiFi.begin();
     }
 }
-
 
 void ModeWifiClient_::modeUpdate()
 {

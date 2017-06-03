@@ -10,11 +10,13 @@ public:
     void modeStart();
     void modeUpdate();
     void setWifiLogin(const char* ssid, const char* passphrase);
+    void setHostname(const char* hostname);
     void connect(bool useCredentials=true);
 
 protected:
     String _ssid;
     String _passphrase;
+    String _hostname;
     int _prevStatus;
 
 };
