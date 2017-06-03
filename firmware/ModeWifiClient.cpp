@@ -62,7 +62,9 @@ void ModeWifiClient_::modeUpdate()
         case WL_CONNECTED:
             DB(F("connected ip="));
             HeartBeat.setMode(Heartbeat::Slower);
-            DBLN(WiFi.localIP());
+            DB(WiFi.localIP());
+            DB(F(" hostname="));
+            DBLN(WiFi.hostname());
             break;
         case WL_IDLE_STATUS:
             DBLN(F("idle"));
