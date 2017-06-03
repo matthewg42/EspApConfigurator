@@ -3,64 +3,19 @@
 #include <MutilaDebug.h>
 #include <DNSServer.h>
 
-// Misc local includes
-#include "NamedMode.h"
-
-// Some globally visible object instances
-#include "APButton.h"
-#include "HeartBeat.h"
-
-// Top level modes
-#include "ModeAP.h"
-#include "ModeWifiClient.h"
-#include "ModeReset.h"
-
-// Compile time config options
-#include "Config.h"
-
-NamedMode* pBaseMode = NULL;
-
-void switchMode(NamedMode* newMode)
-{
-    if (pBaseMode!=NULL) {
-        pBaseMode->stop();
-    }
-    pBaseMode = newMode;
-    pBaseMode->start();
-    DB("BaseMode is now: ");
-    DBLN(pBaseMode->name());
-}
+#include "EspApConfigurator.h"
 
 void setup() 
 {
     Serial.begin(115200);
     delay(50);
     DBLN(F("\n\nS:setup"));
-    HeartBeat.begin();
-    APButton.begin();
-    ModeAP.begin();
-    ModeWifiClient.begin();
-    ModeReset.begin();
-    switchMode(&ModeWifiClient);
+    EspApConfigurator.begin();
     DBLN(F("E:setup"));
 }
 
 void loop() 
 {
-    HeartBeat.update();
-    APButton.update();
-    pBaseMode->update();
-
-    if (APButton.held(3000)) {
-        switchMode(&ModeReset);
-    }
-
-    if (pBaseMode == &ModeAP) {
-        if (pBaseMode->isFinished()) {
-            switchMode(&ModeWifiClient);
-        }
-    } else if (APButton.tapped()) {
-        switchMode(&ModeAP);
-    }
+    EspApConfigurator.update();
 }
 

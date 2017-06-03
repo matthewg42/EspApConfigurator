@@ -24,17 +24,16 @@ Differences:
 - Connect to network in client mode
 - Hard-ish reset (zaps SSID from ESP memory)
 - Experimental settings for Char, UInt8, Long, String
+- Re-arrange project as usable library (wrap whole thing in a ParentMode to it can be easily used in other projects)
 
 ### TODO
 
 - Add generic non-volatile settings
    - Floats
 - Configure settings with web interface
-- Wrap whole thing in a ParentMode to it can be easily used in other projects
 - No networks found indication 
 - rescan button (just reloads page?)
 - Customised theming
-- Re-arrange project as usable library
 - Static IP config
 
 ## Pre-requisites

@@ -37,7 +37,8 @@ void handleNotFound() {
     pHttpServer->sendHeader("Cache-Control", "no-cache, no-store, must-revalidate");
     pHttpServer->sendHeader("Pragma", "no-cache");
     pHttpServer->sendHeader("Expires", "-1");
-    pHttpServer->send ( 404, "text/plain", message );
+    pHttpServer->send (404, "text/plain", message);
+    pHttpServer->client().stop();
 }
 
 void handleRoot()
@@ -77,7 +78,7 @@ void handleRoot()
     pHttpServer->sendHeader("Pragma", "no-cache");
     pHttpServer->sendHeader("Expires", "-1");
     pHttpServer->send(200, "text/html", page);
-    // pHttpServer->client().stop();
+    pHttpServer->client().stop();
 }
 
 void handleWifiSavePage() {
@@ -128,11 +129,13 @@ void handleWifiSavePage() {
     pHttpServer->sendHeader("Expires", "-1");
     if (ok) {
         pHttpServer->send(200, "text/html", page);
+        pHttpServer->client().stop();
         ModeWifiClient.setWifiLogin(ssid.c_str(), pass=="" ? NULL : pass.c_str());
         ModeWifiClient.setHostname(host.c_str());
         ModeAP.finish();
     } else {
         pHttpServer->send(400, "text/plain", page);
+        pHttpServer->client().stop();
     }
 }
 
