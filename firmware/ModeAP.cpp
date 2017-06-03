@@ -61,9 +61,7 @@ void ModeAP_::modeStart()
     }
     pHttpServer->onNotFound(handleNotFound);
     pHttpServer->on("/", handleRoot);
-    pHttpServer->on("/settings", handleSettingsPage);
-    pHttpServer->on("/wifi", handleWifiPage);
-    pHttpServer->on("/wifisave", handleWifiSavePage);
+    pHttpServer->on("/save", handleWifiSavePage);
     pHttpServer->begin();
 
     DBLN(F("E:ModeAP::modeStart()"));

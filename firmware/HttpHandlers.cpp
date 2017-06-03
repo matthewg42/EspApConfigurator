@@ -43,43 +43,17 @@ void handleNotFound() {
 void handleRoot()
 {
     DBLN(F("handleRoot"));
+
     String page = FPSTR(HTTP_HEAD);
-    page.replace("{v}", "EspApConfigurator");
+    page.replace("{v}", "ESPApConfigurator");
     page += FPSTR(HTTP_SCRIPT);
     page += FPSTR(HTTP_STYLE);
     page += FPSTR(HTTP_HEAD_END);
-    page += F("<h1>EspApConfigurator</h1>");
-    page += FPSTR(HTTP_PORTAL_OPTIONS);
-    page += FPSTR(HTTP_END);
-
-    pHttpServer->sendHeader("Cache-Control", "no-cache, no-store, must-revalidate");
-    pHttpServer->sendHeader("Pragma", "no-cache");
-    pHttpServer->sendHeader("Expires", "-1");
-    pHttpServer->send(200, "text/html", page);
-    // pHttpServer->client().stop();
-}
-
-void handleSettingsPage()
-{
-    DBLN(F("handleSettingsPage"));
-
-}
-
-void handleWifiPage()
-{
-    DBLN(F("handleWifiPage"));
-
-    String page = FPSTR(HTTP_HEAD);
-    page.replace("{v}", "Config WiFi");
-    page += FPSTR(HTTP_SCRIPT);
-    page += FPSTR(HTTP_STYLE);
-    page += FPSTR(HTTP_HEAD_END);
+    page += F("<h1>ESPApConfigurator</h1>");
 
     // TODO: sort by signal strength
-    //
     int8_t netCount = WiFi.scanComplete();
     for (int8_t i=0; i<netCount; i++) {
-        // "<div><a href='#p' onclick='c(this)'>{v}</a>&nbsp;<span class='q {i}'>{r}%</span></div>"
         String item = FPSTR(HTTP_ITEM);
         item.replace("{v}", WiFi.SSID(i));
         item.replace("{r}", String(rssiToQuality(WiFi.RSSI(i))));
@@ -96,6 +70,7 @@ void handleWifiPage()
     page += formStart;
     page += FPSTR(HTTP_FORM_END);
     page += F("<br/>");
+    // TODO: custom parameters
     page += FPSTR(HTTP_END);
 
     pHttpServer->sendHeader("Cache-Control", "no-cache, no-store, must-revalidate");
@@ -108,7 +83,7 @@ void handleWifiPage()
 void handleWifiSavePage() {
     DBLN(F("handleWifiSavePage"));
     String page = FPSTR(HTTP_HEAD);
-    page.replace("{v}", "Config WiFi");
+    page.replace("{v}", "Saving Settings");
     page += FPSTR(HTTP_SCRIPT);
     page += FPSTR(HTTP_STYLE);
     page += FPSTR(HTTP_HEAD_END);
