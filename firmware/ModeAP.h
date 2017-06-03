@@ -18,8 +18,6 @@ public:
     bool isFinished();
 
 protected:
-    IPAddress apIP;
-    IPAddress netMsk;
     DNSServer* pDnsServer;
     bool scanning;
     unsigned long lastScan;

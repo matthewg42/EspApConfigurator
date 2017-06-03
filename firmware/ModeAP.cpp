@@ -13,9 +13,7 @@
 ModeAP_ ModeAP;
 
 ModeAP_::ModeAP_() :
-    NamedMode("ModeAP"),
-    apIP(192, 168, 6, 1),
-    netMsk(255, 255, 255, 0)
+    NamedMode("ModeAP")
 {
     pDnsServer = NULL;
     pHttpServer = NULL;
