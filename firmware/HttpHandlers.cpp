@@ -27,25 +27,26 @@ void handleNotFound() {
 void handleRoot()
 {
     DBLN(F("handleRoot"));
+    String page = FPSTR(HTTP_HEAD);
+    page.replace("{v}", "EspApConfigurator");
+    page += FPSTR(HTTP_SCRIPT);
+    page += FPSTR(HTTP_STYLE);
+    page += FPSTR(HTTP_HEAD_END);
+    page += F("<h1>EspApConfigurator</h1>");
+    page += FPSTR(HTTP_PORTAL_OPTIONS);
+    page += FPSTR(HTTP_END);
+
     pHttpServer->sendHeader("Cache-Control", "no-cache, no-store, must-revalidate");
     pHttpServer->sendHeader("Pragma", "no-cache");
     pHttpServer->sendHeader("Expires", "-1");
-    pHttpServer->setContentLength(CONTENT_LENGTH_UNKNOWN);
-    pHttpServer->send(200, "text/html", "");
-    pHttpServer->sendContent("<html><head></head><body><h1>EspApConfigurator</h1><ul><li><a href=\"/settings\">Settings</li><li><a href=\"/wifi\">Wifi</li></ul></body></html>");
-    pHttpServer->client().stop();
+    pHttpServer->send(200, "text/html", page);
+    // pHttpServer->client().stop();
 }
 
 void handleSettingsPage()
 {
     DBLN(F("handleSettingsPage"));
-    pHttpServer->sendHeader("Cache-Control", "no-cache, no-store, must-revalidate");
-    pHttpServer->sendHeader("Pragma", "no-cache");
-    pHttpServer->sendHeader("Expires", "-1");
-    pHttpServer->setContentLength(CONTENT_LENGTH_UNKNOWN);
-    pHttpServer->send(200, "text/html", "");
-    pHttpServer->sendContent("<html><head></head><body><h1>Settings</h1></body></html>");
-    pHttpServer->client().stop();
+
 }
 
 void handleWifiPage()
