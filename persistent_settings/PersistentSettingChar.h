@@ -6,7 +6,6 @@
 
 /*! \brief Class for storing char values to EEPROM
  *
- * Probably to be used mostly for boolean values...
  */
 class PersistentSettingChar : public PersistentSettingAtom<char> {
 public:
