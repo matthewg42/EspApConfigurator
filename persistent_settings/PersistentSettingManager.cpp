@@ -15,11 +15,11 @@ PersistentSettingManager::~PersistentSettingManager()
     _settings = NULL;
 }
 
-bool PersistentSettingManager::addSetting(String id, PersistentSetting* setting, bool load) 
+PersistentSetting* PersistentSettingManager::addSetting(String id, PersistentSetting* setting, bool load) 
 {
     if (_count >= _maxSettings) {    
         DBLN(F("ERROR maxSettings reached"));
-        return false;
+        return NULL;
     }
 
     // Check for EEPROM address conflicts in previous settings
@@ -42,7 +42,7 @@ bool PersistentSettingManager::addSetting(String id, PersistentSetting* setting,
             DB(oldFirst);
             DB(F(" last="));
             DBLN(oldLast);
-            return false;
+            return NULL;
         }
     }
 
@@ -50,7 +50,7 @@ bool PersistentSettingManager::addSetting(String id, PersistentSetting* setting,
     _settings[_count].id = id;
     _settings[_count].setting = setting;
     _count++;
-    return true;
+    return setting;
 }
 
 uint8_t PersistentSettingManager::count()

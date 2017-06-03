@@ -14,7 +14,7 @@ class PersistentSettingManager {
 public:
     PersistentSettingManager(uint8_t maxSettings);
     ~PersistentSettingManager();
-    bool addSetting(String id, PersistentSetting* setting, bool load=true);
+    PersistentSetting* addSetting(String id, PersistentSetting* setting, bool load=true);
     uint8_t count();
     settingPair operator[](uint8_t idx);
 

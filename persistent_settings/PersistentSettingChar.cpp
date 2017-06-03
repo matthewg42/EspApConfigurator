@@ -1,14 +1,14 @@
 #include <EEPROM.h>
 #include "PersistentSettingChar.h"
 
-PersistentSettingChar::PersistentSettingChar(uint16_t eepromAddress, uint8_t defaultValue, validatorFunction validator) :
-    PersistentSettingAtom<uint8_t>(eepromAddress, defaultValue, validator)
+PersistentSettingChar::PersistentSettingChar(uint16_t eepromAddress, char defaultValue, validatorFunction validator) :
+    PersistentSettingAtom<char>(eepromAddress, defaultValue, validator)
 {
 }
 
 bool PersistentSettingChar::load()
 {
-    uint8_t loaded = peek();
+    char loaded = peek();
     String s(loaded);
     if (isValid(s)) {
         _value = loaded;
@@ -20,8 +20,8 @@ bool PersistentSettingChar::load()
 
 bool PersistentSettingChar::set(String newValue)
 {
-    if (isValid(newValue)) {
-        _value = newValue.toInt();
+    if (isValid(newValue) && newValue.length() == 1) {
+        _value = newValue[0];
         return true;
     } else {
         return false;

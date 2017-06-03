@@ -16,6 +16,9 @@
 DebouncedButton button(D6);
 
 PersistentSettingManager settings(3);
+PersistentSetting* longSetting;
+PersistentSetting* charSetting;
+PersistentSetting* strSetting;
 
 void getIt()
 {
@@ -24,12 +27,39 @@ void getIt()
         DB(" = ");
         DBLN(settings[i].setting->get());
     }
+    DB("charSetting as int: ");
+    DBLN((int)charSetting->get()[0]);
+    
     DBLN();
 }
 
 void setIt()
 {
-    DBLN("setIt() NOTHING HERE");
+    long r = random (-16000000,16000000);
+    DB("longSetting->set(");
+    DB(r);
+    DB(")=");
+    DB(longSetting->set(String(r)));
+    DB(", save()=");
+    DBLN(longSetting->save());
+
+    char c = random('A', 'Z');
+    DB("charSetting->set(");
+    DB(c);
+    DB(")=");
+    DB(charSetting->set(String(c)));
+    DB(", save()=");
+    DBLN(charSetting->save());
+
+    String s = "Millis=" + String(Millis());
+    DB("strSetting->set(");
+    DB(s);
+    DB(")=");
+    DB(strSetting->set(s));
+    DB(", save()=");
+    DBLN(strSetting->save());
+    DBLN();
+
 }
 
 void setup()
@@ -39,12 +69,19 @@ void setup()
     DBLN("\n\nS:setup");
     button.begin();
     EEPROM.begin(512);
-    settings.addSetting(String("Long integer setting"),
-                        new PersistentSettingLong(settings.nextFreeAddress(), 3142));
-    settings.addSetting(String("Character setting"),
-                        new PersistentSettingChar(settings.nextFreeAddress(), 'c'));
-    settings.addSetting(String("String setting"),
-                        new PersistentSettingString(settings.nextFreeAddress(), STRSIZE));
+    
+    longSetting =   settings.addSetting(
+                        String("Long integer setting"),
+                        new PersistentSettingLong(settings.nextFreeAddress(), 3142)
+                    );
+    charSetting =   settings.addSetting(
+                        String("Character setting"),
+                        new PersistentSettingChar(settings.nextFreeAddress(), 'c')
+                    );
+    strSetting =    settings.addSetting(
+                        String("String setting"),
+                        new PersistentSettingString(settings.nextFreeAddress(), STRSIZE)
+                    );
     
     DBLN("E:setup");
 }
