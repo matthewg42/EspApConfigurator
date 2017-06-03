@@ -39,7 +39,8 @@ void setup()
     APButton.begin();
     ModeAP.begin();
     ModeWifiClient.begin();
-    switchMode(&ModeWifiClient);
+    // switchMode(&ModeWifiClient);
+    switchMode(&ModeAP);
     DBLN(F("E:setup"));
 }
 

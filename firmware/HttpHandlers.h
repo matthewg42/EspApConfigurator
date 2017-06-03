@@ -2,6 +2,8 @@
 
 #include "HttpServer.h"
 
-void handleRoot();
 void handleNotFound();
+void handleRoot();
+void handleSettingsPage();
+void handleWifiPage();
 

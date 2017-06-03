@@ -63,8 +63,10 @@ void ModeAP_::modeStart()
     if (!pHttpServer) {
         pHttpServer = new ESP8266WebServer(80);
     }
-    pHttpServer->on("/", handleRoot);
     pHttpServer->onNotFound(handleNotFound);
+    pHttpServer->on("/", handleRoot);
+    pHttpServer->on("/settings", handleSettingsPage);
+    pHttpServer->on("/wifi", handleWifiPage);
     pHttpServer->begin();
 
     DBLN(F("E:ModeAP::modeStart()"));
@@ -100,14 +102,14 @@ void ModeAP_::modeUpdate()
             DB("scan took ");
             DB(Millis() - lastScan);
             DBLN("ms");
-            for (int8_t i=0; i<netCount; i++) {
+            /* for (int8_t i=0; i<netCount; i++) {
                 DBF("%d: %s, Ch:%d (%ddBm) %s\n", 
                     i+1, 
                     WiFi.SSID(i).c_str(),
                     WiFi.channel(i), 
                     WiFi.RSSI(i), 
                     WiFi.encryptionType(i) == ENC_TYPE_NONE ? "open" : "");
-            }
+            }*/
         }
     } else if (Millis() > lastScan+(WIFI_SCAN_PERIOD*1000)) {
         startScan();
