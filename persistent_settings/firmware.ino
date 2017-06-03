@@ -8,6 +8,7 @@
 #include "PersistentSettingString.h"
 #include "PersistentSettingChar.h"
 #include "PersistentSettingUInt8.h"
+#include "PersistentSettingFloat.h"
 #include "PersistentSettingManager.h"
 
 // Goal: read write different types to/from eeprom on the ESP8266
@@ -21,6 +22,7 @@ PersistentSetting* longSetting;
 PersistentSetting* charSetting;
 PersistentSetting* uint8Setting;
 PersistentSetting* strSetting;
+PersistentSetting* floatSetting;
 
 void getIt()
 {
@@ -68,8 +70,16 @@ void setIt()
     DB(strSetting->set(s));
     DB(", save()=");
     DBLN(strSetting->save());
-    DBLN();
 
+    float f = r / 1000.;
+    DB("floatSetting->set(");
+    DB(f);
+    DB(")=");
+    DB(floatSetting->set(String(f)));
+    DB(", save()=");
+    DBLN(floatSetting->save());
+
+    DBLN();
 }
 
 void setup()
@@ -95,6 +105,10 @@ void setup()
     strSetting =    settings.addSetting(
                         String("String setting"),
                         new PersistentSettingString(settings.nextFreeAddress(), STRSIZE)
+                    );
+    floatSetting =  settings.addSetting(
+                        String("Float setting"),
+                        new PersistentSettingFloat(settings.nextFreeAddress(), 3.142)
                     );
     
     DBLN("E:setup");
