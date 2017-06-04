@@ -76,16 +76,20 @@ void handleRoot()
 
     // TODO: sort by signal strength
     int8_t netCount = WiFi.scanComplete();
-    for (int8_t i=0; i<netCount; i++) {
-        String item = FPSTR(HTTP_ITEM);
-        item.replace("{v}", WiFi.SSID(i));
-        item.replace("{r}", String(rssiToQuality(WiFi.RSSI(i))));
-        if (WiFi.encryptionType(i) != ENC_TYPE_NONE) {
-            item.replace("{i}", "l");
-        } else {
-            item.replace("{i}", "");
+    if (netCount>0) {
+        for (int8_t i=0; i<netCount; i++) {
+            String item = FPSTR(HTTP_ITEM);
+            item.replace("{v}", WiFi.SSID(i));
+            item.replace("{r}", String(rssiToQuality(WiFi.RSSI(i))));
+            if (WiFi.encryptionType(i) != ENC_TYPE_NONE) {
+                item.replace("{i}", "l");
+            } else {
+                item.replace("{i}", "");
+            }
+            page += item;
         }
-        page += item;
+    } else {
+        page += F("<p>[no networks found]</p>");
     }
     page += F("<br/>");
     String form = FPSTR(HTTP_FORM_START);

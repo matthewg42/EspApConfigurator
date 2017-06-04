@@ -30,11 +30,11 @@ Differences:
     - save to EEPROM
     - validate on load and set default otherwise
 - Add default validation (for string)
+- No networks found indication 
 
 ### TODO
 
 - Re-work the way settings are added to be more convenient
-- No networks found indication 
 - Customised theming
 - Static IP config
 
