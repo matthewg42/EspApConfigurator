@@ -19,6 +19,9 @@ public:
     PersistentSetting* addSetting(String id, PersistentSetting* setting, bool load=true);
     uint8_t count();
     settingPair operator[](uint8_t idx);
+    //! Get setting value by name or return String() if not found
+    String operator[](const char* id);
+    String operator[](String id);
 
     /*! Get next free EEPROM address
      *
