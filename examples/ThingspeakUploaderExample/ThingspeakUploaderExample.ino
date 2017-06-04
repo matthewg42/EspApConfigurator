@@ -22,7 +22,8 @@ void uploadToThingspeak()
     url.replace("{1}", String(random(0,400)));
     url.replace("{2}", String(random(0,400)));
     DB("url: ");
-    DBLN(url);
+    DB(url);
+    DB(' ');
 
     HTTPClient http;
     http.begin(url);
