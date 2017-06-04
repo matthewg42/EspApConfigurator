@@ -40,6 +40,9 @@ Differences:
   can not load if that has changed
 - Customised theming
 - Static IP config
+- Asynchronous HTTP requests
+- HTTPS / TLS connections
+- NTP / time stuff
 
 ## Pre-requisites
 
