@@ -91,6 +91,8 @@ public:
      * 
      *  \return the value in EEPROM for this setting
      */
+
+    uint16_t formLength() { return 16; }
     T peek();
 
 protected:

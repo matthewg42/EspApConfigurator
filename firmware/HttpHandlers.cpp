@@ -5,6 +5,7 @@
 #include "HttpHandlers.h"
 #include "ModeAP.h"
 #include "ModeWifiClient.h"
+#include "SettingManager.h"
 
 // Taken from MIT-licensed WiFiManager code
 int rssiToQuality(int RSSI) {
@@ -18,6 +19,27 @@ int rssiToQuality(int RSSI) {
         quality = 2 * (RSSI + 100);
     }
     return quality;
+}
+
+bool validateHostname(String h) {
+    DB(F("validateHostname "));
+    DB(h);
+    if (h == "") {
+        DBLN(F(" fail:blank"));
+        return false;
+    } 
+    for (uint8_t i=0; i<h.length(); i++) {
+        if (! (
+                   (h[i] >= 'a' && h[i] <= 'z') 
+                || (h[i] >= 'A' && h[i] <= 'Z') 
+                || (h[i] >= '0' && h[i] <= '9') 
+                || h[i] == '_')) {
+            DBLN(F(" fail:char"));
+            return false;
+        }
+    }
+    DBLN(F("OK"));
+    return true;
 }
 
 void handleNotFound() {
@@ -50,7 +72,7 @@ void handleRoot()
     page += FPSTR(HTTP_SCRIPT);
     page += FPSTR(HTTP_STYLE);
     page += FPSTR(HTTP_HEAD_END);
-    page += F("<h1>ESPApConfigurator</h1>");
+    page += F("<h1>ESPApConfigurator</h1><h3>Networks</h3>");
 
     // TODO: sort by signal strength
     int8_t netCount = WiFi.scanComplete();
@@ -66,9 +88,17 @@ void handleRoot()
         page += item;
     }
     page += F("<br/>");
-    String formStart = FPSTR(HTTP_FORM_START);
-    formStart.replace("{h}", WiFi.hostname());
-    page += formStart;
+    String form = FPSTR(HTTP_FORM_START);
+    form.replace("{h}", WiFi.hostname());
+    page += form;
+    for (uint8_t i=0; i<SettingManager.count(); i++) {
+        form = FPSTR(HTTP_FORM_PARAM);
+        form.replace("{i}", String('p') + String((char)('a'+i)));
+        form.replace("{p}", SettingManager[i].id);
+        form.replace("{l}", String(SettingManager[i].setting->formLength()));
+        form.replace("{v}", SettingManager[i].setting->get());
+        page += form;
+    }
     page += FPSTR(HTTP_FORM_END);
     page += F("<br/>");
     // TODO: custom parameters
@@ -107,12 +137,18 @@ void handleWifiSavePage() {
         if (ssid == "") {
             ok = false;
             reason = F("no ssid specified");
-        } else if (host == "") {
+        } else if (!validateHostname(host)) {
             ok = false;
-            reason = F("no hostname specified");
+            reason = F("bad hostname \"");
+            reason += host;
+            reason += '\"';
         }
     }
 
+    // TODO: Handle custom settings...
+    
+
+    // Evaluate our status and display message accordingly
     if (!ok) {
         page += F("<h1>Error</h1>");       
         page += reason;       
@@ -134,7 +170,7 @@ void handleWifiSavePage() {
         ModeWifiClient.setHostname(host.c_str());
         ModeAP.finish();
     } else {
-        pHttpServer->send(400, "text/plain", page);
+        pHttpServer->send(400, "text/html", page);
         pHttpServer->client().stop();
     }
 }

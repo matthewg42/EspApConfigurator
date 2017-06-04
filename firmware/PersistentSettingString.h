@@ -58,6 +58,7 @@ public:
      *  \return size in bytes
      */
     uint16_t size();
+    uint16_t formLength() { return size(); }
 
     /*! \brief Validation
      *
