@@ -38,7 +38,7 @@ bool validateHostname(String h) {
             return false;
         }
     }
-    DBLN(F("OK"));
+    DBLN(F(" OK"));
     return true;
 }
 
