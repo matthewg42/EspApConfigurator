@@ -12,7 +12,6 @@ Differences:
 
 ## Status
 
-
 ### Working
 
 - Button press to enter AP mode
@@ -26,14 +25,15 @@ Differences:
 - Experimental settings for Char, UInt8, Long, String, Float
 - Re-arrange project as usable library (wrap whole thing in a ParentMode to it can be easily used in other projects)
 - Rescan button (just reloads page)
-
-### TODO
-
 - Configure settings with web interface 
     - validate on save
     - save to EEPROM
     - validate on load and set default otherwise
-- Add default validations for each setting type
+- Add default validation (for string)
+
+### TODO
+
+- Re-work the way settings are added to be more convenient
 - No networks found indication 
 - Customised theming
 - Static IP config

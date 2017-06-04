@@ -123,11 +123,11 @@ void handleWifiSavePage() {
     String pass;
     String host;
     bool ok = true;
-    String reason;
+    String reason = "";
 
     if (pHttpServer->method() != HTTP_POST) {
         ok = false;
-        reason = F("not a POST");
+        reason += F("not a POST<br/>");
     } else {
         // we have a POST, good, now populate the parameters
         // iterate over pHttpServer->args
@@ -136,17 +136,34 @@ void handleWifiSavePage() {
         host = pHttpServer->arg("h");
         if (ssid == "") {
             ok = false;
-            reason = F("no ssid specified");
-        } else if (!validateHostname(host)) {
+            reason = F("no ssid specified<br/>");
+        } 
+        if (!validateHostname(host)) {
             ok = false;
-            reason = F("bad hostname \"");
+            reason += F("bad hostname \"");
             reason += host;
-            reason += '\"';
+            reason += '\"<br/>';
+        }
+
+        // Handle custom settings...
+        for (uint8_t i=0; i<SettingManager.count(); i++) {
+            String id = String('p') + String((char)('a'+i));
+            String value = pHttpServer->arg(id.c_str());
+            if (!SettingManager[i].setting->set(value)) {
+                ok = false;
+                reason += F("Setting \"");
+                reason += SettingManager[i].id;
+                reason += F(" \" invalid value \"");
+                reason += value;
+                reason += "\"<br/>";
+            } else if (!SettingManager[i].setting->save()) {
+                ok = false;
+                reason += F("Setting \"");
+                reason += SettingManager[i].id;
+                reason += F(" \" save failed<br/>");
+            }
         }
     }
-
-    // TODO: Handle custom settings...
-    
 
     // Evaluate our status and display message accordingly
     if (!ok) {

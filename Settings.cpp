@@ -1,3 +1,4 @@
+#include <EEPROM.h>
 #include "Settings.h"
 #include "SettingManager.h"
 #include "PersistentSettingString.h"
@@ -8,6 +9,7 @@ PersistentSetting* settingFloatMagicNumber;
 
 void initSettings()
 {
+    EEPROM.begin(512);
     settingStrProjectName = new PersistentSettingString(0, 32);
     SettingManager.add("Project Name", settingStrProjectName);
 

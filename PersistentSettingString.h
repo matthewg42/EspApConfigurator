@@ -4,6 +4,9 @@
 #include <Arduino.h>
 #include "PersistentSetting.h"
 
+// Check that strings are made only of printing ASCII characters
+bool basicStringValidator(String s);
+
 /*! \brief EEPROM-backed non-volatile storage of atomic (non-array) settings
  */
 class PersistentSettingString : public PersistentSetting {
@@ -22,7 +25,7 @@ public:
      *
      *  TODO: Think of a graceful way to handle default values which do not pass validation
      */
-    PersistentSettingString(uint16_t eepromAddress, uint16_t maxLength, validatorFunction validator=NULL);
+    PersistentSettingString(uint16_t eepromAddress, uint16_t maxLength, validatorFunction validator=&basicStringValidator);
 
     /*! \brief get the current value
      *

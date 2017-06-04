@@ -87,12 +87,16 @@ public:
      */
     bool isValid(String value);
 
+    /*! \brief Get the maximum length in characters
+     * 
+     *  \return max length in characters when represented as a string
+     */
+    uint16_t formLength() { return 16; }
+
     /*! \brief peek at what is in EEPROM for this setting (may not be a valid value)
      * 
      *  \return the value in EEPROM for this setting
      */
-
-    uint16_t formLength() { return 16; }
     T peek();
 
 protected:
