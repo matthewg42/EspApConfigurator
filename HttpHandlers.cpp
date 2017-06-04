@@ -95,7 +95,7 @@ void handleRoot()
     String form = FPSTR(HTTP_FORM_START);
     form.replace("{h}", WiFi.hostname());
     page += form;
-    if (EspApConfigurator.count()>0) { F("<h3>ProjectSettings</h3><p>"); }
+    if (EspApConfigurator.count()>0) { page += F("<h3>Project Settings</h3><p>"); }
     for (uint8_t i=0; i<EspApConfigurator.count(); i++) {
         form = FPSTR(HTTP_FORM_PARAM);
         form.replace("{i}", String('p') + String((char)('a'+i)));
@@ -104,7 +104,7 @@ void handleRoot()
         form.replace("{v}", EspApConfigurator[i].setting->get());
         page += form;
     }
-    if (EspApConfigurator.count()>0) { F("</p>"); }
+    if (EspApConfigurator.count()>0) { page += F("</p>"); }
     page += FPSTR(HTTP_FORM_END);
     page += F("<br/>");
     page += FPSTR(HTTP_END);
@@ -116,8 +116,8 @@ void handleRoot()
     pHttpServer->client().stop();
 }
 
-void handleWifiSavePage() {
-    DBLN(F("handleWifiSavePage"));
+void handleWifiSave() {
+    DBLN(F("handleWifiSave"));
     String page = FPSTR(HTTP_HEAD);
     page.replace("{v}", "Saving Settings");
     page += FPSTR(HTTP_SCRIPT);
@@ -195,5 +195,23 @@ void handleWifiSavePage() {
         pHttpServer->send(400, "text/html", page);
         pHttpServer->client().stop();
     }
+}
+
+void handleWifi() {
+    DBLN(F("handleWifi"));
+    String page = FPSTR(HTTP_HEAD);
+    page.replace("{v}", "Cancel Changes");
+    page += FPSTR(HTTP_SCRIPT);
+    page += FPSTR(HTTP_STYLE);
+    page += FPSTR(HTTP_HEAD_END);
+    page += FPSTR(HTTP_NOSAVE);
+    page += FPSTR(HTTP_END);
+
+    pHttpServer->sendHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+    pHttpServer->sendHeader("Pragma", "no-cache");
+    pHttpServer->sendHeader("Expires", "-1");
+    pHttpServer->send(200, "text/html", page);
+    pHttpServer->client().stop();
+    ModeAP.finish();
 }
 

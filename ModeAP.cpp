@@ -61,7 +61,8 @@ void ModeAP_::modeStart()
     }
     pHttpServer->onNotFound(handleNotFound);
     pHttpServer->on("/", handleRoot);
-    pHttpServer->on("/save", handleWifiSavePage);
+    pHttpServer->on("/save", handleWifiSave);
+    pHttpServer->on("/wifi", handleWifi);
     pHttpServer->begin();
 
     DBLN(F("E:ModeAP::modeStart()"));
@@ -107,7 +108,6 @@ void ModeAP_::modeUpdate()
 
 void ModeAP_::startScan()
 {
-    DBLN(F("ModeAP::startScan"));
     if (scanning) {
         DBLN(F("[still scanning]"));
         return;
