@@ -49,12 +49,17 @@ void EspApConfigurator_::modeUpdate()
         switchMode(&ModeReset);
     }
 
-    if (pMode == &ModeAP) {
+    if (inApMode()) {
         if (pMode->isFinished()) {
             switchMode(&ModeWifiClient);
         }
     } else if (APButton.tapped()) {
         switchMode(&ModeAP);
     }
+}
+
+bool EspApConfigurator_::inApMode()
+{
+    return (pMode == &ModeAP);
 }
 

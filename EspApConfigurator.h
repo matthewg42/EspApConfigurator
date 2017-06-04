@@ -15,6 +15,7 @@ public:
     void modeStart();
     void modeEnd();
     void modeUpdate();
+    bool inApMode();
 
 };
 
