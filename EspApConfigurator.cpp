@@ -4,16 +4,19 @@
 #include "ModeReset.h"
 #include "APButton.h"
 #include "HeartBeat.h"
+#include "Config.h"
 
 EspApConfigurator_ EspApConfigurator;
 
 EspApConfigurator_::EspApConfigurator_() :
-    ParentMode("EspApConfigurator")
+    ParentMode("EspApConfigurator"),
+    PersistentSettingManager(NUMBER_OF_SETTINGS)
 {
 }
 
 void EspApConfigurator_::begin()
 {
+    PersistentSettingManager::begin();
     APButton.begin();
     HeartBeat.begin();
     ModeAP.begin();

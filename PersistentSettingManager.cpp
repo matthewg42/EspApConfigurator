@@ -1,4 +1,5 @@
 #include <Arduino.h>
+#include <EEPROM.h>
 #include <MutilaDebug.h>
 #include "PersistentSettingManager.h"
 
@@ -13,6 +14,11 @@ PersistentSettingManager::~PersistentSettingManager()
 {
     delete _settings;
     _settings = NULL;
+}
+
+void PersistentSettingManager::begin()
+{
+    EEPROM.begin(512);
 }
 
 PersistentSetting* PersistentSettingManager::add(String id, PersistentSetting* setting, bool load) 

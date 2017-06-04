@@ -5,7 +5,7 @@
 #include "HttpHandlers.h"
 #include "ModeAP.h"
 #include "ModeWifiClient.h"
-#include "SettingManager.h"
+#include "EspApConfigurator.h"
 
 // Taken from MIT-licensed WiFiManager code
 int rssiToQuality(int RSSI) {
@@ -95,17 +95,18 @@ void handleRoot()
     String form = FPSTR(HTTP_FORM_START);
     form.replace("{h}", WiFi.hostname());
     page += form;
-    for (uint8_t i=0; i<SettingManager.count(); i++) {
+    if (EspApConfigurator.count()>0) { F("<h3>ProjectSettings</h3><p>"); }
+    for (uint8_t i=0; i<EspApConfigurator.count(); i++) {
         form = FPSTR(HTTP_FORM_PARAM);
         form.replace("{i}", String('p') + String((char)('a'+i)));
-        form.replace("{p}", SettingManager[i].id);
-        form.replace("{l}", String(SettingManager[i].setting->formLength()));
-        form.replace("{v}", SettingManager[i].setting->get());
+        form.replace("{p}", EspApConfigurator[i].id);
+        form.replace("{l}", String(EspApConfigurator[i].setting->formLength()));
+        form.replace("{v}", EspApConfigurator[i].setting->get());
         page += form;
     }
+    if (EspApConfigurator.count()>0) { F("</p>"); }
     page += FPSTR(HTTP_FORM_END);
     page += F("<br/>");
-    // TODO: custom parameters
     page += FPSTR(HTTP_END);
 
     pHttpServer->sendHeader("Cache-Control", "no-cache, no-store, must-revalidate");
@@ -150,20 +151,20 @@ void handleWifiSavePage() {
         }
 
         // Handle custom settings...
-        for (uint8_t i=0; i<SettingManager.count(); i++) {
+        for (uint8_t i=0; i<EspApConfigurator.count(); i++) {
             String id = String('p') + String((char)('a'+i));
             String value = pHttpServer->arg(id.c_str());
-            if (!SettingManager[i].setting->set(value)) {
+            if (!EspApConfigurator[i].setting->set(value)) {
                 ok = false;
                 reason += F("Setting \"");
-                reason += SettingManager[i].id;
+                reason += EspApConfigurator[i].id;
                 reason += F(" \" invalid value \"");
                 reason += value;
                 reason += "\"<br/>";
-            } else if (!SettingManager[i].setting->save()) {
+            } else if (!EspApConfigurator[i].setting->save()) {
                 ok = false;
                 reason += F("Setting \"");
-                reason += SettingManager[i].id;
+                reason += EspApConfigurator[i].id;
                 reason += F(" \" save failed<br/>");
             }
         }

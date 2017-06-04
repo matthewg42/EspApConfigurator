@@ -4,14 +4,12 @@
 #include <MutilaDebug.h>
 #include <DNSServer.h>
 #include <EspApConfigurator.h>
-#include <Settings.h>
 
 void setup() 
 {
     Serial.begin(115200);
     delay(50);
     DBLN(F("\n\nS:setup"));
-    initSettings();
     EspApConfigurator.begin();
     DBLN(F("E:setup"));
 }
