@@ -34,9 +34,16 @@ Differences:
 
 ### TODO
 
+- Hostname should be a custom parameter, but perhaps a special one
+- Settings "fingerprinting" with a checksum at EEPROM[0] so we
+  can not load if that has changed
+- Less verbose debugging about scanning
 - Re-work the way settings are added to be more convenient
 - Customised theming
 - Static IP config
+- Fix setting heading (not functioning for some reason)
+- Fetch settings by name with operator[](String)
+- Have example code do something with settings
 
 ## Pre-requisites
 

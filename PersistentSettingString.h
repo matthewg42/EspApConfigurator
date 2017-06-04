@@ -20,12 +20,13 @@ public:
      *  Note that load() is not called in the constructor - the setting will have defaultValue on creation.
      *
      *  \param eepromAddress the FIRST byte in EEPROM which is used by this setting
+     *  \param maxLength the maximum number of characters in the string
      *  \param defaultValue the default to be used when first created or after loading when loaded value is not valid
      *  \param validator a function pointer to a function used to validate loaded / set values
      *
      *  TODO: Think of a graceful way to handle default values which do not pass validation
      */
-    PersistentSettingString(uint16_t eepromAddress, uint16_t maxLength, validatorFunction validator=&basicStringValidator);
+    PersistentSettingString(uint16_t eepromAddress, uint16_t maxLength, String defaultValue, validatorFunction validator=&basicStringValidator);
 
     /*! \brief get the current value
      *
@@ -82,6 +83,7 @@ public:
 
 protected:
     uint16_t _maxLength;
+    String _defaultValue;
     validatorFunction _validator;
     String _value;
 

@@ -15,7 +15,8 @@ public:
     PersistentSettingManager(uint8_t maxSettings);
     ~PersistentSettingManager();
     void begin();
-    PersistentSetting* add(String id, PersistentSetting* setting, bool load=true);
+    PersistentSetting* addSetting(const char* id, PersistentSetting* setting, bool load=true);
+    PersistentSetting* addSetting(String id, PersistentSetting* setting, bool load=true);
     uint8_t count();
     settingPair operator[](uint8_t idx);
 

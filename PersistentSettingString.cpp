@@ -13,10 +13,12 @@ bool basicStringValidator(String s)
     return true;
 }
 
-PersistentSettingString::PersistentSettingString(uint16_t eepromAddress, uint16_t maxLength, validatorFunction validator) : 
+PersistentSettingString::PersistentSettingString(uint16_t eepromAddress, uint16_t maxLength, String defaultValue, validatorFunction validator) : 
     PersistentSetting(eepromAddress),
     _maxLength(maxLength),
-    _validator(validator)
+    _defaultValue(defaultValue),
+    _validator(validator),
+    _value(defaultValue)
 {
 }
 
