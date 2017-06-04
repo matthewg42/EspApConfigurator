@@ -3,10 +3,8 @@
 #include <ESP8266WebServer.h>
 #include <MutilaDebug.h>
 #include <DNSServer.h>
-
-#include "Settings.h"
-#include "SettingManager.h"
-#include "EspApConfigurator.h"
+#include <EspApConfigurator.h>
+#include <Settings.h>
 
 void setup() 
 {
