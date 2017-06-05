@@ -37,17 +37,26 @@ Differences:
 
 ### TODO
 
-- Make wifi scans only once at first (before setting heartbeat!)
-  and after that only when requested with a click...
-- Hostname should be a custom parameter, but perhaps a special one
-- Settings "fingerprinting" with a checksum at EEPROM[0] so we
-  can not load if that has changed
-- Customised theming
+- Make wifi scans much less frequent - behavious should be like this:
+    - On enabled AP, do a scan - do not change HeartBeat mode until scan complete
+    - Re-scan once a minute, and:
+    - Re-scan when user clicks re-scan button in web ui
+    - When scanning runs, set HeartBeat to indicate this somehow
+- Hostname should not be a default parameter, as ESP does not store it in a non-valatile way
+- Enhance settings:
+    - allow special setting for hostname.  If it exists, then use it when switching to ModeWifiClient
+    - "fingerprinting" EEPROM[0] with forced reset if fingerprint if mismatch
+    - each setting type can be queried, and the interface should select an html input as appropriate
+- Web UI:
+    - ssid/pass pre-populated if the ESP has connected ok in the past
+    - pass should have a "show" option
+    - setting type-specific inputs
+    - Customised theming
+- Low power mode:
+    - option go into light sleep between periodic activity?
 - Static IP config
-- Asynchronous HTTP requests?
+- Asynchronous HTTP/HTTPS requests (check out https://github.com/me-no-dev/ESPAsyncTCP)
 - NTP / time stuff
-- Trigger first upload on connection
-  - callbacks?
 
 ## Pre-requisites
 
