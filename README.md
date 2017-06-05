@@ -35,6 +35,8 @@ Differences:
 
 ### TODO
 
+- Make wifi scans only once at first (before setting heartbeat!)
+  and after that only when requested with a click...
 - Hostname should be a custom parameter, but perhaps a special one
 - Settings "fingerprinting" with a checksum at EEPROM[0] so we
   can not load if that has changed
@@ -43,6 +45,8 @@ Differences:
 - Asynchronous HTTP requests
 - HTTPS / TLS connections
 - NTP / time stuff
+- Trigger first upload on connection
+  - callbacks?
 
 ## Pre-requisites
 
