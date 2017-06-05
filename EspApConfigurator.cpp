@@ -64,3 +64,11 @@ bool EspApConfigurator_::inApMode()
     return (pMode == &ModeAP);
 }
 
+bool EspApConfigurator_::isConnected()
+{
+    // Note: When/if we implement static IP mode, this may need to change
+    // https://github.com/esp8266/Arduino/issues/119
+    return !inApMode() && WiFi.status() == WL_CONNECTED;
+}
+
+
