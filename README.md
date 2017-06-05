@@ -52,6 +52,10 @@ Differences:
     - pass should have a "show" option
     - setting type-specific inputs
     - Customised theming
+- Better handling of failed connections:
+    - If connection fails, retry a few times and then
+        - Turn off WiFi and wake it up once ever few minutes to retry
+        - monitor button for APmode
 - Low power mode:
     - option go into light sleep between periodic activity?
 - Static IP config
