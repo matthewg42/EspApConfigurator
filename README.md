@@ -32,6 +32,7 @@ Differences:
 - Add default validation (for string)
 - No networks found indication 
 - Fetch settings by name with operator[](String)
+- HTTPS in example code
 
 ### TODO
 
@@ -42,8 +43,7 @@ Differences:
   can not load if that has changed
 - Customised theming
 - Static IP config
-- Asynchronous HTTP requests
-- HTTPS / TLS connections
+- Asynchronous HTTP requests?
 - NTP / time stuff
 - Trigger first upload on connection
   - callbacks?

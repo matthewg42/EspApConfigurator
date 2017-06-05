@@ -1,44 +1,75 @@
-#include <EEPROM.h>
-#include <ESP8266WiFi.h>
-#include <ESP8266WebServer.h>
-#include <MutilaDebug.h>
 #include <DNSServer.h>
+#include <EEPROM.h>
 #include <ESP8266HTTPClient.h>
+#include <ESP8266WebServer.h>
+#include <ESP8266WiFi.h>
 #include <EspApConfigurator.h>
-#include <PersistentSettingString.h>
+#include <MutilaDebug.h>
+#include <PersistentSettingChar.h>
 #include <PersistentSettingFloat.h>
 #include <PersistentSettingLong.h>
-#include <PersistentSettingChar.h>
+#include <PersistentSettingString.h>
+#include <WiFiClientSecure.h>
+#include <MemoryFree.h>
 
-// We set this a little off 0 so the ESP has a chance to connect to
-// wifi when first powered on, as the HTTP call is blocking.
-unsigned long lastUpload = 10000;
+#define UPLOAD_SERVER   "api.thingspeak.com"
+#define CERT_SERVER     "thingspeak.com"
+#define UPLOAD_PORT     443
+#define URL_TEMPLATE    F("/update?api_key={k}&field1={1}&field2={2}")
+
+unsigned long lastUpload = 0;
 
 void uploadToThingspeak()
 {
     lastUpload = Millis();
-    String url = F("http://api.thingspeak.com/update?api_key={k}&field1={1}&field2={2}");
-    url.replace("{k}", EspApConfigurator["Thingspeak API Key"]);
-    url.replace("{1}", String(random(0,400)));
-    url.replace("{2}", String(random(0,400)));
-    DB("url: ");
-    DB(url);
-    DB(' ');
 
-    HTTPClient http;
-    http.begin(url);
-    // TODO https: http.begin(url, "7a 9c f4 db 40 d3 62 5a 6e 21 bc 5c cc 66 c8 3e a1 45 59 38");
-    int httpCode = http.GET();
-    if(httpCode > 0) {
-        if(httpCode == HTTP_CODE_OK) {
-            String payload = http.getString();
-            DB(F("[HTTP] GET OK, response: "));
-            DBLN(payload);
-        }
-    } else {
-        DBF("[HTTP] GET... ERROR: %s\n", http.errorToString(httpCode).c_str());
+    WiFiClientSecure client;
+    
+    DB(F("Opening connection to "));
+    DB(UPLOAD_SERVER);
+    DB(F(" on port "));
+    DB(UPLOAD_PORT);
+    DBLN(F("... "));
+    if (!client.connect(UPLOAD_SERVER, UPLOAD_PORT)) {
+        DBLN(F("FAILED"));
+        return;
     }
-    http.end();
+    DBLN("OK");
+
+    DB(F("Host TLS cert verification (hash: "));
+    DB(EspApConfigurator["Certificate Hash"].c_str());
+    DB(F(")..."));
+    if (!client.verify(EspApConfigurator["Certificate Hash"].c_str(), CERT_SERVER)) {
+        DBLN(F("FAILED"));
+        return;
+    }
+    DBLN(F("SUCCESS"));
+
+    String url = URL_TEMPLATE;
+    url.replace("{k}", EspApConfigurator["Thingspeak API Key"]);
+    url.replace("{1}", String(ESP.getFreeHeap()));
+    url.replace("{2}", String(ESP.getVcc()));
+
+    DB(F("Sending HTTP request... "));
+    client.print(String("GET ") + url + " HTTP/1.1\r\n" +
+                    "Host: " + UPLOAD_SERVER + "\r\n" +
+                    "User-Agent: ESP8266/ThingspeakUploaderExample\r\n" +
+                    "Connection: close\r\n\r\n");
+
+    bool headers = true;
+    while (client.connected()) {
+        String line = client.readStringUntil('\n');
+        if (line == "\r") {
+            DBLN(F("[headers end]"));
+            headers = false;
+        } else if (headers && line.startsWith("Status:")) {
+            DBLN(line);
+        } else if (!headers) {
+            DB(F("Reply: "));
+            DBLN(line);
+        }
+    }
+
 }
 
 void setup() 
@@ -49,8 +80,9 @@ void setup()
     EspApConfigurator.begin();
 
     // Must add settings AFTER EspApConfigurator.begin()
-    EspApConfigurator.addSetting("Update interval (s)", new PersistentSettingLong(EspApConfigurator.nextFreeAddress(), 15));
-    EspApConfigurator.addSetting("Thingspeak API Key", new PersistentSettingString(EspApConfigurator.nextFreeAddress(), 16, "[write api key]"));
+    EspApConfigurator.addSetting("Update interval (s)",   new PersistentSettingLong(EspApConfigurator.nextFreeAddress(), 15));
+    EspApConfigurator.addSetting("Thingspeak API Key",    new PersistentSettingString(EspApConfigurator.nextFreeAddress(), 16, "[paste api key]"));
+    EspApConfigurator.addSetting("Certificate Hash", new PersistentSettingString(EspApConfigurator.nextFreeAddress(), 60, "[paste fingerprint hash]"));
 
     DBLN(F("E:setup"));
 }
