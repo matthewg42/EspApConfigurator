@@ -12,6 +12,9 @@
 #include <WiFiClientSecure.h>
 #include <MemoryFree.h>
 
+// Enable vcc measurement 
+ADC_MODE(ADC_VCC);
+
 #define UPLOAD_SERVER   "api.thingspeak.com"
 #define CERT_SERVER     "thingspeak.com"
 #define UPLOAD_PORT     443
@@ -50,6 +53,8 @@ void uploadToThingspeak()
     url.replace("{1}", String(ESP.getFreeHeap()));
     url.replace("{2}", String(ESP.getVcc()));
 
+    DB(F("url: "));
+    DBLN(url);
     DB(F("Sending HTTP request... "));
     client.print(String("GET ") + url + " HTTP/1.1\r\n" +
                     "Host: " + UPLOAD_SERVER + "\r\n" +
@@ -60,7 +65,6 @@ void uploadToThingspeak()
     while (client.connected()) {
         String line = client.readStringUntil('\n');
         if (line == "\r") {
-            DBLN(F("[headers end]"));
             headers = false;
         } else if (headers && line.startsWith("Status:")) {
             DBLN(line);
@@ -77,12 +81,22 @@ void setup()
     Serial.begin(115200);
     delay(50);
     DBLN(F("\n\nS:setup"));
+
+
     EspApConfigurator.begin();
 
     // Must add settings AFTER EspApConfigurator.begin()
     EspApConfigurator.addSetting("Update interval (s)",   new PersistentSettingLong(EspApConfigurator.nextFreeAddress(), 15));
     EspApConfigurator.addSetting("Thingspeak API Key",    new PersistentSettingString(EspApConfigurator.nextFreeAddress(), 16, "[paste api key]"));
     EspApConfigurator.addSetting("Certificate Hash", new PersistentSettingString(EspApConfigurator.nextFreeAddress(), 60, "[paste fingerprint hash]"));
+
+    // Dump settings
+    DBLN(F("Settings:"));
+    for (uint8_t i=0; i<EspApConfigurator.count(); i++) {
+        DB(EspApConfigurator[i].id);
+        DB(F(" = "));
+        DBLN(EspApConfigurator[i].setting->get());
+    }
 
     DBLN(F("E:setup"));
 }
@@ -92,11 +106,9 @@ void loop()
     // Give timeslice
     EspApConfigurator.update();
 
-    // Don't bother trying to upload if we're in Access Point mode, 
-    // but we can still do other stuff, for example gathering data
-    // because EspApConfigurator doesn't block.  :)
-    if (!EspApConfigurator.inApMode()) {
-        if (Millis() > lastUpload + EspApConfigurator["Update interval (s)"].toInt()*1000) {
+    // Don't bother trying to upload until we're connected to a network.
+    if (EspApConfigurator.isConnected()) {
+        if (lastUpload == 0 || Millis() > lastUpload + EspApConfigurator["Update interval (s)"].toInt()*1000) {
             uploadToThingspeak();
         }
     }
