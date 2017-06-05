@@ -101,3 +101,11 @@ uint16_t PersistentSettingManager::nextFreeAddress()
     return lastUsedAddress+1;
 }
 
+void PersistentSettingManager::resetAll()
+{
+    for (uint8_t i=0; i<_count; i++) {
+        _settings[i].setting->reset();
+        _settings[i].setting->save();
+    }
+}
+

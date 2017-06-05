@@ -33,6 +33,7 @@ Differences:
 - No networks found indication 
 - Fetch settings by name with operator[](String)
 - HTTPS in example code
+- Reset nukes all user settings
 
 ### TODO
 

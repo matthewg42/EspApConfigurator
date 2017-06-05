@@ -64,6 +64,10 @@ public:
     uint16_t size();
     uint16_t formLength() { return size(); }
 
+    /*! \brief Reset the value in RAM to the default value
+     */
+    virtual void reset() { _value = _defaultValue; }
+
     /*! \brief Validation
      *
      *  Determine if the current value is valid - used after loading from EEPROM and when setting the value. If

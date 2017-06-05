@@ -56,7 +56,11 @@ public:
      */
     virtual uint16_t formLength() = 0;
 
-    /*! \brief Get the EEPROM address of the first byte for this setting.
+    /*! \brief Reset the value in RAM to the default value
+     */
+    virtual void reset() = 0;
+
+    /*! \brief Get the EEPROM address of the first byte for this setting
      * 
      *  \return max length in characters when represented as a string
      */

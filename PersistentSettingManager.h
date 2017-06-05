@@ -22,6 +22,8 @@ public:
     //! Get setting value by name or return String() if not found
     String operator[](const char* id);
     String operator[](String id);
+    //! Reset all settings to default and save
+    void resetAll();
 
     /*! Get next free EEPROM address
      *

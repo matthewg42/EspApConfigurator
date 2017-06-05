@@ -93,6 +93,10 @@ public:
      */
     uint16_t formLength() { return 16; }
 
+    /*! \brief Reset the value in RAM to the default value
+     */
+    virtual void reset() { _value = _default; }
+
     /*! \brief peek at what is in EEPROM for this setting (may not be a valid value)
      * 
      *  \return the value in EEPROM for this setting
