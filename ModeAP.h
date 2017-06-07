@@ -20,7 +20,7 @@ public:
 protected:
     DNSServer* pDnsServer;
     bool scanning;
-    unsigned long lastScan;
+    bool wantScan;
     bool finishFlag;
 
 };

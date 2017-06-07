@@ -29,9 +29,9 @@ void ModeAP_::modeStart()
     // Change heartbeat to indicate AP mode
     HeartBeat.setCustomMode(900, 100);
 
-    // We're not scanning yet
+    // We're not scanning yet, but we'd like to
     scanning = false;
-    lastScan = 0;
+    wantScan = true;
 
     // Make sure the WiFi is turned on
     WiFi.forceSleepWake();
@@ -93,15 +93,13 @@ void ModeAP_::modeUpdate()
 
     if (scanning) {
         int8_t netCount = WiFi.scanComplete();
-        if (netCount > 0) {
+        if (netCount >= 0) {
             scanning = false;
-            DB(F("scan took "));
-            DB(Millis() - lastScan);
-            DB(F("ms, found "));
+            DB(F("Scan complete, found "));
             DB(netCount);
             DBLN(F(" net(s)"));
         }
-    } else if (Millis() > lastScan+(WIFI_SCAN_PERIOD*1000)) {
+    } else if (wantScan) {
         startScan();
     }
 }
@@ -112,8 +110,8 @@ void ModeAP_::startScan()
         DBLN(F("[still scanning]"));
         return;
     }
+    wantScan = false;
     scanning = true;
-    lastScan = Millis();
     WiFi.scanNetworks(true);
 }
 
