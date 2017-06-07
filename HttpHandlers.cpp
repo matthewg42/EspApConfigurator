@@ -43,7 +43,10 @@ bool validateHostname(String h) {
 }
 
 void handleNotFound() {
-    DBLN(F("handleNotFound"));
+    DB(F("handleNotFound: "));
+    DB(pHttpServer->method()==HTTP_GET ? F("GET") : F("POST"));
+    DB(' ');
+    DBLN(pHttpServer->uri());
     String message = "File Not Found\n\n";
     message += "URI: ";
     message += pHttpServer->uri();
