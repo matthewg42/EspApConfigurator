@@ -2,7 +2,6 @@
 
 #include <ESP8266WiFi.h>
 #include <ESP8266WebServer.h>
-#include <DNSServer.h>
 #include "NamedMode.h"
 
 //! \brief Mode which does nothing (except debug out)
@@ -18,7 +17,6 @@ public:
     bool isFinished();
 
 protected:
-    DNSServer* pDnsServer;
     bool scanning;
     bool wantScan;
     bool finishFlag;

@@ -15,7 +15,6 @@ ModeAP_ ModeAP;
 ModeAP_::ModeAP_() :
     NamedMode("ModeAP")
 {
-    pDnsServer = NULL;
     pHttpServer = NULL;
 }
 
@@ -45,13 +44,6 @@ void ModeAP_::modeStart()
     DB(F("AP IP address="));
     DBLN(WiFi.softAPIP());
 
-    // Set up DNS resolver for all names going to local IP
-    if (!pDnsServer) {
-        pDnsServer = new DNSServer();
-    }
-    pDnsServer->setErrorReplyCode(DNSReplyCode::NoError);
-    pDnsServer->start(53, "*", WiFi.softAPIP());
-
     // Set up routes for web server
     if (!pHttpServer) {
         pHttpServer = new ESP8266WebServer(80);
@@ -69,12 +61,6 @@ void ModeAP_::modeStart()
 void ModeAP_::modeEnd()
 {
     DBLN("ModeAP::modeEnd");
-    // destroy DNS to save memory when not in AP mode
-    if (pDnsServer) {
-        delete pDnsServer;
-        pDnsServer = NULL;
-    }
-
     // destroy HTTP server to save memory when not in AP mode
     if (pHttpServer) {
         delete pHttpServer;
@@ -86,7 +72,6 @@ void ModeAP_::modeEnd()
 void ModeAP_::modeUpdate()
 {
     // Handle incoming connections
-    pDnsServer->processNextRequest();
     pHttpServer->handleClient();
 
     if (scanning) {
