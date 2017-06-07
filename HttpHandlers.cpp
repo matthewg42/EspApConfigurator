@@ -215,3 +215,13 @@ void handleWifi() {
     ModeAP.finish();
 }
 
+void handleRescan() {
+    DBLN(F("handleRescan"));
+    pHttpServer->sendHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+    pHttpServer->sendHeader("Pragma", "no-cache");
+    pHttpServer->sendHeader("Expires", "-1");
+    pHttpServer->send(200, "text/plain", "ok");
+    pHttpServer->client().stop();
+    ModeAP.startScan();
+}
+

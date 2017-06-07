@@ -63,6 +63,7 @@ void ModeAP_::modeStart()
     pHttpServer->on("/", handleRoot);
     pHttpServer->on("/save", handleWifiSave);
     pHttpServer->on("/wifi", handleWifi);
+    pHttpServer->on("/r", handleRescan);
     pHttpServer->begin();
 
     DBLN(F("E:ModeAP::modeStart()"));
