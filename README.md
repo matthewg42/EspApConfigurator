@@ -37,11 +37,8 @@ Differences:
 
 ### TODO
 
-- Make wifi scans much less frequent - behavious should be like this:
-    - On enabled AP, do a scan - do not change HeartBeat mode until scan complete
-    - Re-scan once a minute, and:
-    - Re-scan when user clicks re-scan button in web ui
-    - When scanning runs, set HeartBeat to indicate this somehow
+- Optionally run web interface in ModeWifiClient
+    - Web server split to separate class, which should be updated from WebClient if some option set
 - Hostname should not be a default parameter, as ESP does not store it in a non-valatile way
 - Enhance settings:
     - allow special setting for hostname.  If it exists, then use it when switching to ModeWifiClient
