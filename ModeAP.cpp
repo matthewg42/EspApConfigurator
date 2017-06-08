@@ -15,7 +15,6 @@ ModeAP_ ModeAP;
 ModeAP_::ModeAP_() :
     NamedMode("ModeAP")
 {
-    pHttpServer = NULL;
 }
 
 void ModeAP_::modeStart()
@@ -44,16 +43,8 @@ void ModeAP_::modeStart()
     DB(F("AP IP address="));
     DBLN(WiFi.softAPIP());
 
-    // Set up routes for web server
-    if (!pHttpServer) {
-        pHttpServer = new ESP8266WebServer(80);
-    }
-    pHttpServer->onNotFound(handleNotFound);
-    pHttpServer->on("/", handleRoot);
-    pHttpServer->on("/save", handleWifiSave);
-    pHttpServer->on("/wifi", handleWifi);
-    pHttpServer->on("/r", handleRescan);
-    pHttpServer->begin();
+    // Start web server, if not already started
+    HttpServer.begin();
 
     DBLN(F("E:ModeAP::modeStart()"));
 }
@@ -61,18 +52,12 @@ void ModeAP_::modeStart()
 void ModeAP_::modeEnd()
 {
     DBLN("ModeAP::modeEnd");
-    // destroy HTTP server to save memory when not in AP mode
-    if (pHttpServer) {
-        delete pHttpServer;
-        pHttpServer = NULL;
-    }
-
 }
 
 void ModeAP_::modeUpdate()
 {
     // Handle incoming connections
-    pHttpServer->handleClient();
+    HttpServer.handleClient();
 
     if (scanning) {
         int8_t netCount = WiFi.scanComplete();

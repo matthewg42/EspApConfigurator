@@ -2,6 +2,7 @@
 #include "ModeAP.h"
 #include "ModeWifiClient.h"
 #include "ModeReset.h"
+#include "HttpServer.h"
 #include "APButton.h"
 #include "HeartBeat.h"
 #include "Config.h"
@@ -22,6 +23,7 @@ void EspApConfigurator_::begin()
     ModeAP.begin();
     ModeReset.begin();
     ModeWifiClient.begin();
+    HttpServer.init();
     start();
 }
 

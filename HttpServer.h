@@ -2,4 +2,11 @@
 
 #include <ESP8266WebServer.h>
 
-extern ESP8266WebServer* pHttpServer;
+class HttpServer_ : public ESP8266WebServer {
+public:
+    HttpServer_(int port=80);
+    void init();
+
+};
+
+extern HttpServer_ HttpServer;

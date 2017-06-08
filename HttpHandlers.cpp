@@ -44,26 +44,26 @@ bool validateHostname(String h) {
 
 void handleNotFound() {
     DB(F("handleNotFound: "));
-    DB(pHttpServer->method()==HTTP_GET ? F("GET") : F("POST"));
+    DB(HttpServer.method()==HTTP_GET ? F("GET") : F("POST"));
     DB(' ');
-    DBLN(pHttpServer->uri());
+    DBLN(HttpServer.uri());
     String message = "File Not Found\n\n";
     message += "URI: ";
-    message += pHttpServer->uri();
+    message += HttpServer.uri();
     message += "\nMethod: ";
-    message += ( pHttpServer->method() == HTTP_GET ) ? "GET" : "POST";
+    message += ( HttpServer.method() == HTTP_GET ) ? "GET" : "POST";
     message += "\nArguments: ";
-    message += pHttpServer->args();
+    message += HttpServer.args();
     message += "\n";
 
-    for ( uint8_t i = 0; i < pHttpServer->args(); i++ ) {
-        message += " " + pHttpServer->argName ( i ) + ": " + pHttpServer->arg ( i ) + "\n";
+    for ( uint8_t i = 0; i < HttpServer.args(); i++ ) {
+        message += " " + HttpServer.argName ( i ) + ": " + HttpServer.arg ( i ) + "\n";
     }
-    pHttpServer->sendHeader("Cache-Control", "no-cache, no-store, must-revalidate");
-    pHttpServer->sendHeader("Pragma", "no-cache");
-    pHttpServer->sendHeader("Expires", "-1");
-    pHttpServer->send (404, "text/plain", message);
-    pHttpServer->client().stop();
+    HttpServer.sendHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+    HttpServer.sendHeader("Pragma", "no-cache");
+    HttpServer.sendHeader("Expires", "-1");
+    HttpServer.send (404, "text/plain", message);
+    HttpServer.client().stop();
 }
 
 void handleRoot()
@@ -112,11 +112,11 @@ void handleRoot()
     page += F("<br/>");
     page += FPSTR(HTTP_END);
 
-    pHttpServer->sendHeader("Cache-Control", "no-cache, no-store, must-revalidate");
-    pHttpServer->sendHeader("Pragma", "no-cache");
-    pHttpServer->sendHeader("Expires", "-1");
-    pHttpServer->send(200, "text/html", page);
-    pHttpServer->client().stop();
+    HttpServer.sendHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+    HttpServer.sendHeader("Pragma", "no-cache");
+    HttpServer.sendHeader("Expires", "-1");
+    HttpServer.send(200, "text/html", page);
+    HttpServer.client().stop();
 }
 
 void handleWifiSave() {
@@ -133,15 +133,15 @@ void handleWifiSave() {
     bool ok = true;
     String reason = "";
 
-    if (pHttpServer->method() != HTTP_POST) {
+    if (HttpServer.method() != HTTP_POST) {
         ok = false;
         reason += F("not a POST<br/>");
     } else {
         // we have a POST, good, now populate the parameters
-        // iterate over pHttpServer->args
-        ssid = pHttpServer->arg("s");
-        pass = pHttpServer->arg("p");
-        host = pHttpServer->arg("h");
+        // iterate over HttpServer.args
+        ssid = HttpServer.arg("s");
+        pass = HttpServer.arg("p");
+        host = HttpServer.arg("h");
         if (ssid == "") {
             ok = false;
             reason = F("no ssid specified<br/>");
@@ -156,7 +156,7 @@ void handleWifiSave() {
         // Handle custom settings...
         for (uint8_t i=0; i<EspApConfigurator.count(); i++) {
             String id = String('p') + String((char)('a'+i));
-            String value = pHttpServer->arg(id.c_str());
+            String value = HttpServer.arg(id.c_str());
             if (!EspApConfigurator[i].setting->set(value)) {
                 ok = false;
                 reason += F("Setting \"");
@@ -185,18 +185,18 @@ void handleWifiSave() {
 
     page += FPSTR(HTTP_END);
 
-    pHttpServer->sendHeader("Cache-Control", "no-cache, no-store, must-revalidate");
-    pHttpServer->sendHeader("Pragma", "no-cache");
-    pHttpServer->sendHeader("Expires", "-1");
+    HttpServer.sendHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+    HttpServer.sendHeader("Pragma", "no-cache");
+    HttpServer.sendHeader("Expires", "-1");
     if (ok) {
-        pHttpServer->send(200, "text/html", page);
-        pHttpServer->client().stop();
+        HttpServer.send(200, "text/html", page);
+        HttpServer.client().stop();
         ModeWifiClient.setWifiLogin(ssid.c_str(), pass=="" ? NULL : pass.c_str());
         ModeWifiClient.setHostname(host.c_str());
         ModeAP.finish();
     } else {
-        pHttpServer->send(400, "text/html", page);
-        pHttpServer->client().stop();
+        HttpServer.send(400, "text/html", page);
+        HttpServer.client().stop();
     }
 }
 
@@ -210,21 +210,21 @@ void handleWifi() {
     page += FPSTR(HTTP_NOSAVE);
     page += FPSTR(HTTP_END);
 
-    pHttpServer->sendHeader("Cache-Control", "no-cache, no-store, must-revalidate");
-    pHttpServer->sendHeader("Pragma", "no-cache");
-    pHttpServer->sendHeader("Expires", "-1");
-    pHttpServer->send(200, "text/html", page);
-    pHttpServer->client().stop();
+    HttpServer.sendHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+    HttpServer.sendHeader("Pragma", "no-cache");
+    HttpServer.sendHeader("Expires", "-1");
+    HttpServer.send(200, "text/html", page);
+    HttpServer.client().stop();
     ModeAP.finish();
 }
 
 void handleRescan() {
     DBLN(F("handleRescan"));
-    pHttpServer->sendHeader("Cache-Control", "no-cache, no-store, must-revalidate");
-    pHttpServer->sendHeader("Pragma", "no-cache");
-    pHttpServer->sendHeader("Expires", "-1");
-    pHttpServer->send(200, "text/plain", "ok");
-    pHttpServer->client().stop();
+    HttpServer.sendHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+    HttpServer.sendHeader("Pragma", "no-cache");
+    HttpServer.sendHeader("Expires", "-1");
+    HttpServer.send(200, "text/plain", "ok");
+    HttpServer.client().stop();
     ModeAP.startScan();
 }
 

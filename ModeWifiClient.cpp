@@ -4,12 +4,14 @@
 #include "ModeWifiClient.h"
 #include "MutilaDebug.h"
 #include "HeartBeat.h"
+#include "HttpServer.h"
 
 ModeWifiClient_ ModeWifiClient;
 
 ModeWifiClient_::ModeWifiClient_() :
     NamedMode("ModeWifiClient"),
-    _prevStatus(254) // not a real status, so we get debug on first update
+    _prevStatus(254), // not a real status, so we get debug on first update
+    _httpServerEnabled(false)
 {
     setUpdatePeriod(100);
 }
@@ -89,5 +91,14 @@ void ModeWifiClient_::modeUpdate()
         }
         _prevStatus = status;
     }
+
+    if (status == WL_CONNECTED && _httpServerEnabled) {
+        HttpServer.handleClient();
+    }
+}
+
+void ModeWifiClient_::enableHttpServer(bool b)
+{
+    _httpServerEnabled = b;
 }
 
