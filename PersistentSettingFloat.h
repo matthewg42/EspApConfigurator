@@ -13,7 +13,7 @@ public:
      * \param defaultValue value to take before loading
      * \param validatorFunction function to validate values
      */
-    PersistentSettingFloat(uint16_t eepromAddress, float defaultValue, validatorFunction validator=NULL);
+    PersistentSettingFloat(uint16_t eepromAddress, float defaultValue, uint8_t dp=3, validatorFunction validator=NULL);
 
     /*! Load from EEPROM 
      *  Loads value from EEPROM, and checks for validity. If valid use value and return
@@ -28,5 +28,11 @@ public:
      */
     bool set(String newValue);
 
+    String get();
+
+    String typecode();
+
+protected:
+    uint8_t _dp;
 };
 

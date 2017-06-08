@@ -22,17 +22,20 @@ void setup()
 
     // Example settings of each type
     EspApConfigurator.addSetting("Long Int Setting",    new PersistentSettingLong(EspApConfigurator.nextFreeAddress(),   987654321));
-    EspApConfigurator.addSetting("Float Setting",       new PersistentSettingFloat(EspApConfigurator.nextFreeAddress(),  3.14159265359));
+    EspApConfigurator.addSetting("Float Setting",       new PersistentSettingFloat(EspApConfigurator.nextFreeAddress(),  3.14159265359, 6));
     EspApConfigurator.addSetting("Char Setting",        new PersistentSettingChar(EspApConfigurator.nextFreeAddress(),   'M'));
-    EspApConfigurator.addSetting("UInt8 Setting",       new PersistentSettingChar(EspApConfigurator.nextFreeAddress(),   42));
+    EspApConfigurator.addSetting("UInt8 Setting",       new PersistentSettingUInt8(EspApConfigurator.nextFreeAddress(),  42));
     EspApConfigurator.addSetting("String Setting",      new PersistentSettingString(EspApConfigurator.nextFreeAddress(), 16, "string(16)"));
 
     // Dump settings
     DBLN(F("Settings:"));
     for (uint8_t i=0; i<EspApConfigurator.count(); i++) {
         DB(EspApConfigurator[i].id);
-        DB(F(" = "));
-        DBLN(EspApConfigurator[i].setting->get());
+        DB(F("="));
+        DB(EspApConfigurator[i].setting->get());
+        DB(F(" typecode="));
+        DBLN(EspApConfigurator[i].setting->typecode());
+        
     }
 
     DBLN(F("E:setup"));

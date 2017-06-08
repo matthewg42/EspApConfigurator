@@ -28,5 +28,7 @@ public:
      */
     bool set(String newValue);
 
+    String typecode() { return String("i"); }
+
 };
 
