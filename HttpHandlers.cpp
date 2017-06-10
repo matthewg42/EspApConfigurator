@@ -150,7 +150,7 @@ void handleWifiSave() {
             ok = false;
             reason += F("bad hostname \"");
             reason += host;
-            reason += '\"<br/>';
+            reason += "\"<br/>";
         }
 
         // Handle custom settings...
