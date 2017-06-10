@@ -34,11 +34,12 @@ Differences:
 - Fetch settings by name with operator[](String)
 - HTTPS in example code
 - Reset nukes all user settings
+- Optionally run web interface in ModeWifiClient
 
 ### TODO
 
-- Optionally run web interface in ModeWifiClient
-    - Web server split to separate class, which should be updated from WebClient if some option set
+- Fix: web server doesn't respond if WiFiClient enabled and ModeAP wasn't run first...
+- Fix: bool type doesn't represent properly - use checkbox
 - Hostname should not be a default parameter, as ESP does not store it in a non-valatile way
 - Enhance settings:
     - allow special setting for hostname.  If it exists, then use it when switching to ModeWifiClient
