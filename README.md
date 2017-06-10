@@ -38,7 +38,7 @@ Differences:
 
 ### TODO
 
-- Fix: web server doesn't respond if WiFiClient enabled and ModeAP wasn't run first...
+- Fix: when in ModeWifiClient and scan is completed, HeartBeat mode doesn't reset properly
 - Fix: bool type doesn't represent properly - use checkbox
 - Hostname should not be a default parameter, as ESP does not store it in a non-valatile way
 - Enhance settings:

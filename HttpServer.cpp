@@ -11,15 +11,16 @@ HttpServer_::HttpServer_(int port) :
     DBLN(port);
 }
 
-void HttpServer_::init()
+void HttpServer_::begin()
 {
-    DBLN(F("HttpServer::init"));
+    DBLN(F("HttpServer::begin"));
     // Set up routes
     onNotFound(handleNotFound);
     on("/", handleRoot);
     on("/save", handleWifiSave);
     on("/wifi", handleWifi);
     on("/r", handleRescan);
+    ESP8266WebServer::begin();
 }
 
 

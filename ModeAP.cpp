@@ -43,9 +43,6 @@ void ModeAP_::modeStart()
     DB(F("AP IP address="));
     DBLN(WiFi.softAPIP());
 
-    // Start web server, if not already started
-    HttpServer.begin();
-
     DBLN(F("E:ModeAP::modeStart()"));
 }
 

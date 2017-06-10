@@ -23,7 +23,7 @@ void EspApConfigurator_::begin()
     ModeAP.begin();
     ModeReset.begin();
     ModeWifiClient.begin();
-    HttpServer.init();
+    HttpServer.begin();
     start();
 }
 
