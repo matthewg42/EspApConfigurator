@@ -21,27 +21,6 @@ int rssiToQuality(int RSSI) {
     return quality;
 }
 
-bool validateHostname(String h) {
-    DB(F("validateHostname "));
-    DB(h);
-    if (h == "") {
-        DBLN(F(" fail:blank"));
-        return false;
-    } 
-    for (uint8_t i=0; i<h.length(); i++) {
-        if (! (
-                   (h[i] >= 'a' && h[i] <= 'z') 
-                || (h[i] >= 'A' && h[i] <= 'Z') 
-                || (h[i] >= '0' && h[i] <= '9') 
-                || h[i] == '_')) {
-            DBLN(F(" fail:char"));
-            return false;
-        }
-    }
-    DBLN(F(" OK"));
-    return true;
-}
-
 void handleNotFound() {
     DB(F("handleNotFound: "));
     DB(HttpServer.method()==HTTP_GET ? F("GET") : F("POST"));
@@ -95,12 +74,10 @@ void handleRoot()
         page += F("<p>[no networks found]</p>");
     }
     page += F("<br/>");
-    String form = FPSTR(HTTP_FORM_START);
-    form.replace("{h}", WiFi.hostname());
-    page += form;
+    page += FPSTR(HTTP_FORM_START);
     if (EspApConfigurator.count()>0) { page += F("<h3>Project Settings</h3><p>"); }
     for (uint8_t i=0; i<EspApConfigurator.count(); i++) {
-        form = FPSTR(HTTP_FORM_PARAM);
+        String form = FPSTR(HTTP_FORM_PARAM);
         form.replace("{i}", String('p') + String((char)('a'+i)));
         form.replace("{p}", EspApConfigurator[i].id);
         form.replace("{l}", String(EspApConfigurator[i].setting->formLength()));
@@ -129,7 +106,6 @@ void handleWifiSave() {
 
     String ssid;
     String pass;
-    String host;
     bool ok = true;
     String reason = "";
 
@@ -141,17 +117,10 @@ void handleWifiSave() {
         // iterate over HttpServer.args
         ssid = HttpServer.arg("s");
         pass = HttpServer.arg("p");
-        host = HttpServer.arg("h");
         if (ssid == "") {
             ok = false;
             reason = F("no ssid specified<br/>");
         } 
-        if (!validateHostname(host)) {
-            ok = false;
-            reason += F("bad hostname \"");
-            reason += host;
-            reason += "\"<br/>";
-        }
 
         // Handle custom settings...
         for (uint8_t i=0; i<EspApConfigurator.count(); i++) {
@@ -179,7 +148,6 @@ void handleWifiSave() {
         page += reason;       
     } else {
         String saved = FPSTR(HTTP_SAVED);
-        saved.replace("{h}", host);
         page += saved;
     }
 
@@ -192,7 +160,6 @@ void handleWifiSave() {
         HttpServer.send(200, "text/html", page);
         HttpServer.client().stop();
         ModeWifiClient.setWifiLogin(ssid.c_str(), pass=="" ? NULL : pass.c_str());
-        ModeWifiClient.setHostname(host.c_str());
         ModeAP.finish();
     } else {
         HttpServer.send(400, "text/html", page);
