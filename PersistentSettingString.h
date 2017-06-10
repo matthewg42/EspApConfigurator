@@ -85,7 +85,7 @@ public:
      */
     String peek();
 
-    String typecode() { return String("s"); }
+    String typecode();
 
 protected:
     uint16_t _maxLength;
