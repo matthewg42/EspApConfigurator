@@ -60,6 +60,53 @@ Differences:
 - Asynchronous HTTP/HTTPS requests (check out https://github.com/me-no-dev/ESPAsyncTCP)
 - NTP / time stuff
 
+## Interface Modes
+
+### Mode 1: Single page interface
+
+Typically for projects where web server only runs in ModeAP.  No password protection for changing settings, but ModeAP should have password set.
+
+- Single viewable page
+    - WiFi networks list
+    - Re-scan button
+    - Network settings (ssid, passphrase)
+    - Custom settings
+    - Save settings button
+    - Discard settings button
+- Routes: 
+    - onNotFound(handleNotFound);
+    - on("/",       handleRoot);
+    - on("/save",   handleWifiSave);
+    - on("/wifi",   handleWifi);
+    - on("/r",      handleRescan);
+
+### Mode 2: Multi page interface
+
+Typically used for projects where web interface runs in both ModeAP and in ModeWifiClient. 
+
+- Landing page
+    - Project name as title
+    - Link to WiFi settings page
+    - Link to general settings page
+- WiFi settings page
+    - When in ModeWifiClient
+        - Message saying to press the button to switch into ModeAP to change network connection settings
+    - When in ModeAP
+        - WiFi networks list
+        - Re-scan button
+        - Network settings (ssid, passphrase)
+        - Save settings button
+        - Discard settings button
+- General settings page
+    - Custom settings
+    - Save settings button
+    - Discard settings button
+- Routes: TODO
+
+### Mode 3: Custom interface
+
+User for more complex projects, or when user wants a more customized look and feel. No routes are registered, but there is the option to register handlers by calling HttpServer.addRoute(...)
+
 ## Pre-requisites
 
 * Install the Arduino IDE 1.6.6 or later
