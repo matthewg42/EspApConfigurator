@@ -2,10 +2,10 @@
 
 #include <ESP8266WiFi.h>
 #include <ESP8266WebServer.h>
-#include "NamedMode.h"
+#include <Mode.h>
 
 //! \brief Mode which does nothing (except debug out)
-class ModeAP_ : public NamedMode {
+class ModeAP_ : public Mode {
 public:
     ModeAP_();
     void modeStart();

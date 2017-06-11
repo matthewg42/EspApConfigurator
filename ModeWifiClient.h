@@ -1,10 +1,10 @@
 #pragma once
 
 #include <Arduino.h>
-#include "NamedMode.h"
+#include <Mode.h>
 
 //! \brief Normal operation as WiFi client
-class ModeWifiClient_ : public NamedMode {
+class ModeWifiClient_ : public Mode {
 public:
     ModeWifiClient_();
     void modeStart();

@@ -7,8 +7,7 @@
 
 ModeWifiOff_ ModeWifiOff;
 
-ModeWifiOff_::ModeWifiOff_() :
-    NamedMode("ModeWifiOff")
+ModeWifiOff_::ModeWifiOff_()
 {
     setUpdatePeriod(500);
 }

@@ -8,8 +8,7 @@
 
 ModeReset_ ModeReset;
 
-ModeReset_::ModeReset_() :
-    NamedMode("ModeReset")
+ModeReset_::ModeReset_()
 {
 }
 

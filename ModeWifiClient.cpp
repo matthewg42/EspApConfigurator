@@ -9,7 +9,6 @@
 ModeWifiClient_ ModeWifiClient;
 
 ModeWifiClient_::ModeWifiClient_() :
-    NamedMode("ModeWifiClient"),
     _prevStatus(254), // not a real status, so we get debug on first update
     _httpServerEnabled(false)
 {

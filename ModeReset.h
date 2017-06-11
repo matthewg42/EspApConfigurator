@@ -1,9 +1,9 @@
 #pragma once
 
-#include "NamedMode.h"
+#include <Mode.h>
 
 //! \brief Resets WiFi device - clears state like network details and other settings
-class ModeReset_ : public NamedMode {
+class ModeReset_ : public Mode {
 public:
     ModeReset_();
     void modeStart();

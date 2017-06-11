@@ -12,8 +12,7 @@
 
 ModeAP_ ModeAP;
 
-ModeAP_::ModeAP_() :
-    NamedMode("ModeAP")
+ModeAP_::ModeAP_()
 {
 }
 

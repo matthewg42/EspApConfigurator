@@ -1,19 +1,17 @@
 #include "ParentMode.h"
 
-ParentMode::ParentMode(const char* name) :
-    NamedMode(name)
+ParentMode::ParentMode()
 {
     pMode = NULL;
 }
 
-void ParentMode::switchMode(NamedMode* newMode)
+void ParentMode::switchMode(Mode* newMode)
 {
     if (pMode != NULL) {
         pMode->stop();
     }
     pMode = newMode;
     pMode->start();
-    _pname = _name + ":" + pMode->name();
 }
 
 void ParentMode::modeUpdate()
@@ -23,7 +21,3 @@ void ParentMode::modeUpdate()
     }
 }
 
-const char* ParentMode::name()
-{
-    return _pname.c_str();
-}

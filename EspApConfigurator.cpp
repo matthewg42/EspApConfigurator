@@ -10,7 +10,6 @@
 EspApConfigurator_ EspApConfigurator;
 
 EspApConfigurator_::EspApConfigurator_() :
-    ParentMode("EspApConfigurator"),
     PersistentSettingManager(NUMBER_OF_SETTINGS)
 {
 }
