@@ -39,12 +39,6 @@ void setup()
         
     }
 
-    bool b;
-    b=true; DB("b="); DBLN(b);
-    b=false; DB("b="); DBLN(b);
-    b=42; DB("b="); DBLN(b);
-    b=-5; DB("b="); DBLN(b);
-
     DBLN(F("E:setup"));
 }
 

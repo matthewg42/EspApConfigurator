@@ -21,7 +21,7 @@ void HttpServer_::begin(HttpServer_::Mode mode)
         onNotFound(handleNotFound);
         on("/", handleSinglePage);
         on("/save", handleSingleSave);
-        on("/wifi", handleSingleCancel);
+        on("/discard", handleSingleCancel);
         on("/r", handleRescan);
         break;
     case HttpServer_::MultiplePage:

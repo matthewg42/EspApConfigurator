@@ -27,7 +27,7 @@ bool PersistentSettingBool::load()
 bool PersistentSettingBool::set(String newValue)
 {
     if (isValid(newValue) && newValue.length() == 1) {
-        _value = newValue[0];
+        _value = newValue[0] != '0';
         return true;
     } else {
         return false;

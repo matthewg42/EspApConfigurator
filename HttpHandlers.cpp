@@ -111,22 +111,33 @@ void handleSingleSave() {
         // iterate over HttpServer.args
         ssid = HttpServer.arg("s");
         pass = HttpServer.arg("p");
-        if (ssid == "") {
-            ok = false;
-            reason = F("no ssid specified<br/>");
-        } 
 
         // Handle custom settings...
         for (uint8_t i=0; i<EspApConfigurator.count(); i++) {
-            String id = String('p') + String((char)('a'+i));
+            String id('s'); id += i;
             String value = HttpServer.arg(id.c_str());
+
+            // handle checkboxes HTML checkboxes - why like this?!
+            if (EspApConfigurator[i].setting->typecode() == "b") {
+                if (value == id) {
+                    value = "1";
+                } else {
+                    value = "0";
+                }
+            }
+
+            DB(F("save id="));
+            DB(id);
+            DB(F(" value="));
+            DBLN(value);
             if (!EspApConfigurator[i].setting->set(value)) {
                 ok = false;
                 reason += F("Setting \"");
                 reason += EspApConfigurator[i].id;
-                reason += F(" \" invalid value \"");
+                reason += F("\" invalid value \"");
                 reason += value;
                 reason += "\"<br/>";
+                DBLN(" invalid");
             } else if (!EspApConfigurator[i].setting->save()) {
                 ok = false;
                 reason += F("Setting \"");
@@ -153,8 +164,10 @@ void handleSingleSave() {
     if (ok) {
         HttpServer.send(200, "text/html", page);
         HttpServer.client().stop();
-        ModeWifiClient.setWifiLogin(ssid.c_str(), pass=="" ? NULL : pass.c_str());
-        ModeAP.finish();
+        if (ssid != "") {
+            ModeWifiClient.setWifiLogin(ssid.c_str(), pass=="" ? NULL : pass.c_str());
+            ModeAP.finish();
+        }
     } else {
         HttpServer.send(400, "text/html", page);
         HttpServer.client().stop();
@@ -216,7 +229,7 @@ String htmlSettingsForm()
 {
     String s = "";
     for (uint8_t i=0; i<EspApConfigurator.count(); i++) {
-        String inp = F("\n<label {lt}for='{i}'>{n}</label>\n<input id='{i}' {it}value='{v}'>{a}\n");
+        String inp = F("\n<label {lt}for='{i}'>{n}</label>\n<input id='{i}' name='{i}' {it}value='{v}'>{a}\n");
         String id('s'); id += i;
         String labelTags = String();
         String inputTags = String();
@@ -227,8 +240,19 @@ String htmlSettingsForm()
         case 'b':
             labelTags = F("class='cb' ");
             inputTags += F("type='checkbox' ");
+            DB(F("bool value="));
+            DB(EspApConfigurator[i].setting->get());
+            if (EspApConfigurator[i].setting->get()!="0") {
+                inputTags += F("checked ");
+                DBLN(F(" checked"));
+            } else {
+                DBLN(F(" NOT checked"));
+            }
             inp.replace("{v}", id);
             after = F("<br />");
+            break;
+        case 'c':
+            inputTags += F("type='text' length=1 ");
             break;
         case 'i':
             inputTags += F("type='number' step=1 ");
