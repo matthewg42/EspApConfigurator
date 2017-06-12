@@ -51,43 +51,36 @@ void handleSinglePage()
     DBLN(F("handleSinglePage"));
 
     String page = FPSTR(HTTP_HEAD);
-    page.replace("{v}", "ESPApConfigurator");
     page += FPSTR(HTTP_SCRIPT);
     page += FPSTR(HTTP_STYLE);
     page += FPSTR(HTTP_HEAD_END);
-    page += F("<h1>ESPApConfigurator</h1><h3>Networks</h3>");
+    page.replace("{v}", "ESPApConfigurator"); // Page title
+    page.replace("{r}", HttpServer.uri());    // Re-load URI
+    page += F(("<h1>Configuration</h1>"));
 
-    // TODO: sort by signal strength
-    int8_t netCount = WiFi.scanComplete();
-    if (netCount>0) {
-        for (int8_t i=0; i<netCount; i++) {
-            String item = FPSTR(HTTP_WIFI_NET);
-            item.replace("{v}", WiFi.SSID(i));
-            item.replace("{r}", String(rssiToQuality(WiFi.RSSI(i))));
-            if (WiFi.encryptionType(i) != ENC_TYPE_NONE) {
-                item.replace("{i}", "l");
-            } else {
-                item.replace("{i}", "");
-            }
-            page += item;
-        }
+    page += htmlNetworkList();
+
+    page += FPSTR(HTTP_FORM_START);
+    page.replace("{a}", "save");
+
+    page += F("<h3>Wifi Credentials</h3>");
+    page += FPSTR(HTTP_WIFI_INPUTS);
+
+    // Custom settings
+    if (EspApConfigurator.count() > 0) {
+        page += F("<h3>Settings</h3>");
+        page += htmlSettingsForm();
+    }
+    
+    // End the form with the save button
+    page += FPSTR(HTTP_FORM_END);
+    page.replace("{s}", "Save & use Wifi");
+    if (EspApConfigurator.inApMode()) {
+        page.replace("{d}", "Use Wifi (no save)");
     } else {
-        page += F("<p>[no networks found]</p>");
+        page.replace("{d}", "Discard changes");
     }
-    page += F("<br/>");
-    page += FPSTR(HTTP_WIFI_FRM_S);
-    if (EspApConfigurator.count()>0) { page += F("<h3>Project Settings</h3><p>"); }
-    for (uint8_t i=0; i<EspApConfigurator.count(); i++) {
-        String form = FPSTR(HTTP_FORM_PARAM);
-        form.replace("{i}", String('p') + String((char)('a'+i)));
-        form.replace("{p}", EspApConfigurator[i].id);
-        form.replace("{l}", String(EspApConfigurator[i].setting->formLength()));
-        form.replace("{v}", EspApConfigurator[i].setting->get());
-        page += form;
-    }
-    if (EspApConfigurator.count()>0) { page += F("</p>"); }
-    page += FPSTR(HTTP_WIFI_FRM_E);
-    page += F("<br/>");
+
     page += FPSTR(HTTP_END);
 
     HttpServer.sendHeader("Cache-Control", "no-cache, no-store, must-revalidate");
@@ -194,5 +187,77 @@ void handleRescan() {
     HttpServer.send(200, "text/plain", "ok");
     HttpServer.client().stop();
     ModeAP.startScan();
+}
+
+String htmlNetworkList()
+{
+    String s = F("<h3>Networks</h3>");
+    int8_t netCount = WiFi.scanComplete();
+    if (netCount>0) {
+        for (int8_t i=0; i<netCount; i++) {
+            String item = FPSTR(HTTP_WIFI_NET);
+            item.replace("{v}", WiFi.SSID(i));
+            item.replace("{r}", String(rssiToQuality(WiFi.RSSI(i))));
+            if (WiFi.encryptionType(i) != ENC_TYPE_NONE) {
+                item.replace("{i}", "l");
+            } else {
+                item.replace("{i}", "");
+            }
+            s += item;
+        }
+    } else {
+        s += F("<p>[no networks found]</p>");
+    }
+    s += F("<button id='r' onclick='r();'>Re-scan WiFi</button>");
+    return s;
+}
+
+String htmlSettingsForm()
+{
+    String s = "";
+    for (uint8_t i=0; i<EspApConfigurator.count(); i++) {
+        String inp = F("\n<label {lt}for='{i}'>{n}</label>\n<input id='{i}' {it}value='{v}'>{a}\n");
+        String id('s'); id += i;
+        String labelTags = String();
+        String inputTags = String();
+        String after = String();
+        uint8_t dp;
+
+        switch (EspApConfigurator[i].setting->typecode()[0]) {
+        case 'b':
+            labelTags = F("class='cb' ");
+            inputTags += F("type='checkbox' ");
+            inp.replace("{v}", id);
+            after = F("<br />");
+            break;
+        case 'i':
+            inputTags += F("type='number' step=1 ");
+            break;
+        case 'f':
+            inputTags += F("type='number' step=0.");
+            dp = EspApConfigurator[i].setting->typecode().substring(1).toInt();
+            while (dp-- > 1) { inputTags += '0'; }
+            inputTags += F("1 ");
+            break;
+        case 's':
+            inputTags += F("type='text' length=");
+            inputTags += EspApConfigurator[i].setting->typecode().substring(1);
+            inputTags += ' ';
+            break;
+        default:
+            DB(F("WARNING: don't understand setting type: "));
+            DBLN(EspApConfigurator[i].setting->typecode());
+        }
+
+        inp.replace("{i}", id);
+        inp.replace("{n}", EspApConfigurator[i].id);
+        inp.replace("{v}", EspApConfigurator[i].setting->get());
+        inp.replace("{lt}", labelTags);
+        inp.replace("{it}", inputTags);
+        inp.replace("{a}", after);
+
+        s += inp;
+    }
+    return s;
 }
 
