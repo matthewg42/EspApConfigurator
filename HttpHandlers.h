@@ -3,9 +3,9 @@
 #include "HttpServer.h"
 
 void handleNotFound();
-void handleAllInOnePage();
-void handleAllInOneSave();
-void handleAllInOneCancel();
+void handleSinglePage();
+void handleSingleSave();
+void handleSingleCancel();
 void handleRescan();
 
 // HTML taken from MIT-licensed WiFiManager project 

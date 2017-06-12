@@ -19,9 +19,9 @@ void HttpServer_::begin(HttpServer_::Mode mode)
     case HttpServer_::SinglePage:
         DBLN(F("SinglePage"));
         onNotFound(handleNotFound);
-        on("/", handleAllInOnePage);
-        on("/save", handleAllInOneSave);
-        on("/wifi", handleAllInOneCancel);
+        on("/", handleSinglePage);
+        on("/save", handleSingleSave);
+        on("/wifi", handleSingleCancel);
         on("/r", handleRescan);
         break;
     case HttpServer_::MultiplePage:

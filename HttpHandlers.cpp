@@ -46,9 +46,9 @@ void handleNotFound() {
     HttpServer.client().stop();
 }
 
-void handleAllInOnePage()
+void handleSinglePage()
 {
-    DBLN(F("handleAllInOnePage"));
+    DBLN(F("handleSinglePage"));
 
     String page = FPSTR(HTTP_HEAD);
     page.replace("{v}", "ESPApConfigurator");
@@ -97,8 +97,8 @@ void handleAllInOnePage()
     HttpServer.client().stop();
 }
 
-void handleAllInOneSave() {
-    DBLN(F("handleAllInOneSave"));
+void handleSingleSave() {
+    DBLN(F("handleSingleSave"));
     String page = FPSTR(HTTP_HEAD);
     page.replace("{v}", "Saving Settings");
     page += FPSTR(HTTP_SCRIPT);
@@ -168,8 +168,8 @@ void handleAllInOneSave() {
     }
 }
 
-void handleAllInOneCancel() {
-    DBLN(F("handleAllInOneCancel"));
+void handleSingleCancel() {
+    DBLN(F("handleSingleCancel"));
     String page = FPSTR(HTTP_HEAD);
     page.replace("{v}", "Cancel Changes");
     page += FPSTR(HTTP_SCRIPT);

@@ -75,9 +75,9 @@ Typically for projects where web server only runs in ModeAP.  No password protec
     - Discard settings button
 - Routes: 
     - onNotFound(handleNotFound);
-    - on("/",       handleAllInOnePage);
-    - on("/save",   handleAllInOneSave);
-    - on("/wifi",   handleAllInOneCancel);
+    - on("/",       handleSinglePage);
+    - on("/save",   handleSingleSave);
+    - on("/wifi",   handleSingleCancel);
     - on("/r",      handleRescan);
 
 ### Mode 2: Multi page interface
