@@ -2,11 +2,23 @@
 
 #include "HttpServer.h"
 
+// common
 void handleNotFound();
+void sendStdHeaders();
+void handleRescan();
+
+// Single page mode
 void handleSinglePage();
 void handleSingleSave();
 void handleSingleCancel();
-void handleRescan();
+
+// For multi-page mode
+void handleLandingPage();
+void handleWifiPage();
+void handleSettingsPage();
+void handleWifiSave();
+void handleSettingsSave();
+void handleCancel();
 
 // Construct chunks of pages
 String htmlNetworkList();
@@ -22,7 +34,7 @@ const char HTTP_WIFI_NET[] PROGMEM    = "<div><a href='#p' onclick='c(this)'>{v}
 const char HTTP_FORM_START[] PROGMEM  = "<form method='post' action='{a}'>";
 const char HTTP_WIFI_INPUTS[] PROGMEM = "<label for='s'>SSID</label><input id='s' name='s' length=32><label for='p'>Passphrase</label><input id='p' name='p' length=64 type='password'>";
 const char HTTP_FORM_PARAM[] PROGMEM  = "<label for='{i}'>{p}</label><input id='{i}' name='{i}' length={l} value='{v}'>";
-const char HTTP_FORM_END[] PROGMEM    = "<button type='submit'>{s}</button></form><form method=\"get\" action=\"discard\"><button>{d}</button></form>";
+const char HTTP_FORM_END[] PROGMEM    = "<button type='submit'>{s}</button></form><form method=\"get\" action=\"{a}\"><button>{d}</button></form>";
 const char HTTP_SAVED[] PROGMEM       = "<div>Settings Saved<br />Trying to connect ESP to network.<br />If connection fails, reconnect to AP to try again</div>";
 const char HTTP_NOSAVE[] PROGMEM      = "<div>Settings Not Saved<br />Trying to connect ESP to network.<br />If it fails, reconnect to AP to try again</div>";
 const char HTTP_END[] PROGMEM         = "</div></body></html>";

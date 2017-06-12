@@ -39,9 +39,7 @@ void handleNotFound() {
     for ( uint8_t i = 0; i < HttpServer.args(); i++ ) {
         message += " " + HttpServer.argName ( i ) + ": " + HttpServer.arg ( i ) + "\n";
     }
-    HttpServer.sendHeader("Cache-Control", "no-cache, no-store, must-revalidate");
-    HttpServer.sendHeader("Pragma", "no-cache");
-    HttpServer.sendHeader("Expires", "-1");
+    sendStdHeaders();
     HttpServer.send (404, "text/plain", message);
     HttpServer.client().stop();
 }
@@ -54,7 +52,7 @@ void handleSinglePage()
     page += FPSTR(HTTP_SCRIPT);
     page += FPSTR(HTTP_STYLE);
     page += FPSTR(HTTP_HEAD_END);
-    page.replace("{v}", "ESPApConfigurator"); // Page title
+    page.replace("{v}", "EspApConfigurator"); // Page title
     page.replace("{r}", HttpServer.uri());    // Re-load URI
     page += F(("<h1>Configuration</h1>"));
 
@@ -74,6 +72,7 @@ void handleSinglePage()
     
     // End the form with the save button
     page += FPSTR(HTTP_FORM_END);
+    page.replace("{a}", "discard");
     page.replace("{s}", "Save & use Wifi");
     if (EspApConfigurator.inApMode()) {
         page.replace("{d}", "Use Wifi (no save)");
@@ -83,9 +82,7 @@ void handleSinglePage()
 
     page += FPSTR(HTTP_END);
 
-    HttpServer.sendHeader("Cache-Control", "no-cache, no-store, must-revalidate");
-    HttpServer.sendHeader("Pragma", "no-cache");
-    HttpServer.sendHeader("Expires", "-1");
+    sendStdHeaders();
     HttpServer.send(200, "text/html", page);
     HttpServer.client().stop();
 }
@@ -158,9 +155,7 @@ void handleSingleSave() {
 
     page += FPSTR(HTTP_END);
 
-    HttpServer.sendHeader("Cache-Control", "no-cache, no-store, must-revalidate");
-    HttpServer.sendHeader("Pragma", "no-cache");
-    HttpServer.sendHeader("Expires", "-1");
+    sendStdHeaders();
     if (ok) {
         HttpServer.send(200, "text/html", page);
         HttpServer.client().stop();
@@ -184,9 +179,7 @@ void handleSingleCancel() {
     page += FPSTR(HTTP_NOSAVE);
     page += FPSTR(HTTP_END);
 
-    HttpServer.sendHeader("Cache-Control", "no-cache, no-store, must-revalidate");
-    HttpServer.sendHeader("Pragma", "no-cache");
-    HttpServer.sendHeader("Expires", "-1");
+    sendStdHeaders();
     HttpServer.send(200, "text/html", page);
     HttpServer.client().stop();
     ModeAP.finish();
@@ -194,12 +187,120 @@ void handleSingleCancel() {
 
 void handleRescan() {
     DBLN(F("handleRescan"));
-    HttpServer.sendHeader("Cache-Control", "no-cache, no-store, must-revalidate");
-    HttpServer.sendHeader("Pragma", "no-cache");
-    HttpServer.sendHeader("Expires", "-1");
+    sendStdHeaders();
     HttpServer.send(200, "text/plain", "ok");
     HttpServer.client().stop();
     ModeAP.startScan();
+}
+
+void handleLandingPage()
+{
+    DBLN(F("handleLandingPage"));
+
+    String page = FPSTR(HTTP_HEAD);
+    page += FPSTR(HTTP_SCRIPT);
+    page += FPSTR(HTTP_STYLE);
+    page += FPSTR(HTTP_HEAD_END);
+    page.replace("{v}", "EspApConfigurator"); // Page title
+    page.replace("{r}", HttpServer.uri());    // Re-load URI
+    page += F(("<h1>EspApConfigurator</h1>"));
+
+    // Buttons for various sub-pages
+    page += F("<a href=\"set\"><button>Project Settings</button></a>");
+    page += F("<a href=\"wifi\"><button>WiFi Settings</button></a>");
+    page += F("<a href=\"#\"><button>Switch to Wifi</button></a>");
+
+    page += FPSTR(HTTP_END);
+
+    sendStdHeaders();
+    HttpServer.send(200, "text/html", page);
+    HttpServer.client().stop();
+}
+
+void handleWifiPage()
+{
+    DBLN(F("handleWifiPage"));
+
+    String page = FPSTR(HTTP_HEAD);
+    page += FPSTR(HTTP_SCRIPT);
+    page += FPSTR(HTTP_STYLE);
+    page += FPSTR(HTTP_HEAD_END);
+    page.replace("{v}", "Wifi Settings");   // Page title
+    page.replace("{r}", HttpServer.uri());  // Re-load URI
+    page += F(("<h1>Wifi Settings</h1>"));
+
+    page += htmlNetworkList();
+
+    page += FPSTR(HTTP_FORM_START);
+    page.replace("{a}", "savewifi");
+
+    page += F("<h3>Wifi Credentials</h3>");
+    page += FPSTR(HTTP_WIFI_INPUTS);
+
+    // End the form with the save/cancel buttons
+    page += FPSTR(HTTP_FORM_END);
+    page.replace("{a}", "cancel");
+    page.replace("{s}", "Save");
+    page.replace("{d}", "Cancel");
+
+    page += FPSTR(HTTP_END);
+
+    sendStdHeaders();
+    HttpServer.send(200, "text/html", page);
+    HttpServer.client().stop();
+}
+
+void handleSettingsPage()
+{
+    DBLN(F("handleSettingsPage"));
+
+    String page = FPSTR(HTTP_HEAD);
+    page += FPSTR(HTTP_SCRIPT);
+    page += FPSTR(HTTP_STYLE);
+    page += FPSTR(HTTP_HEAD_END);
+    page.replace("{v}", "Settings"); // Page title
+    page += F(("<h1>Settings</h1>"));
+
+    page += FPSTR(HTTP_FORM_START);
+    page.replace("{a}", "saveset");
+
+    // Custom settings
+    if (EspApConfigurator.count() > 0) {
+        page += F("<h3>Settings</h3>");
+        page += htmlSettingsForm();
+    }
+    
+    // End the form with the save/cancel buttons
+    page += FPSTR(HTTP_FORM_END);
+    page.replace("{a}", "cancel");
+    page.replace("{s}", "Save");
+    page.replace("{d}", "Cancel");
+
+    page += FPSTR(HTTP_END);
+
+    sendStdHeaders();
+    HttpServer.send(200, "text/html", page);
+    HttpServer.client().stop();
+}
+
+void handleWifiSave()
+{
+    DBLN(F("handleWifiSave"));
+}
+
+void handleSettingsSave()
+{
+    DBLN(F("handleSettingsSave"));
+}
+
+void handleCancel()
+{
+    DBLN(F("handleCancel"));
+
+    // just re-direct to langing page
+    HttpServer.sendHeader("Location", String("/"), true);
+    HttpServer.send( 302, "text/plain", "");
+
 }
 
 String htmlNetworkList()
@@ -285,3 +386,9 @@ String htmlSettingsForm()
     return s;
 }
 
+void sendStdHeaders()
+{
+    HttpServer.sendHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+    HttpServer.sendHeader("Pragma", "no-cache");
+    HttpServer.sendHeader("Expires", "-1");
+}

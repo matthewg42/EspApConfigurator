@@ -9,13 +9,12 @@
 
 EspApConfigurator_ EspApConfigurator;
 
-EspApConfigurator_::EspApConfigurator_(HttpServer_::Mode mode) :
-    PersistentSettingManager(NUMBER_OF_SETTINGS),
-    _mode(mode)
+EspApConfigurator_::EspApConfigurator_() :
+    PersistentSettingManager(NUMBER_OF_SETTINGS)
 {
 }
 
-void EspApConfigurator_::begin()
+void EspApConfigurator_::begin(HttpServer_::Mode interfaceMode)
 {
     PersistentSettingManager::begin();
     APButton.begin();
@@ -23,7 +22,7 @@ void EspApConfigurator_::begin()
     ModeAP.begin();
     ModeReset.begin();
     ModeWifiClient.begin();
-    HttpServer.begin(_mode);
+    HttpServer.begin(interfaceMode);
     start();
 }
 

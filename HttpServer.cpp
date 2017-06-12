@@ -26,6 +26,13 @@ void HttpServer_::begin(HttpServer_::Mode mode)
         break;
     case HttpServer_::MultiplePage:
         DBLN(F("MultiplePage"));
+        on("/", handleLandingPage);
+        on("/wifi", handleWifiPage);
+        on("/set", handleSettingsPage);
+        on("/savewifi", handleWifiSave);
+        on("/saveset", handleSettingsSave);
+        on("/cancel", handleCancel);
+        on("/r", handleRescan);
         onNotFound(handleNotFound);
         break;
     default:

@@ -17,7 +17,7 @@ void setup()
     delay(50);
     DBLN(F("\n\nS:setup"));
 
-    EspApConfigurator.begin();
+    EspApConfigurator.begin(HttpServer_::MultiplePage);
     ModeWifiClient.enableHttpServer(true);
 
     // Example settings of each type
