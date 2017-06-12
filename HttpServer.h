@@ -4,8 +4,13 @@
 
 class HttpServer_ : public ESP8266WebServer {
 public:
+    enum Mode {
+        SinglePage,
+        MultiplePage,
+        Custom
+    };
     HttpServer_(int port=80);
-    void begin();
+    void begin(Mode mode);
 
 };
 

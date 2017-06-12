@@ -2,6 +2,7 @@
 
 #include <ParentMode.h>
 #include "PersistentSettingManager.h"
+#include "HttpServer.h"
 
 /*! \brief Access Point Configurator 
  *
@@ -11,7 +12,7 @@
 class EspApConfigurator_ : public ParentMode, public PersistentSettingManager {
 public:
     //! Constructor
-    EspApConfigurator_();
+    EspApConfigurator_(HttpServer_::Mode mode=HttpServer_::SinglePage);
 
     //! Initialization - call from setup()
     void begin();
@@ -30,6 +31,9 @@ public:
 
     //! Find out if we are connected to wireless network
     bool isConnected();
+
+protected:
+    HttpServer_::Mode _mode;
 
 };
 

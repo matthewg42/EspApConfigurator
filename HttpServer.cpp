@@ -11,15 +11,27 @@ HttpServer_::HttpServer_(int port) :
     DBLN(port);
 }
 
-void HttpServer_::begin()
+void HttpServer_::begin(HttpServer_::Mode mode)
 {
-    DBLN(F("HttpServer::begin"));
-    // Set up routes
-    onNotFound(handleNotFound);
-    on("/", handleRoot);
-    on("/save", handleWifiSave);
-    on("/wifi", handleWifi);
-    on("/r", handleRescan);
+    DB(F("HttpServer::begin "));
+
+    switch (mode) {
+    case HttpServer_::SinglePage:
+        DBLN(F("SinglePage"));
+        onNotFound(handleNotFound);
+        on("/", handleAllInOnePage);
+        on("/save", handleAllInOneSave);
+        on("/wifi", handleAllInOneCancel);
+        on("/r", handleRescan);
+        break;
+    case HttpServer_::MultiplePage:
+        DBLN(F("MultiplePage"));
+        onNotFound(handleNotFound);
+        break;
+    default:
+        DBLN(F("Custom"));
+        // We don't set up any routes here - the sketch is responsible now
+    };
     ESP8266WebServer::begin();
 }
 

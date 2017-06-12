@@ -26,6 +26,7 @@ void handleNotFound() {
     DB(HttpServer.method()==HTTP_GET ? F("GET") : F("POST"));
     DB(' ');
     DBLN(HttpServer.uri());
+
     String message = "File Not Found\n\n";
     message += "URI: ";
     message += HttpServer.uri();
@@ -45,9 +46,9 @@ void handleNotFound() {
     HttpServer.client().stop();
 }
 
-void handleRoot()
+void handleAllInOnePage()
 {
-    DBLN(F("handleRoot"));
+    DBLN(F("handleAllInOnePage"));
 
     String page = FPSTR(HTTP_HEAD);
     page.replace("{v}", "ESPApConfigurator");
@@ -60,7 +61,7 @@ void handleRoot()
     int8_t netCount = WiFi.scanComplete();
     if (netCount>0) {
         for (int8_t i=0; i<netCount; i++) {
-            String item = FPSTR(HTTP_ITEM);
+            String item = FPSTR(HTTP_WIFI_NET);
             item.replace("{v}", WiFi.SSID(i));
             item.replace("{r}", String(rssiToQuality(WiFi.RSSI(i))));
             if (WiFi.encryptionType(i) != ENC_TYPE_NONE) {
@@ -74,7 +75,7 @@ void handleRoot()
         page += F("<p>[no networks found]</p>");
     }
     page += F("<br/>");
-    page += FPSTR(HTTP_FORM_START);
+    page += FPSTR(HTTP_WIFI_FRM_S);
     if (EspApConfigurator.count()>0) { page += F("<h3>Project Settings</h3><p>"); }
     for (uint8_t i=0; i<EspApConfigurator.count(); i++) {
         String form = FPSTR(HTTP_FORM_PARAM);
@@ -85,7 +86,7 @@ void handleRoot()
         page += form;
     }
     if (EspApConfigurator.count()>0) { page += F("</p>"); }
-    page += FPSTR(HTTP_FORM_END);
+    page += FPSTR(HTTP_WIFI_FRM_E);
     page += F("<br/>");
     page += FPSTR(HTTP_END);
 
@@ -96,8 +97,8 @@ void handleRoot()
     HttpServer.client().stop();
 }
 
-void handleWifiSave() {
-    DBLN(F("handleWifiSave"));
+void handleAllInOneSave() {
+    DBLN(F("handleAllInOneSave"));
     String page = FPSTR(HTTP_HEAD);
     page.replace("{v}", "Saving Settings");
     page += FPSTR(HTTP_SCRIPT);
@@ -167,8 +168,8 @@ void handleWifiSave() {
     }
 }
 
-void handleWifi() {
-    DBLN(F("handleWifi"));
+void handleAllInOneCancel() {
+    DBLN(F("handleAllInOneCancel"));
     String page = FPSTR(HTTP_HEAD);
     page.replace("{v}", "Cancel Changes");
     page += FPSTR(HTTP_SCRIPT);
