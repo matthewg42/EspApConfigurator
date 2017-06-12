@@ -35,7 +35,7 @@ void EspApConfigurator_::modeStart()
 void EspApConfigurator_::modeEnd()
 {
     DBLN(F("EspApConfigurator::modeEnd"));
-    switchMode(&ModeWifiClient);
+    // Don't expect this to run, but heh
 }
 
 void EspApConfigurator_::modeUpdate()
