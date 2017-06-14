@@ -3,7 +3,6 @@
 #include "ModeWifiClient.h"
 #include "ModeReset.h"
 #include "HttpServer.h"
-#include "HeartBeat.h"
 #include "Config.h"
 
 EspApConfigurator_ EspApConfigurator;
@@ -12,23 +11,33 @@ EspApConfigurator_::EspApConfigurator_() :
     PersistentSettingManager(NUMBER_OF_SETTINGS)
 {
     _apButton = NULL;
+    _heartbeat = NULL;
 }
 
 EspApConfigurator_::~EspApConfigurator_()
 {
     // Delete any dynamically allocated stuff
+    // Will probably never be called because we globally allocate a
+    // single instance of EspApConfigurator_ and never delete it,
+    // but I fell like this is good practise in case I change how 
+    // this stuff works
     if (_apButton) {
         delete _apButton;
         _apButton = NULL;
     }
+    if (_heartbeat) {
+        delete _heartbeat;
+        _heartbeat = NULL;
+    }
 }
 
-void EspApConfigurator_::begin(uint8_t apButtonPin, HttpServer_::Mode interfaceMode)
+void EspApConfigurator_::begin(uint8_t apButtonPin, uint8_t heartbeatPin, bool heartbeatInv, HttpServer_::Mode interfaceMode)
 {
     PersistentSettingManager::begin();
     _apButton = new DebouncedButton(apButtonPin);
     _apButton->begin();
-    HeartBeat.begin();
+    _heartbeat = new Heartbeat(heartbeatPin, heartbeatInv);
+    _heartbeat->begin();
     ModeAP.begin();
     ModeReset.begin();
     ModeWifiClient.begin();
@@ -50,7 +59,7 @@ void EspApConfigurator_::modeEnd()
 
 void EspApConfigurator_::modeUpdate()
 {
-    HeartBeat.update();
+    _heartbeat->update();
     _apButton->update();
 
     if (pMode != NULL) {
@@ -82,4 +91,8 @@ bool EspApConfigurator_::isConnected()
     return !inApMode() && WiFi.status() == WL_CONNECTED;
 }
 
+Heartbeat* EspApConfigurator_::heartbeat() 
+{
+    return _heartbeat;
+}
 

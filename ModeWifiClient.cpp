@@ -1,9 +1,9 @@
 #include <Arduino.h>
 #include <ESP8266WiFi.h>
 #include <MutilaDebug.h>
+#include "EspApConfigurator.h"
 #include "ModeWifiClient.h"
 #include "MutilaDebug.h"
-#include "HeartBeat.h"
 #include "HttpServer.h"
 
 ModeWifiClient_ ModeWifiClient;
@@ -18,7 +18,7 @@ ModeWifiClient_::ModeWifiClient_() :
 void ModeWifiClient_::modeStart()
 {
     DBLN(F("ModeWifiClient::modeStart()"));
-    HeartBeat.setMode(Heartbeat::Quick);
+    EspApConfigurator.heartbeat()->setMode(Heartbeat::Quick);
     WiFi.forceSleepWake(); 
     connect(_ssid!="");
 }
@@ -62,30 +62,30 @@ void ModeWifiClient_::modeUpdate()
         switch (status) {
         case WL_CONNECTED:
             DB(F("connected ip="));
-            HeartBeat.setMode(Heartbeat::Slower);
+            EspApConfigurator.heartbeat()->setMode(Heartbeat::Slower);
             DB(WiFi.localIP());
             DB(F(" hostname="));
             DBLN(WiFi.hostname());
             break;
         case WL_IDLE_STATUS:
             DBLN(F("idle"));
-            HeartBeat.setMode(Heartbeat::Normal);
+            EspApConfigurator.heartbeat()->setMode(Heartbeat::Normal);
             break;
         case WL_CONNECT_FAILED:
             DBLN(F("connect failed"));
-            HeartBeat.setMode(Heartbeat::Quick);
+            EspApConfigurator.heartbeat()->setMode(Heartbeat::Quick);
             break;
         case WL_CONNECTION_LOST:
             DBLN(F("connect lost"));
-            HeartBeat.setMode(Heartbeat::Quick);
+            EspApConfigurator.heartbeat()->setMode(Heartbeat::Quick);
             break;
         case WL_DISCONNECTED:
             DBLN(F("connect disconnected"));
-            HeartBeat.setMode(Heartbeat::Normal);
+            EspApConfigurator.heartbeat()->setMode(Heartbeat::Normal);
             break;
         default:
             DBLN(status);
-            HeartBeat.setMode(Heartbeat::Quick);
+            EspApConfigurator.heartbeat()->setMode(Heartbeat::Quick);
             break;
         }
         _prevStatus = status;

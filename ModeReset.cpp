@@ -1,6 +1,7 @@
 #include <Arduino.h>
 #include <MutilaDebug.h>
 #include <ESP8266WiFi.h>
+#include <Heartbeat.h>
 #include "ModeReset.h"
 #include "MutilaDebug.h"
 #include "Config.h"
@@ -24,11 +25,13 @@ void ModeReset_::modeStart()
 
     // show we're doing something with the LED
     for (uint8_t j=0; j<3; j++) {
-        for (uint8_t i=0; i<33; i++) {
-            digitalWrite(HEARTBEAT_PIN, i%2);
-            delay(30);
+        EspApConfigurator.heartbeat()->setMode(Heartbeat::Quicker);
+        for (uint8_t i=0; i<50; i++) {
+            EspApConfigurator.heartbeat()->update();
+            delay(10);
         }
-        digitalWrite(HEARTBEAT_PIN, 0);
+        EspApConfigurator.heartbeat()->setMode(Heartbeat::Off);
+        EspApConfigurator.heartbeat()->update();
         delay(500);
     }
 

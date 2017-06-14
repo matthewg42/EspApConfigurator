@@ -1,9 +1,10 @@
 #include <Arduino.h>
 #include <ESP8266WiFi.h>
 #include <MutilaDebug.h>
+#include <Heartbeat.h>
+#include <EspApConfigurator.h>
 #include "ModeWifiOff.h"
 #include "MutilaDebug.h"
-#include "HeartBeat.h"
 
 ModeWifiOff_ ModeWifiOff;
 
@@ -16,7 +17,7 @@ void ModeWifiOff_::modeStart()
 {
     DBLN(F("ModeWifiOff::modeStart()"));
     WiFi.forceSleepBegin(); 
-    HeartBeat.setMode(Heartbeat::Slow);
+    EspApConfigurator.heartbeat()->setMode(Heartbeat::Slow);
 }
 
 void ModeWifiOff_::modeUpdate()

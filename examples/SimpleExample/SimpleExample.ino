@@ -12,6 +12,7 @@
 #include <ModeWifiClient.h>
 
 #define AP_BUTTON_PIN       D7
+#define HEARTBEAT_PIN       D0
 
 void setup() 
 {
@@ -19,8 +20,12 @@ void setup()
     delay(50);
     DBLN(F("\n\nS:setup"));
 
-    EspApConfigurator.begin(AP_BUTTON_PIN, HttpServer_::MultiplePage);
-    ModeWifiClient.enableHttpServer(true);
+    EspApConfigurator.begin(AP_BUTTON_PIN, 
+                            HEARTBEAT_PIN,
+                            true,                       // Invert heartbeat logic for NodeMCU build-in LED
+                            HttpServer_::MultiplePage); // Choose to use Multi-page web interface
+
+    ModeWifiClient.enableHttpServer(true);              // Enable web interface in WiFi client mode
 
     // Example settings of each type
     EspApConfigurator.addSetting("Long Int Setting",    new PersistentSettingLong(EspApConfigurator.nextFreeAddress(),   987654321));
@@ -30,7 +35,7 @@ void setup()
     EspApConfigurator.addSetting("UInt8 Setting",       new PersistentSettingUInt8(EspApConfigurator.nextFreeAddress(),  42));
     EspApConfigurator.addSetting("String Setting",      new PersistentSettingString(EspApConfigurator.nextFreeAddress(), 16, "string(16)"));
 
-    // Dump settings
+    // Dump settings to serial
     DBLN(F("Settings:"));
     for (uint8_t i=0; i<EspApConfigurator.count(); i++) {
         DB(EspApConfigurator[i].id);
@@ -38,7 +43,6 @@ void setup()
         DB(EspApConfigurator[i].setting->get());
         DB(F(" typecode="));
         DBLN(EspApConfigurator[i].setting->typecode());
-        
     }
 
     DBLN(F("E:setup"));

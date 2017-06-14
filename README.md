@@ -38,7 +38,7 @@ Differences:
 
 ### TODO
 
-- Fix: when in ModeWifiClient and scan is completed, HeartBeat mode doesn't reset properly
+- Fix: when in ModeWifiClient and scan is completed, Heartbeat mode doesn't reset properly
 - Fix: bool type doesn't represent properly - use checkbox
 - Hostname should not be a default parameter, as ESP does not store it in a non-valatile way
 - Enhance settings:

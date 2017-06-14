@@ -4,10 +4,10 @@
 #include <Millis.h>
 #include "ModeAP.h"
 #include "MutilaDebug.h"
-#include "HeartBeat.h"
 #include "HttpServer.h"
 #include "HttpHandlers.h"
 #include "ModeWifiClient.h"
+#include "EspApConfigurator.h"
 #include "Config.h"
 
 ModeAP_ ModeAP;
@@ -59,7 +59,7 @@ void ModeAP_::modeUpdate()
         int8_t netCount = WiFi.scanComplete();
         if (netCount >= 0) {
             // show that scan has completed, and now AP mode is listening
-            HeartBeat.setCustomMode(900, 100);
+            EspApConfigurator.heartbeat()->setCustomMode(900, 100);
             scanning = false;
             DB(F("Scan complete, found "));
             DB(netCount);
@@ -76,7 +76,7 @@ void ModeAP_::startScan()
         DBLN(F("[still scanning]"));
         return;
     }
-    HeartBeat.setMode(Heartbeat::Quicker);
+    EspApConfigurator.heartbeat()->setMode(Heartbeat::Quicker);
     wantScan = false;
     scanning = true;
     WiFi.scanNetworks(true);
