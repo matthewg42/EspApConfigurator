@@ -74,19 +74,19 @@ settingPair PersistentSettingManager::operator[](uint8_t idx)
     return _settings[idx];
 }
 
-String PersistentSettingManager::operator[](const char* id)
+PersistentSetting* PersistentSettingManager::operator[](const char* id)
 {
     return this->operator[](String(id));
 }
 
-String PersistentSettingManager::operator[](String id)
+PersistentSetting* PersistentSettingManager::operator[](String id)
 {
     for (uint8_t i=0; i<_count; i++) {
         if (_settings[i].id == id) {
-            return _settings[i].setting->get();
+            return _settings[i].setting;
         }
     }
-    return String();
+    return NULL;
 }
 
 uint16_t PersistentSettingManager::nextFreeAddress()

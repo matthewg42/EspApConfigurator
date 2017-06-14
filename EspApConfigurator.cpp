@@ -3,7 +3,6 @@
 #include "ModeWifiClient.h"
 #include "ModeReset.h"
 #include "HttpServer.h"
-#include "APButton.h"
 #include "HeartBeat.h"
 #include "Config.h"
 
@@ -12,12 +11,23 @@ EspApConfigurator_ EspApConfigurator;
 EspApConfigurator_::EspApConfigurator_() :
     PersistentSettingManager(NUMBER_OF_SETTINGS)
 {
+    _apButton = NULL;
 }
 
-void EspApConfigurator_::begin(HttpServer_::Mode interfaceMode)
+EspApConfigurator_::~EspApConfigurator_()
+{
+    // Delete any dynamically allocated stuff
+    if (_apButton) {
+        delete _apButton;
+        _apButton = NULL;
+    }
+}
+
+void EspApConfigurator_::begin(uint8_t apButtonPin, HttpServer_::Mode interfaceMode)
 {
     PersistentSettingManager::begin();
-    APButton.begin();
+    _apButton = new DebouncedButton(apButtonPin);
+    _apButton->begin();
     HeartBeat.begin();
     ModeAP.begin();
     ModeReset.begin();
@@ -41,13 +51,13 @@ void EspApConfigurator_::modeEnd()
 void EspApConfigurator_::modeUpdate()
 {
     HeartBeat.update();
-    APButton.update();
+    _apButton->update();
 
     if (pMode != NULL) {
         pMode->update();
     }
 
-    if (APButton.held(3000)) {
+    if (_apButton->held(3000)) {
         switchMode(&ModeReset);
     }
 
@@ -55,7 +65,7 @@ void EspApConfigurator_::modeUpdate()
         if (pMode->isFinished()) {
             switchMode(&ModeWifiClient);
         }
-    } else if (APButton.tapped()) {
+    } else if (_apButton->tapped()) {
         switchMode(&ModeAP);
     }
 }

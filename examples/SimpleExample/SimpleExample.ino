@@ -11,13 +11,15 @@
 #include <EspApConfigurator.h>
 #include <ModeWifiClient.h>
 
+#define AP_BUTTON_PIN       D7
+
 void setup() 
 {
     Serial.begin(115200);
     delay(50);
     DBLN(F("\n\nS:setup"));
 
-    EspApConfigurator.begin(HttpServer_::MultiplePage);
+    EspApConfigurator.begin(AP_BUTTON_PIN, HttpServer_::MultiplePage);
     ModeWifiClient.enableHttpServer(true);
 
     // Example settings of each type

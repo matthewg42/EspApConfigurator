@@ -1,6 +1,8 @@
 #pragma once
 
+#include <stdint.h>
 #include <ParentMode.h>
+#include <DebouncedButton.h>
 #include "PersistentSettingManager.h"
 #include "HttpServer.h"
 
@@ -14,10 +16,13 @@ public:
     //! Constructor
     EspApConfigurator_();
 
+    //! Destructor
+    ~EspApConfigurator_();
+
     //! Initialization - call from setup()
     //!
     //! \param interfaceMode which type of web interface we want to use
-    void begin(HttpServer_::Mode interfaceMode=HttpServer_::SinglePage);
+    void begin(uint8_t apButtonPin, HttpServer_::Mode interfaceMode=HttpServer_::SinglePage);
 
     //! This gets called (indirectly) from begin()
     void modeStart();
@@ -33,6 +38,9 @@ public:
 
     //! Find out if we are connected to wireless network
     bool isConnected();
+
+protected:
+    DebouncedButton* _apButton;
 
 };
 
