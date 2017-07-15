@@ -59,6 +59,7 @@ void EspApConfigurator_::modeEnd()
 
 void EspApConfigurator_::modeUpdate()
 {
+
     _heartbeat->update();
     _apButton->update();
 
@@ -77,6 +78,9 @@ void EspApConfigurator_::modeUpdate()
     } else if (_apButton->tapped()) {
         switchMode(&ModeAP);
     }
+
+    // Let the ESP's Wifi components have a go at the CPU.
+    yield();
 }
 
 bool EspApConfigurator_::inApMode()
