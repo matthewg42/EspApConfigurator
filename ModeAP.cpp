@@ -12,7 +12,9 @@
 
 ModeAP_ ModeAP;
 
-ModeAP_::ModeAP_()
+ModeAP_::ModeAP_() :
+    _ssid(AP_NAME),
+    _pass(AP_PASS)
 {
 }
 
@@ -35,7 +37,11 @@ void ModeAP_::modeStart()
     WiFi.mode(WIFI_STA);
 
     // Set AP SSID and passphrase
-    WiFi.softAP(AP_NAME, AP_PASS);
+    DB(F("AP SSID="));
+    DB(_ssid);
+    DB(' ');
+    DBLN(_pass == "" ? F("[open]") : F("[passphrase]"));
+    WiFi.softAP(_ssid.c_str(), _pass == "" ? NULL : _pass.c_str());
 
     // Wait a moment for ESP state to change
     delay(100);
@@ -90,5 +96,15 @@ void ModeAP_::finish()
 bool ModeAP_::isFinished()
 {
     return finishFlag;
+}
+
+void ModeAP_::setApDetails(const char* ssid, const char* pass)
+{
+    _ssid = ssid;
+    if (pass == NULL) {
+        _pass = "";
+    } else {
+        _pass = pass;
+    }
 }
 

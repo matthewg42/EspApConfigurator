@@ -15,8 +15,11 @@ public:
     void startScan();
     void finish();
     bool isFinished();
+    void setApDetails(const char* ssid, const char* pass);
 
 protected:
+    String _ssid;
+    String _pass;
     bool scanning;
     bool wantScan;
     bool finishFlag;

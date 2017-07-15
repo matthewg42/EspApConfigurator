@@ -46,6 +46,12 @@ public:
     //! Get a pointer to the heartbeat object
     Heartbeat* heartbeat();
 
+    //! Should be called before AP mode is entered
+    //! \param ssid the SSID to be used when in access point mode
+    //! \param pass the passphrase to be used when in access point mode
+    // Setting pass to NULL will cause the access point to run in open Wifi mode.
+    void setApDetails(const char* ssid, const char* pass);
+
 protected:
     DebouncedButton* _apButton;
     Heartbeat* _heartbeat;

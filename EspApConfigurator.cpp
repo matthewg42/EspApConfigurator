@@ -100,3 +100,12 @@ Heartbeat* EspApConfigurator_::heartbeat()
     return _heartbeat;
 }
 
+void EspApConfigurator_::setApDetails(const char* ssid, const char* pass)
+{
+    ModeAP.setApDetails(ssid, pass);
+    if (inApMode()) {
+        switchMode(&ModeWifiClient);
+        switchMode(&ModeAP);
+    }
+}
+
