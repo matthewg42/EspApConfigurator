@@ -5,8 +5,7 @@
 
 ModeDummy_ ModeDummy;
 
-ModeDummy_::ModeDummy_() :
-    NamedMode("ModeDummy")
+ModeDummy_::ModeDummy_()
 {
     setUpdatePeriod(500);
 }

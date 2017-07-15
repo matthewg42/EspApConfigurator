@@ -4,17 +4,19 @@
 #include <Arduino.h>
 #include "PersistentSettingAtom.h"
 
-/*! \brief Class for storing unsigned 9-bit integers values to EEPROM
+bool basicBoolValidator(String s);
+
+/*! \brief Class for storing boolean values to EEPROM
  *
  */
-class PersistentSettingUInt8 : public PersistentSettingAtom<uint8_t> {
+class PersistentSettingBool : public PersistentSettingAtom<bool> {
 public:
     /*! Constructor
      * \param eepromAddress start address of this setting
      * \param defaultValue value to take before loading
      * \param validatorFunction function to validate values
      */
-    PersistentSettingUInt8(uint16_t eepromAddress, uint8_t defaultValue, validatorFunction validator=NULL);
+    PersistentSettingBool(uint16_t eepromAddress, bool defaultValue, validatorFunction validator=&basicBoolValidator);
 
     /*! Load from EEPROM 
      *  Loads value from EEPROM, and checks for validity. If valid use value and return
@@ -27,9 +29,8 @@ public:
      *
      *  If newValue is valid, set it and return true, else return false.
      */
-    bool set(String newValue);
-
-    String typecode() { return String("i"); }
+    bool set(String newValue) override;
+    String typecode() override { return String("b"); }
 
 };
 

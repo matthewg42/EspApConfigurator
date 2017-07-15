@@ -10,11 +10,12 @@
 #include <PersistentSettingLong.h>
 #include <PersistentSettingString.h>
 #include <WiFiClientSecure.h>
-#include <MemoryFree.h>
+#include <ModeWifiClient.h>
 
 // Enable vcc measurement 
 ADC_MODE(ADC_VCC);
 
+#define AP_BUTTON_PIN       D7
 #define UPLOAD_SERVER   "api.thingspeak.com"
 #define CERT_SERVER     "thingspeak.com"
 #define UPLOAD_PORT     443
@@ -40,16 +41,16 @@ void uploadToThingspeak()
     DBLN("OK");
 
     DB(F("Host TLS cert verification (hash: "));
-    DB(EspApConfigurator["Certificate Hash"].c_str());
+    DB(EspApConfigurator["Certificate Hash"]->get().c_str());
     DB(F(")..."));
-    if (!client.verify(EspApConfigurator["Certificate Hash"].c_str(), CERT_SERVER)) {
+    if (!client.verify(EspApConfigurator["Certificate Hash"]->get().c_str(), CERT_SERVER)) {
         DBLN(F("FAILED"));
         return;
     }
     DBLN(F("SUCCESS"));
 
     String url = URL_TEMPLATE;
-    url.replace("{k}", EspApConfigurator["Thingspeak API Key"]);
+    url.replace("{k}", EspApConfigurator["Thingspeak API Key"]->get());
     url.replace("{1}", String(ESP.getFreeHeap()));
     url.replace("{2}", String(ESP.getVcc()));
 
@@ -82,13 +83,17 @@ void setup()
     delay(50);
     DBLN(F("\n\nS:setup"));
 
+    EspApConfigurator.begin(AP_BUTTON_PIN);
 
-    EspApConfigurator.begin();
+    // Enable web server in ModeWifiClient - this just makes testing
+    // easier as I don't have to keep connecting to the AP to see
+    // how the interface is being rendered...
+    ModeWifiClient.enableHttpServer(true);
 
     // Must add settings AFTER EspApConfigurator.begin()
-    EspApConfigurator.addSetting("Update interval (s)",   new PersistentSettingLong(EspApConfigurator.nextFreeAddress(), 15));
-    EspApConfigurator.addSetting("Thingspeak API Key",    new PersistentSettingString(EspApConfigurator.nextFreeAddress(), 16, "[paste api key]"));
-    EspApConfigurator.addSetting("Certificate Hash", new PersistentSettingString(EspApConfigurator.nextFreeAddress(), 60, "[paste fingerprint hash]"));
+    EspApConfigurator.addSetting("Update interval (s)", new PersistentSettingLong(EspApConfigurator.nextFreeAddress(), 15));
+    EspApConfigurator.addSetting("Thingspeak API Key",  new PersistentSettingString(EspApConfigurator.nextFreeAddress(), 16, "[write api key]"));
+    EspApConfigurator.addSetting("Certificate Hash",    new PersistentSettingString(EspApConfigurator.nextFreeAddress(), 60, "[SHA hash]"));
 
     // Dump settings
     DBLN(F("Settings:"));
@@ -108,7 +113,7 @@ void loop()
 
     // Don't bother trying to upload until we're connected to a network.
     if (EspApConfigurator.isConnected()) {
-        if (lastUpload == 0 || Millis() > lastUpload + EspApConfigurator["Update interval (s)"].toInt()*1000) {
+        if (lastUpload == 0 || Millis() > lastUpload + EspApConfigurator["Update interval (s)"]->get().toInt()*1000) {
             uploadToThingspeak();
         }
     }

@@ -66,6 +66,9 @@ public:
      */
     uint16_t address() { return _address; }
 
+    /*! Get a typecode which will tell the web interface how to render this setting */
+    virtual String typecode() = 0;
+
 protected:
     uint16_t _address;
 

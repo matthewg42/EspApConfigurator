@@ -1,9 +1,9 @@
 #pragma once
 
-#include "NamedMode.h"
+#include <Mode.h>
 
 //! \brief Mode which does nothing (except debug out)
-class ModeWifiOff_ : public NamedMode {
+class ModeWifiOff_ : public Mode {
 public:
     ModeWifiOff_();
     void modeStart();

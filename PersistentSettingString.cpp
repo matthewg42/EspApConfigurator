@@ -98,3 +98,10 @@ String PersistentSettingString::peek()
 }
 
 
+String PersistentSettingString::typecode()
+{
+    String t = "s";
+    t += size();
+    return t;
+}
+

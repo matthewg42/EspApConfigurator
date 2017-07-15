@@ -34,11 +34,12 @@ Differences:
 - Fetch settings by name with operator[](String)
 - HTTPS in example code
 - Reset nukes all user settings
+- Optionally run web interface in ModeWifiClient
 
 ### TODO
 
-- Optionally run web interface in ModeWifiClient
-    - Web server split to separate class, which should be updated from WebClient if some option set
+- Fix: when in ModeWifiClient and scan is completed, Heartbeat mode doesn't reset properly
+- Fix: bool type doesn't represent properly - use checkbox
 - Hostname should not be a default parameter, as ESP does not store it in a non-valatile way
 - Enhance settings:
     - allow special setting for hostname.  If it exists, then use it when switching to ModeWifiClient
@@ -58,6 +59,53 @@ Differences:
 - Static IP config
 - Asynchronous HTTP/HTTPS requests (check out https://github.com/me-no-dev/ESPAsyncTCP)
 - NTP / time stuff
+
+## Interface Modes
+
+### Mode 1: Single page interface
+
+Typically for projects where web server only runs in ModeAP.  No password protection for changing settings, but ModeAP should have password set.
+
+- Single viewable page
+    - WiFi networks list
+    - Re-scan button
+    - Network settings (ssid, passphrase)
+    - Custom settings
+    - Save settings button
+    - Discard settings button
+- Routes: 
+    - onNotFound(handleNotFound);
+    - on("/",       handleSinglePage);
+    - on("/save",   handleSingleSave);
+    - on("/wifi",   handleSingleCancel);
+    - on("/r",      handleRescan);
+
+### Mode 2: Multi page interface
+
+Typically used for projects where web interface runs in both ModeAP and in ModeWifiClient. 
+
+- Landing page
+    - Project name as title
+    - Link to WiFi settings page
+    - Link to general settings page
+- WiFi settings page
+    - When in ModeWifiClient
+        - Message saying to press the button to switch into ModeAP to change network connection settings
+    - When in ModeAP
+        - WiFi networks list
+        - Re-scan button
+        - Network settings (ssid, passphrase)
+        - Save settings button
+        - Discard settings button
+- General settings page
+    - Custom settings
+    - Save settings button
+    - Discard settings button
+- Routes: TODO
+
+### Mode 3: Custom interface
+
+User for more complex projects, or when user wants a more customized look and feel. No routes are registered, but there is the option to register handlers by calling HttpServer.addRoute(...)
 
 ## Pre-requisites
 

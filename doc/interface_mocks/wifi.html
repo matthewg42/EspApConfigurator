@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>ESPApConfigurator</title>
+
+<script>
+function c(l) {
+  document.getElementById('s').value=l.innerText || l.textContent;
+  document.getElementById('p').focus();
+}
+
+function r(l) {
+  b=document.getElementById('r');
+  b.innerHTML='scanning...';
+  b.disabled=true;
+  x=new XMLHttpRequest();
+  x.open('GET','r',false);
+  x.send(null);
+  window.setTimeout(function(){
+                        console.log('redirect');
+                        window.location.href='';
+                    }, 3300);
+}
+</script>
+
+<style>
+body {
+  font-size: 1em;
+  line-height: 1.5em;
+  max-width: 280px;
+  margin: 0 auto;
+}
+
+button {
+  background-color: #811;
+  color: #fff;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  padding: 0.5rem;
+  border-radius:0.5rem;
+}
+
+.l { background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAALVBMVEX///8EBwfBwsLw8PAzNjaCg4NTVVUjJiZDRUUUFxdiZGSho6OSk5Pg4eFydHTCjaf3AAAAZElEQVQ4je2NSw7AIAhEBamKn97/uMXEGBvozkWb9C2Zx4xzWykBhFAeYp9gkLyZE0zIMno9n4g19hmdY39scwqVkOXaxph0ZCXQcqxSpgQpONa59wkRDOL93eAXvimwlbPbwwVAegLS1HGfZAAAAABJRU5ErkJggg==") no-repeat left center;
+  background-size: 1em;
+}
+
+.q {
+  float: right;
+  width: 64px;
+  text-align: right;
+} 
+
+label,input,button {
+  width: 100%;
+  font-size: 1.2rem;
+  box-sizing:border-box;
+}
+
+input {
+  margin-bottom: 10px;
+  padding: 0.5rem;
+  border-radius:0.5rem;
+}
+</style>
+</head>
+
+<body>
+<div class="c">
+<h1>ESPApConfigurator</h1>
+<h2>Wifi Configuration</h2>
+
+<h3>Networks</h3>
+<div><a href='#p' onclick='c(this)'>TALKTALK024F7B</a>&nbsp;<span class='q l'>42%</span></div>
+<div><a href='#p' onclick='c(this)'>EE-BrightBox-sgqckf</a>&nbsp;<span class='q l'>42%</span></div>
+<div><a href='#p' onclick='c(this)'>Qadri786</a>&nbsp;<span class='q l'>22%</span></div>
+<div><a href='#p' onclick='c(this)'>Sisinka</a>&nbsp;<span class='q l'>20%</span></div>
+<div><a href='#p' onclick='c(this)'>Virgin Media</a>&nbsp;<span class='q l'>24%</span></div>
+<div><a href='#p' onclick='c(this)'>wirescubedextended</a>&nbsp;<span class='q l'>60%</span></div>
+<div><a href='#p' onclick='c(this)'>BTHub6-CFST</a>&nbsp;<span class='q l'>26%</span></div>
+<div><a href='#p' onclick='c(this)'>BTWifi-with-FON</a>&nbsp;<span class='q '>26%</span></div>
+<div><a href='#p' onclick='c(this)'>BTWifi-X</a>&nbsp;<span class='q l'>30%</span></div>
+<div><a href='#p' onclick='c(this)'>TALKTALK3CB338</a>&nbsp;<span class='q l'>24%</span></div>
+<button id='r' onclick='r();'>Re-scan WiFi</button>
+<h3>Network Selection</h3>
+<form method='post' action='save'>
+  <label for='s'>SSID</label>
+  <input id='s' name='s' length=32>
+
+  <label for='p'>Passphrase</label>
+  <input id='p' name='p' length=64 type='password'>
+  <button type="submit">Connect</button>
+
+<form>
+</div>
+</body>
+</html>

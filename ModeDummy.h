@@ -1,9 +1,9 @@
 #pragma once
 
-#include "NamedMode.h"
+#include <Mode.h>
 
 //! \brief Mode which does nothing (except debug out)
-class ModeDummy_ : public NamedMode {
+class ModeDummy_ : public Mode {
 public:
     ModeDummy_();
     void modeStart();

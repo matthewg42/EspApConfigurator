@@ -3,27 +3,45 @@
 #include "ModeWifiClient.h"
 #include "ModeReset.h"
 #include "HttpServer.h"
-#include "APButton.h"
-#include "HeartBeat.h"
 #include "Config.h"
 
 EspApConfigurator_ EspApConfigurator;
 
 EspApConfigurator_::EspApConfigurator_() :
-    ParentMode("EspApConfigurator"),
     PersistentSettingManager(NUMBER_OF_SETTINGS)
 {
+    _apButton = NULL;
+    _heartbeat = NULL;
 }
 
-void EspApConfigurator_::begin()
+EspApConfigurator_::~EspApConfigurator_()
+{
+    // Delete any dynamically allocated stuff
+    // Will probably never be called because we globally allocate a
+    // single instance of EspApConfigurator_ and never delete it,
+    // but I fell like this is good practise in case I change how 
+    // this stuff works
+    if (_apButton) {
+        delete _apButton;
+        _apButton = NULL;
+    }
+    if (_heartbeat) {
+        delete _heartbeat;
+        _heartbeat = NULL;
+    }
+}
+
+void EspApConfigurator_::begin(uint8_t apButtonPin, uint8_t heartbeatPin, bool heartbeatInv, HttpServer_::Mode interfaceMode)
 {
     PersistentSettingManager::begin();
-    APButton.begin();
-    HeartBeat.begin();
+    _apButton = new DebouncedButton(apButtonPin);
+    _apButton->begin();
+    _heartbeat = new Heartbeat(heartbeatPin, heartbeatInv);
+    _heartbeat->begin();
     ModeAP.begin();
     ModeReset.begin();
     ModeWifiClient.begin();
-    HttpServer.init();
+    HttpServer.begin(interfaceMode);
     start();
 }
 
@@ -36,19 +54,20 @@ void EspApConfigurator_::modeStart()
 void EspApConfigurator_::modeEnd()
 {
     DBLN(F("EspApConfigurator::modeEnd"));
-    switchMode(&ModeWifiClient);
+    // Don't expect this to run, but heh
 }
 
 void EspApConfigurator_::modeUpdate()
 {
-    HeartBeat.update();
-    APButton.update();
+
+    _heartbeat->update();
+    _apButton->update();
 
     if (pMode != NULL) {
         pMode->update();
     }
 
-    if (APButton.held(3000)) {
+    if (_apButton->held(3000)) {
         switchMode(&ModeReset);
     }
 
@@ -56,9 +75,12 @@ void EspApConfigurator_::modeUpdate()
         if (pMode->isFinished()) {
             switchMode(&ModeWifiClient);
         }
-    } else if (APButton.tapped()) {
+    } else if (_apButton->tapped()) {
         switchMode(&ModeAP);
     }
+
+    // Let the ESP's Wifi components have a go at the CPU.
+    yield();
 }
 
 bool EspApConfigurator_::inApMode()
@@ -73,4 +95,8 @@ bool EspApConfigurator_::isConnected()
     return !inApMode() && WiFi.status() == WL_CONNECTED;
 }
 
+Heartbeat* EspApConfigurator_::heartbeat() 
+{
+    return _heartbeat;
+}
 

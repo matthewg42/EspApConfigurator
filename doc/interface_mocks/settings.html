@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>ESPApConfigurator</title>
+
+<script>
+function c(l) {
+  document.getElementById('s').value=l.innerText || l.textContent;
+  document.getElementById('p').focus();
+}
+
+function r(l) {
+  b=document.getElementById('r');
+  b.innerHTML='scanning...';
+  b.disabled=true;
+  x=new XMLHttpRequest();
+  x.open('GET','r',false);
+  x.send(null);
+  window.setTimeout(function(){
+                        console.log('redirect');
+                        window.location.href='';
+                    }, 3300);
+}
+</script>
+
+<style>
+body {
+  line-height: 1.5em;
+  max-width: 280px;
+  margin: 0 auto;
+  font-family: Helvetica;
+}
+
+
+button {
+  background-color: #811;
+  color: #fff;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  padding: 0.5rem;
+  border-radius:0.5rem;
+}
+
+.l { background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAALVBMVEX///8EBwfBwsLw8PAzNjaCg4NTVVUjJiZDRUUUFxdiZGSho6OSk5Pg4eFydHTCjaf3AAAAZElEQVQ4je2NSw7AIAhEBamKn97/uMXEGBvozkWb9C2Zx4xzWykBhFAeYp9gkLyZE0zIMno9n4g19hmdY39scwqVkOXaxph0ZCXQcqxSpgQpONa59wkRDOL93eAXvimwlbPbwwVAegLS1HGfZAAAAABJRU5ErkJggg==") no-repeat left center;
+  background-size: 1em;
+}
+
+.q {
+  float: right;
+  width: 64px;
+  text-align: right;
+}
+
+label,input,button {
+  width: 100%;
+  box-sizing:border-box;
+  font-size: 1.3rem;
+  border-width: thick;
+}
+
+input {
+  margin-top:5px;
+  margin-bottom: 30px;
+  padding: 0.5rem;
+  border-radius:0.5rem;
+}
+
+label.cb {
+  width:80%;
+}
+
+input[type="checkbox"] {
+  width: auto;
+  float: right;
+  margin-bottom: 20px;
+  transform: scale(1.5);
+}
+
+br {
+  clear:right;
+}
+
+</style>
+</head>
+
+<body>
+<div class="c">
+<h1>ESPApConfigurator</h1>
+<h2>Project Settings</h2>
+
+<form method='post' action='save'>
+  <label for='s1'>Text, length=32</label>
+  <input id='s1' name='s1' type='text' length=32 value='This is a test string'>
+
+  <label class="cb" for='s2'>Boolean Setting</label>
+  <input id='s2' name='s2' type='checkbox' value='s2'>
+  <br />
+
+  <label for='s3'>Integer Setting</label>
+  <input id='s3' name='s3' type='number' step=1 value='1234567'>
+
+  <label for='s4'>Float, 3 d.p.</label>
+  <input id='s4' name='s4' type='number' step=0.001 value='3.142'>
+
+
+  <button type="submit">save</button>
+<form>
+<button>restore defaults</button>
+</div>
+</body>
+</html>

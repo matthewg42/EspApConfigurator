@@ -85,6 +85,8 @@ public:
      */
     String peek();
 
+    String typecode();
+
 protected:
     uint16_t _maxLength;
     String _defaultValue;
