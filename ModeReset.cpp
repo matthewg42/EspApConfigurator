@@ -4,7 +4,7 @@
 #include <Heartbeat.h>
 #include "ModeReset.h"
 #include "MutilaDebug.h"
-#include "Config.h"
+#include "EspConfiguratorConfig.h"
 #include "EspApConfigurator.h"
 
 ModeReset_ ModeReset;

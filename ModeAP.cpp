@@ -8,7 +8,7 @@
 #include "HttpHandlers.h"
 #include "ModeWifiClient.h"
 #include "EspApConfigurator.h"
-#include "Config.h"
+#include "EspConfiguratorConfig.h"
 
 ModeAP_ ModeAP;
 

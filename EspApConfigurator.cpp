@@ -3,7 +3,7 @@
 #include "ModeWifiClient.h"
 #include "ModeReset.h"
 #include "HttpServer.h"
-#include "Config.h"
+#include "EspConfiguratorConfig.h"
 
 EspApConfigurator_ EspApConfigurator;
 
