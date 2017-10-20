@@ -291,6 +291,7 @@ void handleWifiSave()
 void handleSettingsSave()
 {
     DBLN(F("handleSettingsSave"));
+    handleSingleSave();
 }
 
 void handleCancel()
@@ -367,6 +368,11 @@ String htmlSettingsForm()
         case 's':
             inputTags += F("type='text' length=");
             inputTags += EspApConfigurator[i].setting->typecode().substring(1);
+            inputTags += ' ';
+            break;
+        case 't':
+            // Time
+            inputTags += F("type='text' length=8");
             inputTags += ' ';
             break;
         default:
