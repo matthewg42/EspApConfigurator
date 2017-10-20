@@ -12,7 +12,7 @@
 #include <EspApConfigurator.h>
 #include <ModeWifiClient.h>
 
-#define AP_BUTTON_PIN       D7
+#define AP_BUTTON_PIN       D8
 #define HEARTBEAT_PIN       D0
 
 void setup() 
@@ -24,7 +24,8 @@ void setup()
     EspApConfigurator.begin(AP_BUTTON_PIN, 
                             HEARTBEAT_PIN,
                             true,                       // Invert heartbeat logic for NodeMCU build-in LED
-                            HttpServer_::MultiplePage); // Choose to use Multi-page web interface
+                            HttpServer_::MultiplePage,  // Choose to use Multi-page web interface
+                            false);                     // Don't use pullup logic (for CheeseBoard v0)
 
     ModeWifiClient.enableHttpServer(true);              // Enable web interface in WiFi client mode
 
