@@ -22,11 +22,11 @@ public:
 
     //! Initialization - call from setup()
     //!
-    //! \param apButtonPin pin for button (pull to ground) to active AP
+    //! \param apButtonPin pin for button (pull to ground) to active AP, -1 means "none"
     //! \param heartbeatPin pin for heartbeat LED
     //! \param heartbeatInv invert heartbeat logic (e.g. for D0/D4 on-board on NodeMCU)
     //! \param interfaceMode which type of web interface we want to use
-    void begin(uint8_t apButtonPin, uint8_t heartbeatPin=D0, bool heartbeatInv=true, HttpServer_::Mode interfaceMode=HttpServer_::SinglePage);
+    void begin(int8_t apButtonPin=-1, uint8_t heartbeatPin=D0, bool heartbeatInv=true, HttpServer_::Mode interfaceMode=HttpServer_::SinglePage);
 
     //! This gets called (indirectly) from begin()
     void modeStart();
@@ -36,6 +36,9 @@ public:
 
     //! This should be called frequently, typically from loop()
     void modeUpdate();
+
+    //! Go into AP mode (for projects which don't use the button)
+    void setApMode();
 
     //! Find out if we are in AP mode
     bool inApMode();

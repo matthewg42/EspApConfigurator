@@ -31,11 +31,15 @@ EspApConfigurator_::~EspApConfigurator_()
     }
 }
 
-void EspApConfigurator_::begin(uint8_t apButtonPin, uint8_t heartbeatPin, bool heartbeatInv, HttpServer_::Mode interfaceMode)
+void EspApConfigurator_::begin(int8_t apButtonPin, uint8_t heartbeatPin, bool heartbeatInv, HttpServer_::Mode interfaceMode)
 {
     PersistentSettingManager::begin();
-    _apButton = new DebouncedButton(apButtonPin);
-    _apButton->begin();
+    if (apButtonPin >= 0) {
+        _apButton = new DebouncedButton(apButtonPin);
+        _apButton->begin();
+    } else {
+        _apButton = NULL;
+    }
     _heartbeat = new Heartbeat(heartbeatPin, heartbeatInv);
     _heartbeat->begin();
     ModeAP.begin();
@@ -59,28 +63,40 @@ void EspApConfigurator_::modeEnd()
 
 void EspApConfigurator_::modeUpdate()
 {
-
     _heartbeat->update();
-    _apButton->update();
+    if (_apButton != NULL) {
+        _apButton->update();
+    }
 
     if (pMode != NULL) {
         pMode->update();
     }
 
-    if (_apButton->held(3000)) {
-        switchMode(&ModeReset);
+    if (_apButton != NULL) {
+        if (_apButton->held(3000)) {
+            switchMode(&ModeReset);
+        }
     }
 
     if (inApMode()) {
         if (pMode->isFinished()) {
             switchMode(&ModeWifiClient);
         }
-    } else if (_apButton->tapped()) {
-        switchMode(&ModeAP);
+    } else if (_apButton != NULL) {
+        if (_apButton->tapped()) {
+            switchMode(&ModeAP);
+        }
     }
 
     // Let the ESP's Wifi components have a go at the CPU.
     yield();
+}
+
+void EspApConfigurator_::setApMode()
+{
+    if (!inApMode()) {
+        switchMode(&ModeAP);
+    }
 }
 
 bool EspApConfigurator_::inApMode()
