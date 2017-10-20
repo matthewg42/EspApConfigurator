@@ -52,6 +52,5 @@ void loop()
 {
     // Give timeslice
     EspApConfigurator.update();
-    yeild();
 }
 
