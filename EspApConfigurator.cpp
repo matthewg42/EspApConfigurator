@@ -31,11 +31,11 @@ EspApConfigurator_::~EspApConfigurator_()
     }
 }
 
-void EspApConfigurator_::begin(int8_t apButtonPin, uint8_t heartbeatPin, bool heartbeatInv, HttpServer_::Mode interfaceMode)
+void EspApConfigurator_::begin(int8_t apButtonPin, uint8_t heartbeatPin, bool heartbeatInv, HttpServer_::Mode interfaceMode, bool apButtonPullup)
 {
     PersistentSettingManager::begin();
     if (apButtonPin >= 0) {
-        _apButton = new DebouncedButton(apButtonPin);
+        _apButton = new DebouncedButton(apButtonPin, apButtonPullup);
         _apButton->begin();
     } else {
         _apButton = NULL;

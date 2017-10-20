@@ -26,7 +26,7 @@ public:
     //! \param heartbeatPin pin for heartbeat LED
     //! \param heartbeatInv invert heartbeat logic (e.g. for D0/D4 on-board on NodeMCU)
     //! \param interfaceMode which type of web interface we want to use
-    void begin(int8_t apButtonPin=-1, uint8_t heartbeatPin=D0, bool heartbeatInv=true, HttpServer_::Mode interfaceMode=HttpServer_::SinglePage);
+    void begin(int8_t apButtonPin=-1, uint8_t heartbeatPin=D0, bool heartbeatInv=true, HttpServer_::Mode interfaceMode=HttpServer_::SinglePage, bool apButtonPullup=true);
 
     //! This gets called (indirectly) from begin()
     void modeStart();
