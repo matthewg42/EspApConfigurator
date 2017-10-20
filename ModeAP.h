@@ -16,6 +16,7 @@ public:
     void finish();
     bool isFinished();
     void setApDetails(const char* ssid, const char* pass);
+    String ssid();
 
 protected:
     String _ssid;

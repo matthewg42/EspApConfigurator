@@ -108,3 +108,8 @@ void ModeAP_::setApDetails(const char* ssid, const char* pass)
     }
 }
 
+String ModeAP_::ssid()
+{
+    return _ssid;
+}
+
