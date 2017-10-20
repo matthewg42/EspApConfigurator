@@ -52,6 +52,9 @@ long timeStrToSeconds(String s)
         }
         hms[chunkNum] = s.substring(st,en).toInt();
         DBF("timeStrToSeconds hms[%d] = %d\n", chunkNum, hms[chunkNum]);
+        if (en >= s.length()) {
+            break;
+        }
         if (hms[chunkNum] > hmsMax[chunkNum]) {
             DBF("timeStrToSeconds fail in chunk=%d c=%d max=%d\n", chunkNum, hms[chunkNum], hmsMax[chunkNum]);
             return -1;
@@ -63,9 +66,9 @@ long timeStrToSeconds(String s)
         DB(F("timeStrToSeconds en after="));
         DBLN(en);
         st = en + 1;
-        if (st >= s.length()) {
-            break;
-        }
+        //if (st >= s.length()) {
+        //    break;
+        //}
         DB(F("timeStrToSeconds next st="));
         DBLN(st);
     }
