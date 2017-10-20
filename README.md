@@ -14,7 +14,7 @@ Differences:
 
 ### Working
 
-- Button press to enter AP mode
+- Button press to enter AP mode (support high=on logic)
 - AP mode runs 
 - DNS re-directs all to device
 - WiFi network scanning
@@ -38,17 +38,19 @@ Differences:
 
 ### TODO
 
+- Implement: Multi-page after saving settings re-direct to main page
+- Implement: Multi-page after saving wifi re-direct to main page
+- Multi-page implement switch to wifi button
+- New feature: Add option to disable heartbeat
+- Fix: sometimes saving and/connecting results in page load fail - fix it!
 - Fix: when in ModeWifiClient and scan is completed, Heartbeat mode doesn't reset properly
-- Fix: bool type doesn't represent properly - use checkbox
-- Hostname should not be a default parameter, as ESP does not store it in a non-valatile way
+- Hostname should not be a default parameter, as ESP does not store it in a non-volatile way
 - Enhance settings:
     - allow special setting for hostname.  If it exists, then use it when switching to ModeWifiClient
     - "fingerprinting" EEPROM[0] with forced reset if fingerprint if mismatch
-    - each setting type can be queried, and the interface should select an html input as appropriate
 - Web UI:
     - ssid/pass pre-populated if the ESP has connected ok in the past
     - pass should have a "show" option
-    - setting type-specific inputs
     - Customised theming
 - Better handling of failed connections:
     - If connection fails, retry a few times and then
