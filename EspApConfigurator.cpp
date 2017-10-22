@@ -92,10 +92,12 @@ void EspApConfigurator_::modeUpdate()
     yield();
 }
 
-void EspApConfigurator_::setApMode()
+void EspApConfigurator_::setApMode(bool accessPoint)
 {
-    if (!inApMode()) {
+    if (accessPoint && !inApMode()) {
         switchMode(&ModeAP);
+    } else if (!accessPoint && inApMode()) {
+        switchMode(&ModeWifiClient);
     }
 }
 

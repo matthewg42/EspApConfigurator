@@ -38,7 +38,8 @@ public:
     void modeUpdate();
 
     //! Go into AP mode (for projects which don't use the button)
-    void setApMode();
+    //! \param accessPoint when true set ModeAP, else set ModeWifiClient
+    void setApMode(bool accessPoint=true);
 
     //! Find out if we are in AP mode
     bool inApMode();
