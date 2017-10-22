@@ -124,10 +124,7 @@ bool PersistentSettingTime::load()
 
 String PersistentSettingTime::get()
 {
-    String s = secondsToTimeStr(_value);
-    if (!_displaySeconds) {
-        s = s.substring(0, s.length() - 3);
-    }
+    String s = secondsToTimeStr(_value, _displaySeconds);
     DB(F("PersistentSettingTime::get="));
     DBLN(s);
     return s;
