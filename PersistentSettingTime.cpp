@@ -102,9 +102,10 @@ bool basicTimeValidator(String s)
     return timeStrToSeconds(s) >= 0;
 }
 
-PersistentSettingTime::PersistentSettingTime(uint16_t eepromAddress, String defaultValue, validatorFunction validator) :
+PersistentSettingTime::PersistentSettingTime(uint16_t eepromAddress, String defaultValue, bool displaySeconds, validatorFunction validator) :
     // PersistentSettingAtom<long>(eepromAddress, timeStrToSeconds(defaultValue), validator)
-    PersistentSettingAtom<long>(eepromAddress, 0, validator)
+    PersistentSettingAtom<long>(eepromAddress, 0, validator),
+    _displaySeconds(displaySeconds)
 {
 }
 
@@ -123,7 +124,11 @@ bool PersistentSettingTime::load()
 
 String PersistentSettingTime::get()
 {
-    return secondsToTimeStr(_value);
+    String s = secondsToTimeStr(_value);
+    if (!_displaySeconds) {
+        s = s.substring(0, s.length() - 3);
+    }
+    return s;
 }
 
 bool PersistentSettingTime::set(String newValue)

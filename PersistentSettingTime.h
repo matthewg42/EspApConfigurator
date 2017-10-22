@@ -15,9 +15,10 @@ public:
     /*! Constructor
      * \param eepromAddress start address of this setting
      * \param defaultValue value to take before loading
+     * \param displaySeconds if true, get() will return seconds in value, else only to minute precision
      * \param validatorFunction function to validate values
      */
-    PersistentSettingTime(uint16_t eepromAddress, String defaultValue, validatorFunction validator=basicTimeValidator);
+    PersistentSettingTime(uint16_t eepromAddress, String defaultValue, bool displaySeconds=false, validatorFunction validator=basicTimeValidator);
 
     /*! Load from EEPROM 
      *  Loads value from EEPROM, and checks for validity. If valid use value and return
@@ -39,6 +40,9 @@ public:
     bool set(String newValue);
 
     String typecode() { return String("t"); }
+
+protected:
+    bool _displaySeconds;
 
 };
 
