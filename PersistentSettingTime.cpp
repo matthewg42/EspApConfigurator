@@ -4,20 +4,20 @@
 
 bool basicTimeValidatorChunk(const String& s, int8_t start, int8_t end)
 {
-    DB(F("basicTimeValidatorChunk: s=\""));
-    DB(s);
-    DB(F("\" st="));
-    DB(start);
-    DB(F(" en="));
-    DBLN(end);
+    _DB(F("basicTimeValidatorChunk: s=\""));
+    _DB(s);
+    _DB(F("\" st="));
+    _DB(start);
+    _DB(F(" en="));
+    _DBLN(end);
     for (uint8_t i=start; i<end; i++) {
-        DB(F("basicTimeValidatorChunk: @"));
-        DB(i);
-        DB('=');
-        DBLN(s[i]);
+        _DB(F("basicTimeValidatorChunk: @"));
+        _DB(i);
+        _DB('=');
+        _DBLN(s[i]);
         if (s[i] < '0' || s[i] > '9') {
-            DB(F("basicTimeValidatorChunk: bad character@"));
-            DBLN(i);
+            _DB(F("basicTimeValidatorChunk: bad character@"));
+            _DBLN(i);
             return false;
         }
     }
@@ -31,8 +31,8 @@ long timeStrToSeconds(String s)
     // 0:00:01
     //
     // no am/pm!
-    DB(F("timeStrToSeconds s="));
-    DBLN(s);
+    _DB(F("timeStrToSeconds s="));
+    _DBLN(s);
     
     const uint8_t hmsMax[3] = { 23, 59, 59 };
     uint8_t hms[3] = { 0, 0, 0 };
@@ -47,34 +47,34 @@ long timeStrToSeconds(String s)
             en = s.length();
         }
         if (!basicTimeValidatorChunk(s, st, en)) {
-            DBF("timeStrToSeconds fail in chunk=%d\n", chunkNum);
+            _DBF("timeStrToSeconds fail in chunk=%d\n", chunkNum);
             return -1;
         }
         hms[chunkNum] = s.substring(st,en).toInt();
-        DBF("timeStrToSeconds hms[%d] = %d\n", chunkNum, hms[chunkNum]);
+        _DBF("timeStrToSeconds hms[%d] = %d\n", chunkNum, hms[chunkNum]);
         if (en >= s.length()) {
             break;
         }
         if (hms[chunkNum] > hmsMax[chunkNum]) {
-            DBF("timeStrToSeconds fail in chunk=%d c=%d max=%d\n", chunkNum, hms[chunkNum], hmsMax[chunkNum]);
+            _DBF("timeStrToSeconds fail in chunk=%d c=%d max=%d\n", chunkNum, hms[chunkNum], hmsMax[chunkNum]);
             return -1;
         }
         if (++chunkNum > 2) {
-            DBLN(F("timeStrToSeconds fail too many chunks"));
+            _DBLN(F("timeStrToSeconds fail too many chunks"));
             return -1;
         }
-        DB(F("timeStrToSeconds en after="));
-        DBLN(en);
+        _DB(F("timeStrToSeconds en after="));
+        _DBLN(en);
         st = en + 1;
         //if (st >= s.length()) {
         //    break;
         //}
-        DB(F("timeStrToSeconds next st="));
-        DBLN(st);
+        _DB(F("timeStrToSeconds next st="));
+        _DBLN(st);
     }
     long result = hms[0]*3600 + hms[1]*60 + hms[2];
-    DB(F("timeStrToSeconds result="));
-    DBLN(result);
+    _DB(F("timeStrToSeconds result="));
+    _DBLN(result);
     return hms[0]*3600 + hms[1]*60 + hms[2];
 }
 
@@ -97,8 +97,8 @@ String secondsToTimeStr(long seconds, bool showSeconds)
 
 bool basicTimeValidator(String s)
 {
-    DB(F("basicTimeValidator s="));
-    DBLN(s);
+    _DB(F("basicTimeValidator s="));
+    _DBLN(s);
     return timeStrToSeconds(s) >= 0;
 }
 
@@ -128,12 +128,14 @@ String PersistentSettingTime::get()
     if (!_displaySeconds) {
         s = s.substring(0, s.length() - 3);
     }
+    DB(F("PersistentSettingTime::get="));
+    DBLN(s);
     return s;
 }
 
 bool PersistentSettingTime::set(String newValue)
 {
-    DB(F("PersistentSettingTime::set ="));
+    DB(F("PersistentSettingTime::set="));
     DBLN(newValue);
     long newLong = timeStrToSeconds(newValue);
     if (newLong != -1) {
