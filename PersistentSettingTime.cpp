@@ -112,8 +112,8 @@ PersistentSettingTime::PersistentSettingTime(uint16_t eepromAddress, String defa
 bool PersistentSettingTime::load()
 {
     long loaded = peek();
-    DB(F("PersistentSettingTime::load peeked="));
-    DBLN(loaded);
+    _DB(F("PersistentSettingTime::load peeked="));
+    _DBLN(loaded);
     if (loaded >= 0 && loaded < (24*3600)) {
         _value = loaded;
         return true;
@@ -125,15 +125,15 @@ bool PersistentSettingTime::load()
 String PersistentSettingTime::get()
 {
     String s = secondsToTimeStr(_value, _displaySeconds);
-    DB(F("PersistentSettingTime::get="));
-    DBLN(s);
+    _DB(F("PersistentSettingTime::get="));
+    _DBLN(s);
     return s;
 }
 
 bool PersistentSettingTime::set(String newValue)
 {
-    DB(F("PersistentSettingTime::set="));
-    DBLN(newValue);
+    _DB(F("PersistentSettingTime::set="));
+    _DBLN(newValue);
     long newLong = timeStrToSeconds(newValue);
     if (newLong != -1) {
         _value = newLong;
