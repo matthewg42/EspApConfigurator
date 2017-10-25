@@ -10,7 +10,13 @@ Differences:
 - Everything done with timeslices an Mutila Modes, making it possible to run your own code while also being in AP mode (WiFiManager blocks)
 - Extensible - add your own configuration options which save to EEPROM
 
+## Documentation
+
+Doxygen-generated documentation can be read here: http://matthewg42.github.io/EspApConfigurator/
+
 ## Status
+
+Still under heavy development.
 
 ### Working
 
