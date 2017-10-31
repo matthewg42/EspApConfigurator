@@ -103,8 +103,7 @@ bool basicTimeValidator(String s)
 }
 
 PersistentSettingTime::PersistentSettingTime(uint16_t eepromAddress, String defaultValue, bool displaySeconds, validatorFunction validator) :
-    // PersistentSettingAtom<long>(eepromAddress, timeStrToSeconds(defaultValue), validator)
-    PersistentSettingAtom<long>(eepromAddress, 0, validator),
+    PersistentSettingAtom<long>(eepromAddress, timeStrToSeconds(defaultValue), validator),
     _displaySeconds(displaySeconds)
 {
 }
