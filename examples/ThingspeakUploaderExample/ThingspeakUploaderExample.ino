@@ -91,9 +91,14 @@ void setup()
     ModeWifiClient.enableHttpServer(true);
 
     // Must add settings AFTER EspApConfigurator.begin()
-    EspApConfigurator.addSetting("Update interval (s)", new PersistentSettingLong(EspApConfigurator.nextFreeAddress(), 15));
+    EspApConfigurator.addSetting("Update interval (s)", new PersistentSettingLong(EspApConfigurator.nextFreeAddress(),   15));
     EspApConfigurator.addSetting("Thingspeak API Key",  new PersistentSettingString(EspApConfigurator.nextFreeAddress(), 16, "[write api key]"));
     EspApConfigurator.addSetting("Certificate Hash",    new PersistentSettingString(EspApConfigurator.nextFreeAddress(), 60, "[SHA hash]"));
+
+    // Check the signature of the settings in EEPROM matches our setting, and reset to defaults if not
+    if (!EspApConfigurator.checkSignature()) {
+        EspApConfigurator.resetAll();
+    }
 
     // Dump settings
     DBLN(F("Settings:"));

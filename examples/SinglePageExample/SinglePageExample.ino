@@ -38,6 +38,11 @@ void setup()
     EspApConfigurator.addSetting("String Setting",      new PersistentSettingString(EspApConfigurator.nextFreeAddress(), 16, "string(16)"));
     EspApConfigurator.addSetting("Time Setting",        new PersistentSettingTime(EspApConfigurator.nextFreeAddress(),   "12:00"));
 
+    // Check the signature of the settings in EEPROM matches our setting, and reset to defaults if not
+    if (!EspApConfigurator.checkSignature()) {
+        EspApConfigurator.resetAll();
+    }
+
     // Dump settings to serial
     DBLN(F("Settings:"));
     for (uint8_t i=0; i<EspApConfigurator.count(); i++) {
