@@ -15,7 +15,7 @@
 class EspApConfigurator_ : public ParentMode, public PersistentSettingManager {
 public:
     //! Constructor
-    EspApConfigurator_();
+    EspApConfigurator_(uint8_t maxSettings=16);
 
     //! Destructor
     ~EspApConfigurator_();

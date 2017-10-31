@@ -3,12 +3,12 @@
 #include "ModeWifiClient.h"
 #include "ModeReset.h"
 #include "HttpServer.h"
-#include "EspConfiguratorConfig.h"
+#include "EspApConfiguratorConfig.h"
 
 EspApConfigurator_ EspApConfigurator;
 
-EspApConfigurator_::EspApConfigurator_() :
-    PersistentSettingManager(NUMBER_OF_SETTINGS)
+EspApConfigurator_::EspApConfigurator_(uint8_t maxSettings) :
+    PersistentSettingManager(maxSettings)
 {
     _apButton = NULL;
     _heartbeat = NULL;
