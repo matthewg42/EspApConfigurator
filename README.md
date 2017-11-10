@@ -44,6 +44,8 @@ Still under heavy development.
 
 ### TODO
 
+- Add option to not have heartbeat
+- Add ability to remember multiple ssid/passwords
 - When connected to WiFi "Save & use WiFi" button should just be a save button
   - in MultiplePade mode, should have a "switch to AP mode" button
 - Implement: Multi-page after saving settings re-direct to main page
