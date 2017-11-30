@@ -12,11 +12,32 @@ Differences:
 
 ## Documentation
 
-Doxygen-generated documentation can be read here: http://matthewg42.github.io/EspApConfigurator/
+Doxygen-generated documentation can be read [here](http://matthewg42.github.io/EspApConfigurator/)
+
+### Notes About the EspApConfigurator Library
+
+The EspApConfigurator library and examples use the [Mutila library](https://github.com/matthewg42/Mutila/) (by the same author) for various functions and classes. To avoid confusion, I'll mention a few here which you may notice in the code:
+
+1. The macros DB, DBLN abd DBF act like Serial.print, Serial.println and Serial.printf respectively. These only produce output if DEBUG is defined, allowing quick enabling / disabling of debugging output on serial when building with the Makefile. To enable debugging output from the IDE, simply add this line at the top of your sketch:
+
+```cpp
+#define DEBUG 1
+```
+
+2. Mutila objects follow the common Arduino paradigm of having a begin() member which should be called during setup().
+
+3. Many Mutila classes for are implemented with a timeslice approach. That is, they require an update() function to be called frequently to maintain their state. The idea behind this is to avoid using interrupts wherever possible in order to prevent conflicts with other libraries.
+
+4. EspApConfigurator is my own re-implementation of venerable [WiFi Manager](https://github.com/tzapu/WiFiManager) library. It doesn't block like WiFi Manager, and has a better (IMO) persistent settings system. At time of writing, EspApConfigurator is not complete - multi-page setup mode and custom themed settings pages are still to be implemented. However, single page configuration mode works just fine for many projects.
+
+More detailed Doxygen-generated API documentation for the library can be found here: 
+
+* https://matthewg42.github.io/Mutila/
+* https://matthewg42.github.io/EspApConfigurator/
 
 ## Status
 
-Still under heavy development.
+As of Nov 2017, still under frequent development.
 
 ### Working
 
