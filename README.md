@@ -7,7 +7,7 @@ This is a re-implementation and modification of the functionality available in t
 Differences:
 
 - Less flash memory usage (faster to upload your code)
-- Everything done with timeslices an Mutila Modes, making it possible to run your own code while also being in AP mode (WiFiManager blocks)
+- Everything done with timeslices and [Mutila library](https://github.com/matthewg42/Mutila/) Modes, making it possible to run your own code while also being in AP mode (WiFiManager blocks)
 - Extensible - add your own configuration options which save to EEPROM
 
 ## Documentation
