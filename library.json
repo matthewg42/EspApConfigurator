@@ -1,6 +1,6 @@
 {
 "name": "EspApConfigurator",
-"frameworks": "ESP8266",
+"frameworks": "Arduino",
 "keywords": "ESP8266, WiFi, Access Point, Configuration, EEPROM",
 "description": "EspApConfigurator uses access point mode and EEPROM to have persistent configrations for ESP8266 projects",
 "url": "https://github.com/matthewg42/EspApConfigurator/",
